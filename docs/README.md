@@ -13,8 +13,8 @@ features:
 - title: 极简代码
   details: 坚决贯彻极简封装和最少代码原则，让枯燥的crud在几秒内即可完成。
 - title: 最佳实践
-  details: 提供最佳实践代码，让每一位开发者都能以正确的姿势来使用 carton ui。
-footer: MIT Licensed | Copyright © 2025 seepine 
+  details: 提供最佳实践代码，让每一位开发者都能以正确的姿势使用。
+footer: MIT Licensed | Copyright © 2026 seepine 
 ---
 
 
@@ -50,7 +50,7 @@ import Components from 'unplugin-vue-components/vite';
 
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 
-import { NaivePlusResolver } from 'naive-plus/lib/resolver'
+import { NaivePlusResolver } from 'naive-plus/resolver'
 
 export default {
   plugins: [
@@ -60,8 +60,8 @@ export default {
     }),
     Components({
       resolvers: [
-         // 添加按需引入
         NaiveUiResolver(),
+        // 添加按需引入
         NaivePlusResolver(),
       ],
     }),

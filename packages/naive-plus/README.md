@@ -32,7 +32,7 @@ import Components from 'unplugin-vue-components/vite';
 
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 
-import { NaivePlusResolver } from 'naive-plus/lib/resolver'
+import { NaivePlusResolver } from 'naive-plus/resolver'
 
 export default {
   plugins: [
@@ -42,8 +42,8 @@ export default {
     }),
     Components({
       resolvers: [
-         // 添加按需引入
         NaiveUiResolver(),
+        // 添加按需引入
         NaivePlusResolver(),
       ],
     }),

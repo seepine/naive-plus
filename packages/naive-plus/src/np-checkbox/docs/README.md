@@ -62,5 +62,5 @@ permalink: /components/np-checkbox
 组件导出以下类型定义
 
 ```ts
-import type { CCheckboxProps } from 'carton-ui'
+import type { NpCheckboxProps } from 'naive-plus'
 ```

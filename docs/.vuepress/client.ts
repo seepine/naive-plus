@@ -1,6 +1,6 @@
 import { defineClientConfig } from '@vuepress/client'
 import NaiveUi from 'naive-ui'
-import Ui from 'naive-plus/src'
+import Ui from 'naive-plus'
 import Layout from './layouts/Layout.vue'
 import './configs/styles/index.scss'
 

@@ -8,6 +8,19 @@
   "style": "dist/index.css",
   "unpkg": "dist/index.min.js",
   "jsdelivr": "dist/index.min.js",
+  "exports": {
+    ".": {
+      "types": "./es/index.d.ts",
+      "import": "./es/index.mjs",
+      "require": "./lib/index.js"
+    },
+    "./resolver": {
+      "types": "./es/resolver.d.ts",
+      "import": "./es/resolver.mjs",
+      "require": "./lib/resolver.js"
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "gen": "tsx scripts/generate/component.ts",
     "build": "gulp --require @esbuild-kit/cjs-loader -f scripts/build/index.ts",

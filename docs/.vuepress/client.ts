@@ -5,7 +5,7 @@ import Layout from './layouts/Layout.vue'
 import './configs/styles/index.scss'
 
 // 引入组件库的少量全局样式变量
-import 'naive-plus/dist/index.css'
+import 'naive-plus/index.css'
 
 export default defineClientConfig({
   layouts: {

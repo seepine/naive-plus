@@ -19,6 +19,8 @@
       "import": "./es/resolver.mjs",
       "require": "./lib/resolver.js"
     },
+    "./index.css": "./dist/index.css",
+    "./index.scss": "./es/index.scss",
     "./package.json": "./package.json"
   },
   "scripts": {

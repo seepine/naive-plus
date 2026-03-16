@@ -6,7 +6,7 @@ import{_ as e,M as t,p,q as i,R as n,t as s,N as o,a1 as l}from"./framework-de7a
 
 <span class="token keyword">import</span> <span class="token punctuation">{</span> NaiveUiResolver <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&#39;unplugin-vue-components/resolvers&#39;</span>
 
-<span class="token keyword">import</span> <span class="token punctuation">{</span> NaivePlusResolver <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&#39;naive-plus/lib/resolver&#39;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> NaivePlusResolver <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&#39;naive-plus/resolver&#39;</span>
 
 <span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
   <span class="token literal-property property">plugins</span><span class="token operator">:</span> <span class="token punctuation">[</span>
@@ -16,8 +16,8 @@ import{_ as e,M as t,p,q as i,R as n,t as s,N as o,a1 as l}from"./framework-de7a
     <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
     <span class="token function">Components</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
       <span class="token literal-property property">resolvers</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-         <span class="token comment">// 添加按需引入</span>
         <span class="token function">NaiveUiResolver</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token comment">// 添加按需引入</span>
         <span class="token function">NaivePlusResolver</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
       <span class="token punctuation">]</span><span class="token punctuation">,</span>
     <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>

@@ -1,0 +1,14 @@
+:root {
+  --np-form-loading-mask-disabled: rgb(255 255 255 / 40%);
+}
+
+:root[theme-mode='dark'] {
+  --np-form-loading-mask-disabled: rgb(0 0 0 / 0%);
+}
+
+.np-form__loading {
+  .n-spin-content {
+    background-color: var(--np-form-loading-mask-disabled);
+    backdrop-filter: blur(0.5px);
+  }
+}

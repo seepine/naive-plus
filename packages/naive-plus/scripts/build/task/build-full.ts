@@ -1,0 +1,65 @@
+import path from 'path'
+import { rollup } from 'rollup'
+import { nodeResolve } from '@rollup/plugin-node-resolve'
+import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import vueDefineOptions from 'unplugin-vue-define-options/rollup'
+import esbuild, { minify as minifyPlugin } from 'rollup-plugin-esbuild'
+import { compRoot, output } from '../utils/paths'
+import { target, generateExternal } from '../utils/rollup'
+
+const build = async (minify: boolean) => {
+  const input = [
+    // root
+    path.resolve(compRoot, 'index.ts'),
+  ]
+
+  const bundle = await rollup({
+    input,
+    plugins: [
+      vueDefineOptions(),
+      vue(),
+      vueJsx(),
+      nodeResolve(),
+      esbuild({
+        target,
+        sourceMap: minify,
+        treeShaking: true,
+      }),
+      minify
+        ? minifyPlugin({
+            target,
+            sourceMap: minify,
+          })
+        : null,
+    ],
+    treeshake: true,
+    external: generateExternal({ full: false }),
+  })
+
+  await Promise.all([
+    bundle.write({
+      format: 'esm',
+      file: path.resolve(output, `index${minify ? '.min' : ''}.mjs`),
+      exports: undefined,
+      sourcemap: minify,
+    }),
+    bundle.write({
+      format: 'umd',
+      file: path.resolve(output, `index${minify ? '.min' : ''}.js`),
+      exports: 'named',
+      sourcemap: minify,
+      name: 'naivePlus',
+      globals: {
+        // js 中 import 'pkg' 对应的全局变量
+        // 例如 https://www.naiveui.com/zh-CN/light/docs/umd 全局变量是 naive
+        vue: 'Vue',
+        'naive-ui': 'naive',
+      },
+    }),
+  ])
+}
+
+export const buildFull = async () => {
+  await Promise.all([build(false), build(true)])
+}

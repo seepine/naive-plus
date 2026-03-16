@@ -1,0 +1,12 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "@seepine/docs": "0.1.0",
+    "@seepine/examples": "0.1.0",
+    "@seepine/eslint-config": "0.1.0",
+    "naive-plus": "0.1.0-beta.0",
+    "@seepine/stylelint-config": "0.1.0"
+  },
+  "changesets": []
+}

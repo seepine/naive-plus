@@ -1,0 +1,138 @@
+:root {
+  // brand colors
+  --c-brand: #165dff;
+  --c-brand-light: #366ef4;
+  --sidebar-width-mobile: calc(var(--sidebar-width) * 0.76);
+  --sidebar-bg-color: 255, 255, 255;
+  --sidebar-width: 14rem;
+  --siderbar-item-active-text: #fff;
+}
+
+html.dark {
+  --c-bg: #181818;
+  --c-bg-light: #1f1f1f;
+  --c-brand: #4582e6;
+  --c-brand-light: #2667d4;
+  --code-bg-color: #1f1f1f;
+  --sidebar-bg-color: 24, 24, 24;
+}
+
+@media screen and (width >= 1200px) {
+  .page {
+    .theme-default-content,
+    .page-meta,
+    .page-nav {
+      padding: 0 10rem 0 0;
+    }
+  }
+
+  .sidebar {
+    padding: 0 0.5rem;
+
+    p.sidebar-heading {
+      padding-left: 0.5rem;
+    }
+  }
+
+  .sidebar-item:not(.sidebar-heading) {
+    padding: 0.5rem 1rem 0.5rem 1.25rem;
+    border-radius: 0.2rem;
+  }
+
+  aside.sidebar ul.sidebar-item-children {
+    .sidebar-item.active:not(p.sidebar-heading) {
+      font-weight: unset;
+      color: var(--siderbar-item-active-text);
+      background-color: var(--c-brand-light);
+      border-left-color: var(--c-brand-light);
+    }
+  }
+
+  aside.sidebar ul.sidebar-item-children ul.sidebar-item-children {
+    position: fixed;
+    top: 10rem;
+    right: 2rem;
+    padding: 0.25rem 1rem 0.25rem 1.75rem;
+    padding-left: 0;
+    background-color: rgb(var(--sidebar-bg-color) 0.8);
+    border-radius: 0.5rem;
+
+    .sidebar-item.active:not(p.sidebar-heading) {
+      color: var(--c-brand);
+      background-color: unset;
+      border-left-color: var(--c-text-accent);
+      border-radius: unset;
+    }
+
+    .sidebar-item:not(p.sidebar-heading) {
+      border-left-color: var(--c-border);
+      border-left-width: 2px;
+      border-radius: unset;
+    }
+  }
+}
+
+@media screen and (width >= 1440px) {
+  .page {
+    .theme-default-content,
+    .page-meta,
+    .page-nav {
+      padding: 0 8rem 0 0;
+    }
+  }
+}
+
+.back-to-top {
+  width: 1.5rem !important;
+  height: 0.8rem !important;
+}
+
+.home .hero .action-button {
+  min-width: 6rem;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border-width: 0;
+}
+
+.theme-default-content {
+  table {
+    display: table;
+    width: 100%;
+
+    th,
+    td {
+      text-align: left;
+    }
+  }
+
+  .code-demo-content {
+    .token.tag,
+    .token.namespace,
+    .token.deleted {
+      color: #498bc8;
+    }
+
+    .token.attr-name {
+      color: #91d7fe;
+    }
+
+    .token.string,
+    .token.attr-value {
+      color: #c6856c;
+    }
+
+    .token.keyword {
+      color: #bb7ab7;
+    }
+
+    .token.comment {
+      color: #5f8e4b;
+    }
+  }
+}
+
+.home {
+  .theme-default-content {
+    margin-bottom: 4rem;
+  }
+}

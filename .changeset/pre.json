@@ -9,6 +9,8 @@
     "@seepine/stylelint-config": "0.1.0"
   },
   "changesets": [
-    "lucky-falcons-help"
+    "funny-singers-exercise",
+    "lucky-falcons-help",
+    "unlucky-trainers-leave"
   ]
 }

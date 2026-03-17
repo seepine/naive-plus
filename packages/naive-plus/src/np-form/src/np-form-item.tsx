@@ -24,7 +24,11 @@ import {
   NTreeSelect,
   type FormItemRule,
 } from 'naive-ui'
-import type { FormInjection, FormItemToolInjection } from './interface'
+import type {
+  FormColumnComponent,
+  FormInjection,
+  FormItemToolInjection,
+} from './interface'
 import NpCheckbox from '../../np-checkbox'
 import NpRadio from '../../np-radio'
 import NpUpload from '../../np-upload'
@@ -164,8 +168,17 @@ export default defineComponent({
       value.value = isString(val) ? val[trim]() : val
     }
 
+    const isFormColumnComponent = (obj: any): obj is FormColumnComponent => {
+      return !isFunction(obj.render)
+    }
+
     const comp = () => {
-      if (type === undefined || type === 'input') {
+      const column = props.column || {}
+      if (!isFormColumnComponent(column)) {
+        return <span>RenderFunctionFirst</span>
+      }
+      const { type } = column
+      if (type === 'input') {
         return (
           <NInput
             clearable
@@ -173,10 +186,11 @@ export default defineComponent({
             value={value.value}
             onUpdateValue={onChange}
             onBlur={() => onBlur(value.value)}
-          ></NInput>
+          >
+            {{ ...column.slots }}
+          </NInput>
         )
       }
-
       if (type === 'textarea') {
         return (
           <NInput
@@ -185,7 +199,9 @@ export default defineComponent({
             value={value.value}
             onUpdateValue={onChange}
             onBlur={() => onBlur(value.value, 'trimEnd')}
-          ></NInput>
+          >
+            {{ ...column.slots }}
+          </NInput>
         )
       }
       if (type === 'password') {
@@ -196,7 +212,9 @@ export default defineComponent({
             value={value.value}
             onUpdateValue={onChange}
             onBlur={() => onBlur(value.value)}
-          ></NInput>
+          >
+            {{ ...column.slots }}
+          </NInput>
         )
       }
 
@@ -208,7 +226,9 @@ export default defineComponent({
             {...props.column.props}
             value={value.value}
             onUpdateValue={onChange}
-          ></NInputNumber>
+          >
+            {{ ...column.slots }}
+          </NInputNumber>
         )
       }
 
@@ -221,7 +241,9 @@ export default defineComponent({
             value={value.value}
             onBlur={() => onBlur(value.value)}
             onUpdateValue={onChange}
-          ></NAutoComplete>
+          >
+            {{ ...column.slots }}
+          </NAutoComplete>
         )
       }
 
@@ -233,7 +255,9 @@ export default defineComponent({
             value={value.value}
             onUpdateValue={onChange}
             options={options.value}
-          ></NCascader>
+          >
+            {{ ...column.slots }}
+          </NCascader>
         )
       }
 
@@ -257,7 +281,9 @@ export default defineComponent({
             {...props.column.props}
             formattedValue={value.value}
             onUpdateFormattedValue={onChange}
-          ></NDatePicker>
+          >
+            {{ ...column.slots }}
+          </NDatePicker>
         )
       }
 
@@ -269,7 +295,9 @@ export default defineComponent({
             {...props.column.props}
             formattedValue={value.value}
             onUpdateFormattedValue={onChange}
-          ></NTimePicker>
+          >
+            {{ ...column.slots }}
+          </NTimePicker>
         )
       }
 
@@ -302,7 +330,9 @@ export default defineComponent({
             options={options.value}
             value={value.value}
             onUpdateValue={onChange}
-          ></NSelect>
+          >
+            {{ ...column.slots }}
+          </NSelect>
         )
       }
 
@@ -312,7 +342,9 @@ export default defineComponent({
             {...props.column.props}
             value={value.value}
             onUpdateValue={onChange}
-          ></NSlider>
+          >
+            {{ ...column.slots }}
+          </NSlider>
         )
       }
 
@@ -322,7 +354,9 @@ export default defineComponent({
             {...props.column.props}
             value={value.value}
             onUpdateValue={onChange}
-          ></NSwitch>
+          >
+            {{ ...column.slots }}
+          </NSwitch>
         )
       }
 
@@ -346,7 +380,9 @@ export default defineComponent({
             value={value.value}
             onUpdateValue={onChange}
             options={options.value}
-          ></NTreeSelect>
+          >
+            {{ ...column.slots }}
+          </NTreeSelect>
         )
       }
 
@@ -357,7 +393,9 @@ export default defineComponent({
             urlOnly={(props.column as any).urlOnly}
             modelValue={value.value || []}
             onChange={onChange}
-          ></NpUpload>
+          >
+            {{ ...column.slots }}
+          </NpUpload>
         )
       }
 

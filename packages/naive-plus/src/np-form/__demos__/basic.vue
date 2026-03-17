@@ -6,7 +6,7 @@
 </template>
 <script setup lang="ts">
 import type { FormOption } from 'naive-plus'
-import { ref } from 'vue'
+import { ref, h } from 'vue'
 
 type User = {
   fullName?: string
@@ -41,10 +41,16 @@ const option: FormOption<User> = {
     {
       label: '年龄',
       key: 'age',
+      // type 声明内部使用的组件，例如 number 为 naive-ui 的 n-input[type=number] 组件
       type: 'number',
+      // 透传给组件的属性，拥有哪些属性可查看 naive-ui 的 InputProps
       props: {
         min: 0,
         max: 99,
+      },
+      // 透传给组件的插槽，拥有哪些插槽可查看 naive-ui 的 InputSlots
+      slots: {
+        suffix: () => [h('span', null, '岁')],
       },
     },
     {

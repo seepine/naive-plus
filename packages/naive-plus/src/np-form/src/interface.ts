@@ -4,26 +4,37 @@ import type {
   AutoCompleteGroupOption,
   AutoCompleteOption,
   AutoCompleteProps,
+  AutoCompleteSlots,
   ButtonProps,
   CascaderOption,
   CascaderProps,
+  CascaderSlots,
   DatePickerProps,
+  DatePickerSlots,
   DynamicTagsProps,
+  DynamicTagsSlots,
   FormItemProps,
   FormItemRule,
   FormProps,
   InputNumberProps,
+  InputNumberSlots,
   InputProps,
+  InputSlots,
   RateProps,
   SelectOption,
   SelectProps,
+  SelectSlots,
   SliderProps,
+  SliderSlots,
   SwitchProps,
+  SwitchSlots,
   TimePickerProps,
+  TimePickerSlots,
   TransferOption,
   TransferProps,
   TreeSelectOption,
   TreeSelectProps,
+  TreeSelectSlots,
   UploadProps,
 } from 'naive-ui'
 import type { NpRadioProps, RadioOption, RadioValue } from '../../np-radio'
@@ -83,24 +94,28 @@ export type FormColumnComponent<FormData extends AnyObject = AnyObject> =
   | {
       type?: 'input' | 'text'
       props?: Omit<InputProps, OmitValue | 'type'>
+      slots?: InputSlots
       defaultValue?: string
       onChange?: (value: string, ctx: OnChangeCtx<FormData>) => void
     }
   | {
       type: 'textarea'
       props?: Omit<InputProps, OmitValue | 'type'>
+      slots?: InputSlots
       defaultValue?: string
       onChange?: (value: string, ctx: OnChangeCtx<FormData>) => void
     }
   | {
       type: 'password'
       props?: Omit<InputProps, OmitValue | 'type'>
+      slots?: InputSlots
       defaultValue?: string
       onChange?: (value: string, ctx: OnChangeCtx<FormData>) => void
     }
   | {
       type: 'number'
       props?: Omit<InputNumberProps, OmitValue>
+      slots?: InputNumberSlots
       defaultValue?: number
       onChange?: (value: number, ctx: OnChangeCtx<FormData>) => void
     }
@@ -121,6 +136,7 @@ export type FormColumnComponent<FormData extends AnyObject = AnyObject> =
   | {
       type: 'autoComplete'
       props?: Omit<AutoCompleteProps, OmitValue>
+      slots?: AutoCompleteSlots
       defaultValue?: string
       options: Run<
         FormData,
@@ -131,6 +147,7 @@ export type FormColumnComponent<FormData extends AnyObject = AnyObject> =
   | {
       type: 'cascader'
       props?: Omit<CascaderProps, OmitValue>
+      slots?: CascaderSlots
       defaultValue?: string | number | Array<string> | Array<number>
       options: Run<FormData, Array<CascaderOption>>
       onChange?: (
@@ -141,12 +158,14 @@ export type FormColumnComponent<FormData extends AnyObject = AnyObject> =
   | {
       type: 'tag'
       props?: Omit<DynamicTagsProps, OmitValue>
+      slots?: DynamicTagsSlots
       defaultValue?: string[]
       onChange?: (value: string[], ctx: OnChangeCtx<FormData>) => void
     }
   | {
       type: 'date'
       props?: Omit<DatePickerProps, OmitValue>
+      slots?: DatePickerSlots
       defaultValue?: string | [string, string]
       onChange?: (
         value: string | [string, string],
@@ -162,6 +181,7 @@ export type FormColumnComponent<FormData extends AnyObject = AnyObject> =
   | {
       type: 'select'
       props?: Omit<SelectProps, OmitValue>
+      slots?: SelectSlots
       defaultValue?: Array<string | number> | string | number
       options: Run<FormData, Array<SelectOption | any>>
       onChange?: (
@@ -177,12 +197,14 @@ export type FormColumnComponent<FormData extends AnyObject = AnyObject> =
   | {
       type: 'slider'
       props?: Omit<SliderProps, OmitValue>
+      slots?: SliderSlots
       defaultValue?: number | number[]
       onChange?: (value: number | number[], ctx: OnChangeCtx<FormData>) => void
     }
   | {
       type: 'switch'
       props?: Omit<SwitchProps, OmitValue>
+      slots?: SwitchSlots
       defaultValue?: string | number | boolean
       onChange?: (
         value: string | number | boolean,
@@ -192,6 +214,7 @@ export type FormColumnComponent<FormData extends AnyObject = AnyObject> =
   | {
       type: 'time'
       props?: Omit<TimePickerProps, OmitValue>
+      slots?: TimePickerSlots
       defaultValue?: string
       onChange?: (value: string, ctx: OnChangeCtx<FormData>) => void
     }
@@ -216,6 +239,7 @@ export type FormColumnComponent<FormData extends AnyObject = AnyObject> =
   | {
       type: 'tree'
       props?: Omit<TreeSelectProps, OmitValue>
+      slots?: TreeSelectSlots
       defaultValue?: string | number | Array<string | number>
       options: Run<FormData, Array<TreeSelectOption>>
       onChange?: (
@@ -250,6 +274,9 @@ export type FormColumnComponent<FormData extends AnyObject = AnyObject> =
         | 'onUpdate:fileList'
         | 'onUpdateFileList'
       >
+      slots?: {
+        default?: () => VNode
+      }
       urlOnly?: boolean
       defaultValue?: string[]
       onChange?: (value: string[], ctx: OnChangeCtx<FormData>) => void

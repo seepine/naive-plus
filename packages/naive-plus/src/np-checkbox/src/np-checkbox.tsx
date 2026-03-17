@@ -63,9 +63,11 @@ export default defineComponent({
           onUpdateValue={handleChange}
         >
           {loading.value && options.value.length === 0 ? (
-            <NSpin size={16} style={{ marginTop: '2px' }}>
-              <NCheckbox></NCheckbox>
-            </NSpin>
+            <div style={{ width: 'fit-content' }}>
+              <NSpin size={14}>
+                <NCheckbox disabled></NCheckbox>
+              </NSpin>
+            </div>
           ) : (
             options.value.map(item => (
               <NCheckbox value={item.value} label={item.label}></NCheckbox>

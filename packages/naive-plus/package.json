@@ -19,6 +19,11 @@
       "import": "./es/resolver.mjs",
       "require": "./lib/resolver.js"
     },
+    "./dist/*": "./dist/*",
+    "./es": "./es/index.mjs",
+    "./es/*": "./es/*",
+    "./lib": "./lib/index.js",
+    "./lib/*": "./lib/*",
     "./index.css": "./dist/index.css",
     "./index.scss": "./es/index.scss",
     "./package.json": "./package.json"

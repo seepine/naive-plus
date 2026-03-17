@@ -178,7 +178,7 @@ export default defineComponent({
         return <span>RenderFunctionFirst</span>
       }
       const { type } = column
-      if (type === 'input') {
+      if (type === undefined || type === 'input' || type === 'text') {
         return (
           <NInput
             clearable

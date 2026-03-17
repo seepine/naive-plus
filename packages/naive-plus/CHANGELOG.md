@@ -1,5 +1,11 @@
 # naive-plus
 
+## 0.1.0-beta.3
+
+### Patch Changes
+
+- [`715da44`](https://github.com/seepine/naive-plus/commit/715da44fb20b0b89279ff03456660ee0aac519bc) Thanks [@seepine](https://github.com/seepine)! - fix: update package.json exports for dist and es directories
+
 ## 0.1.0-beta.2
 
 ### Patch Changes

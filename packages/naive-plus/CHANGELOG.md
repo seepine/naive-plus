@@ -1,5 +1,11 @@
 # naive-plus
 
+## 0.1.0-beta.5
+
+### Patch Changes
+
+- [`8e347b7`](https://github.com/seepine/naive-plus/commit/8e347b7dcf7f62d97991c079d79849cf029d466d) Thanks [@seepine](https://github.com/seepine)! - fix(resolver): update component name check to use prefix
+
 ## 0.1.0-beta.4
 
 ### Patch Changes

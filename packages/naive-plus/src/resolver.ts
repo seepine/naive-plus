@@ -3,7 +3,6 @@ import type {
   SideEffectsInfo,
 } from 'unplugin-vue-components/types'
 import { kebabCase } from 'unplugin-vue-components'
-import { ComponentNames } from '.'
 
 const isSSR = Boolean(
   process.env.SSR ||
@@ -49,7 +48,7 @@ export function NaivePlusResolver(
     type: 'component',
     resolve: (name: string) => {
       const kebabcase = kebabCase(name)
-      if (ComponentNames.includes(kebabcase)) {
+      if (kebabcase.startsWith('np-')) {
         return {
           name,
           from: `naive-plus/${moduleType}`,

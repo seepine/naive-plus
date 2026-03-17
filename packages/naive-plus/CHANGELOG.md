@@ -1,5 +1,11 @@
 # naive-plus
 
+## 0.1.0-beta.4
+
+### Patch Changes
+
+- [`f604100`](https://github.com/seepine/naive-plus/commit/f6041004967db80c1797d02e2e1aa924506308f1) Thanks [@seepine](https://github.com/seepine)! - fix(np-checkbox): adjust loading spin style
+
 ## 0.1.0-beta.3
 
 ### Patch Changes

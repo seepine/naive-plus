@@ -1,5 +1,13 @@
 # naive-plus
 
+## 0.1.0-beta.6
+
+### Patch Changes
+
+- [`2c77e89`](https://github.com/seepine/naive-plus/commit/2c77e8944d073597f0a994b08718e7503347e7b0) Thanks [@seepine](https://github.com/seepine)! - fix(np-form-item): fix type assertion of input
+
+- [`f70a865`](https://github.com/seepine/naive-plus/commit/f70a865b2635bf5c53c8eb4df0bd63baafabb4b2) Thanks [@seepine](https://github.com/seepine)! - feat(np-form): enhance form components with slot support
+
 ## 0.1.0-beta.5
 
 ### Patch Changes

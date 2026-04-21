@@ -28,6 +28,7 @@ import type {
   FormColumnComponent,
   FormInjection,
   FormItemToolInjection,
+  Rule,
 } from './interface'
 import NpCheckbox from '../../np-checkbox'
 import NpRadio from '../../np-radio'
@@ -70,8 +71,8 @@ export default defineComponent({
     const display = ref(true)
     const rule = ref<FormItemRule[]>()
 
-    const uploadBlobRule: FormItemRule = {
-      validator: (_rule: FormItemRule, value: any) => {
+    const uploadBlobRule: Rule = {
+      validator: (value: any) => {
         if (!isArray(value)) return true
         const hasBlobUrl = value.some((item: string) => {
           try {
@@ -88,6 +89,34 @@ export default defineComponent({
       },
     }
 
+    const initRule = (newRule: Rule[]) => {
+      let res: Rule[] = []
+      // 数字类型默认加上 type: 'number' 的校验
+      if (type === 'number' || type === 'rate' || type === 'slider') {
+        res = newRule.map(item => {
+          if (item.type === undefined) {
+            return { ...item, type: 'number' }
+          }
+          return item
+        })
+      }
+      // upload 类型默认加上 blob URL 校验
+      if (type === 'upload') {
+        res = [...newRule, uploadBlobRule]
+      }
+      rule.value = res.map(item => {
+        if (item.validator !== undefined) {
+          return {
+            ...item,
+            validator: (rule, value, callback) => {
+              return item.validator?.(value, rule as any, callback)
+            },
+          }
+        }
+        return item
+      })
+    }
+
     const init = async (newData: AnyObject) => {
       runAsync(props.column?.label, newData).then(res => {
         label.value = res
@@ -98,30 +127,13 @@ export default defineComponent({
         })
       }
       if (props.column?.rule !== undefined) {
-        runAsync<FormItemRule[] | FormItemRule>(
-          props.column?.rule,
-          newData
-        ).then(res => {
+        runAsync<Rule[] | Rule>(props.column?.rule, newData).then(res => {
           const newRule = isArray(res) ? res : [res]
-          // 数字类型默认加上 type: 'number' 的校验
-          if (type === 'number' || type === 'rate' || type === 'slider') {
-            rule.value = newRule.map(item => {
-              if (item.type === undefined) {
-                return { ...item, type: 'number' }
-              }
-              return item
-            })
-            return
-          }
-          // upload 类型默认加上 blob URL 校验
-          if (type === 'upload') {
-            rule.value = [...newRule, uploadBlobRule]
-            return
-          }
-          rule.value = newRule
+          initRule(newRule)
         })
       } else if (type === 'upload') {
         rule.value = [uploadBlobRule]
+        initRule([uploadBlobRule])
       }
     }
     init(formInj.data.value)

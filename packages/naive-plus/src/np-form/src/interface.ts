@@ -45,6 +45,14 @@ import type {
 } from '../../np-checkbox'
 import type EventBus from '../../utils/event-bus'
 
+export type Rule = Omit<FormItemRule, 'validator' | 'asyncValidator'> & {
+  validator?: (
+    value: any,
+    rule: Omit<Rule, 'validator'> & { field: string },
+    callback: (error?: string | Error) => void
+  ) => boolean | Error | Error[] | Promise<void> | undefined
+}
+
 export interface FormColumnBase<FormData extends AnyObject = AnyObject> {
   /**
    * 标签值
@@ -63,12 +71,9 @@ export interface FormColumnBase<FormData extends AnyObject = AnyObject> {
    */
   render?: (data: FormData) => VNode
   /**
-   * 表单字段校验规则。TS 类型：Array<FormItemRule>
+   * 表单字段校验规则。TS 类型：Array<Rule>
    */
-  rule?:
-    | Run<FormData, FormItemRule | Array<FormItemRule>>
-    | FormItemRule
-    | Array<FormItemRule>
+  rule?: Run<FormData, Rule | Array<Rule>> | Rule | Array<Rule>
   /**
    * 表单项属性
    */

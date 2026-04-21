@@ -30,6 +30,10 @@ export const npFormItemProps = {
       return {}
     },
   },
+  columnIdx: {
+    type: Number,
+    default: 0,
+  },
   injectKey: {},
 }
 

@@ -299,6 +299,14 @@ export type FormColumn<FormData extends AnyObject = AnyObject> =
 export interface FormOption<FormData extends AnyObject = AnyObject> {
   onSubmit?: Run<FormData, void>
   onReset?: Run<FormData, void>
+  /**
+   * 回车提交表单
+   * - `'last'`: 仅在最后一个表单项回车时提交
+   * - `'all'`: 任意表单项回车都提交
+   * - `false`: 禁用回车提交
+   * @defaultValue false
+   */
+  enterSubmitMode?: 'last' | 'all' | false
   columns: FormColumn<FormData>[]
   props?: Omit<FormProps, 'model' | 'rules' | 'onSubmit'>
   footer?:
@@ -335,6 +343,7 @@ export interface FormInjection<FormData extends AnyObject = AnyObject> {
     'data-change': AnyObject
   }>
   readonly injectKey: symbol
+  readonly submit: () => Promise<void>
 }
 
 /**

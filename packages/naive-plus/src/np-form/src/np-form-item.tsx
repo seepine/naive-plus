@@ -57,6 +57,7 @@ export default defineComponent({
       event: new EventBus<{
         'data-change': AnyObject
       }>(),
+      submit: async () => {},
     })
 
     const { type } = props.column || {}
@@ -99,10 +100,12 @@ export default defineComponent({
           }
           return item
         })
+      } else {
+        res = [...newRule]
       }
       // upload 类型默认加上 blob URL 校验
       if (type === 'upload') {
-        res = [...newRule, uploadBlobRule]
+        res.push(uploadBlobRule)
       }
       rule.value = res.map(item => {
         if (item.validator !== undefined) {
@@ -180,6 +183,20 @@ export default defineComponent({
       value.value = isString(val) ? val[trim]() : val
     }
 
+    const handleKeyupEnter = (e: KeyboardEvent) => {
+      if (e.key !== 'Enter') {
+        return
+      }
+      const enterSubmitMode = formInj.props.option.enterSubmitMode
+      if (!enterSubmitMode) {
+        return
+      }
+      const isLast = formInj.props.option.columns.length - 1 === props.columnIdx
+      if (enterSubmitMode === 'all' || isLast) {
+        formInj.submit()
+      }
+    }
+
     const isFormColumnComponent = (obj: any): obj is FormColumnComponent => {
       return !isFunction(obj.render)
     }
@@ -198,6 +215,7 @@ export default defineComponent({
             value={value.value}
             onUpdateValue={onChange}
             onBlur={() => onBlur(value.value)}
+            onKeyup={handleKeyupEnter}
           >
             {{ ...column.slots }}
           </NInput>
@@ -224,6 +242,7 @@ export default defineComponent({
             value={value.value}
             onUpdateValue={onChange}
             onBlur={() => onBlur(value.value)}
+            onKeyup={handleKeyupEnter}
           >
             {{ ...column.slots }}
           </NInput>
@@ -238,6 +257,7 @@ export default defineComponent({
             {...props.column.props}
             value={value.value}
             onUpdateValue={onChange}
+            onKeyup={handleKeyupEnter}
           >
             {{ ...column.slots }}
           </NInputNumber>
@@ -253,6 +273,7 @@ export default defineComponent({
             value={value.value}
             onBlur={() => onBlur(value.value)}
             onUpdateValue={onChange}
+            onKeyup={handleKeyupEnter}
           >
             {{ ...column.slots }}
           </NAutoComplete>

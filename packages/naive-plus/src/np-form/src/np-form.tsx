@@ -67,23 +67,17 @@ export default defineComponent({
       { deep: true, immediate: false }
     )
 
-    provide<FormInjection>(injectKey, {
-      data,
-      props,
-      injectKey,
-      event,
-    })
-
     const submit = async () => {
       if (loading.value) {
         return
       }
+      loading.value = true
       try {
         await formRef.value?.validate()
       } catch {
+        loading.value = false
         return
       }
-      loading.value = true
       try {
         await runAsync(props.option.onSubmit, data.value)
       } catch {
@@ -97,6 +91,14 @@ export default defineComponent({
       data.value = cloneDeep(backData.value)
       await runAsync(props.option.onReset, data.value)
     }
+
+    provide<FormInjection>(injectKey, {
+      data,
+      props,
+      injectKey,
+      event,
+      submit,
+    })
 
     expose(
       new Proxy(
@@ -180,12 +182,16 @@ export default defineComponent({
             submit()
           }}
         >
-          {(props.option.columns || []).map(column => {
+          {(props.option.columns || []).map((column, columnIdx) => {
             if (typeof column.render === 'function') {
               return column.render(data.value)
             }
             return (
-              <NpFormItem column={column} injectKey={injectKey}></NpFormItem>
+              <NpFormItem
+                column={column}
+                columnIdx={columnIdx}
+                injectKey={injectKey}
+              ></NpFormItem>
             )
           })}
           {footer()}

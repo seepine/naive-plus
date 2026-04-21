@@ -37,6 +37,7 @@ export const zh: SidebarConfig = {
         { text: '改变事件', link: '/form/change/' },
         { text: '自定义类型', link: '/form/custom/' },
         { text: '自定义底部', link: '/form/footer/' },
+        { text: '回车提交表单', link: '/form/enter-submit/' },
       ],
     },
   ],

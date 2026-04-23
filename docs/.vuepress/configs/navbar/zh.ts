@@ -9,4 +9,8 @@ export const zh: NavbarConfig = [
     text: '表单',
     link: '/form/base/',
   },
+  {
+    text: '表格',
+    link: '/table/base/',
+  },
 ]

@@ -71,7 +71,8 @@ np-example/
 
 ## 6. Changeset
 
-- 修改代码后，使用命令 `pnpm cs` 进行变更生成，再一并提交md文件
+- 修改代码后，使用命令 `pnpm cs` 在 `.changeset` 生成变更文件
+- 命令 `pnpm cz` 提交代码和变更文件
 - 推送代码后，github action 会自动判断并创建pr
 
 ## 7. 注意事项

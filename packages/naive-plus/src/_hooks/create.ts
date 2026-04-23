@@ -26,7 +26,7 @@ export const useCreate = (
         .filter(key => !!args?.value[key])
         .map(key => `${name}-${key}`)
         .join(' ')
-      bemClass.value = `${name} ${extClass}`
+      bemClass.value = `${name} ${extClass}`.trim()
     },
     {
       immediate: true,

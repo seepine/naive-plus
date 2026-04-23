@@ -30,5 +30,6 @@ module.exports = {
     'at-rule-no-unknown': null,
     'value-no-vendor-prefix': null,
     'selector-class-pattern': null,
+    'import-notation': 'string',
   },
 }

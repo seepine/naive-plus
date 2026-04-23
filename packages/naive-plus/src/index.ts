@@ -4,23 +4,29 @@ import { NpCheckbox } from './np-checkbox'
 import { NpRadio } from './np-radio'
 import { NpForm } from './np-form'
 import { NpUpload } from './np-upload'
-// import { CRow } from './c-row'
-// import { CCol } from './c-col'
-// import { CForm } from './c-form'
+import { NpTable } from './np-table'
+import { NpFilter } from './np-filter'
 
 export * from './np-button'
 export * from './np-checkbox'
 export * from './np-radio'
 export * from './np-form'
 export * from './np-upload'
-// export * from './c-row'
-// export * from './c-col'
-// export * from './c-form'
+export * from './np-table'
+export * from './np-filter'
 
 export * from './types'
 export * from './utils'
 
-const components = [NpButton, NpCheckbox, NpRadio, NpForm, NpUpload]
+const components = [
+  NpButton,
+  NpCheckbox,
+  NpRadio,
+  NpForm,
+  NpUpload,
+  NpTable,
+  NpFilter,
+]
 export const ComponentNames = components.map(item => item.name)
 
 export function install(app: App) {

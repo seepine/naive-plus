@@ -21,6 +21,10 @@ export const zh: SidebarConfig = {
           text: 'Upload 上传',
           link: '/components/np-upload/',
         },
+        {
+          text: 'Filter 筛选',
+          link: '/components/np-filter/',
+        },
       ],
     },
   ],
@@ -38,6 +42,15 @@ export const zh: SidebarConfig = {
         { text: '自定义类型', link: '/form/custom/' },
         { text: '自定义底部', link: '/form/footer/' },
         { text: '回车提交表单', link: '/form/enter-submit/' },
+      ],
+    },
+  ],
+  '/table': [
+    {
+      text: '表格',
+      children: [
+        { text: '基础用法', link: '/table/base/' },
+        { text: '筛选功能', link: '/table/filter/' },
       ],
     },
   ],

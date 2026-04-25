@@ -1,0 +1,118 @@
+.np-cell {
+  --np-cell-color-hover: rgb(243 243 245);
+  --np-cell-value-color: rgb(114 113 123);
+  --np-cell-font-size: 14px;
+  --np-cell-padding: 6px 12px;
+  --np-cell-radius: 3px;
+  --np-cell-left-gap: 6px;
+  --np-cell-right-gap: 4px;
+
+  &__small {
+    --np-cell-padding: 4px 12px;
+    --np-cell-radius: 2px;
+  }
+
+  &__large {
+    --np-cell-padding: 8px 12px;
+    --np-cell-font-size: 16px;
+    --np-cell-radius: 4px;
+    --np-cell-left-gap: 8px;
+    --np-cell-right-gap: 6px;
+  }
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--np-cell-padding);
+  font-size: var(--np-cell-font-size);
+  user-select: none;
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background-color: var(--np-cell-color-hover);
+    border-radius: var(--np-cell-radius);
+  }
+
+  .dark &,
+  html[theme-mode='dark'] & {
+    --np-cell-color-hover: rgb(255 255 255 / 9%);
+    --np-cell-value-color: rgb(160 160 170);
+  }
+
+  &__left {
+    display: flex;
+    flex-direction: row;
+    gap: var(--np-cell-left-gap);
+    align-items: center;
+  }
+
+  &__right {
+    display: flex;
+    flex-direction: row;
+    gap: var(--np-cell-right-gap);
+    align-items: center;
+  }
+
+  &__control {
+    display: flex;
+    align-items: center;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+
+    img,
+    svg {
+      width: 1em;
+      height: 1em;
+      cursor: default;
+      user-select: none;
+    }
+  }
+
+  &__value {
+    font-size: calc(var(--np-cell-font-size) - 2px);
+    color: var(--np-cell-value-color);
+  }
+
+  &__arrow {
+    font-size: var(--np-cell-font-size);
+    color: var(--np-cell-value-color);
+  }
+}
+
+.np-cell-group {
+  .dark &,
+  html[theme-mode='dark'] & {
+    --np-cell-group-title-color: rgb(160 160 170);
+    // --np-cell-group-border-color: rgba(255, 255, 255, 0.09);
+  }
+
+  --np-cell-group-title-color: rgb(114 113 123);
+  // --np-cell-group-border-color: rgb(239, 239, 245);
+
+  --np-cell-group-title-font-size: 12px;
+  --np-cell-group-padding: 6px 12px;
+
+  &__small {
+    --np-cell-group-padding: 4px 12px;
+  }
+
+  &__large {
+    --np-cell-group-padding: 8px 12px;
+    --np-cell-group-title-font-size: 14px;
+  }
+
+  &__title {
+    padding: var(--np-cell-group-padding);
+    font-size: var(--np-cell-group-title-font-size);
+    color: var(--np-cell-group-title-color);
+    user-select: none;
+  }
+
+  // .np-cell + .np-cell {
+  //   border-top: 1px solid var(--np-cell-group-border-color);
+  // }
+}

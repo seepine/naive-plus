@@ -6,6 +6,7 @@ import { NpForm } from './np-form'
 import { NpUpload } from './np-upload'
 import { NpTable } from './np-table'
 import { NpFilter } from './np-filter'
+import { NpCell, NpCellGroup } from './np-cell'
 
 export * from './np-button'
 export * from './np-checkbox'
@@ -14,6 +15,7 @@ export * from './np-form'
 export * from './np-upload'
 export * from './np-table'
 export * from './np-filter'
+export * from './np-cell'
 
 export * from './types'
 export * from './utils'
@@ -26,6 +28,8 @@ const components = [
   NpUpload,
   NpTable,
   NpFilter,
+  NpCell,
+  NpCellGroup,
 ]
 export const ComponentNames = components.map(item => item.name)
 

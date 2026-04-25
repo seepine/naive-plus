@@ -3,7 +3,7 @@ import type { SidebarConfig } from 'vuepress'
 export const zh: SidebarConfig = {
   '/components': [
     {
-      text: '组件',
+      text: '基础组件',
       children: [
         {
           text: 'Button 按钮',
@@ -24,6 +24,19 @@ export const zh: SidebarConfig = {
         {
           text: 'Filter 筛选',
           link: '/components/np-filter/',
+        },
+      ],
+    },
+    {
+      text: 'Cell 单元格',
+      children: [
+        {
+          text: 'Cell 单元格',
+          link: '/components/np-cell/',
+        },
+        {
+          text: 'CellGroup 单元格组',
+          link: '/components/np-cell-group/',
         },
       ],
     },

@@ -9,5 +9,7 @@ declare module '@vue/runtime-core' {
     NpUpload: typeof import('naive-plus')['NpUpload']
     NpFilter: typeof import('naive-plus')['NpFilter']
     NpTable: typeof import('naive-plus')['NpTable']
+    NpCell: typeof import('naive-plus')['NpCell']
+    NpCellGroup: typeof import('naive-plus')['NpCellGroup']
   }
 }

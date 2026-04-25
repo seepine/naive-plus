@@ -8,6 +8,8 @@ permalink: /components/np-cell-group/
 
 ## 基础用法
 
+options 支持所有 `np-cell` 属性
+
 <demo src="../__demos__/group.vue"></demo>
 
 ## Props

@@ -18,7 +18,14 @@ export const npCellProps = {
   value: {
     type: [String, Function] as PropType<string | VNode | (() => VNode)>,
   },
+  description: {
+    type: [String, Function] as PropType<string | VNode | (() => VNode)>,
+  },
   arrow: {
+    type: Boolean,
+    default: false,
+  },
+  bordered: {
     type: Boolean,
     default: false,
   },
@@ -34,7 +41,9 @@ export interface NpCellOption {
   icon?: VNode | (() => VNode)
   label: string | VNode | (() => VNode)
   value?: string | VNode | (() => VNode)
+  description?: string | VNode | (() => VNode)
   arrow?: boolean
+  bordered?: boolean
   onClick?: () => void
 }
 

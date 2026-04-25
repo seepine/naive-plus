@@ -5,12 +5,8 @@
     </div>
     <NpCell
       v-for="(item, idx) in props.options"
+      v-bind="item"
       :key="idx"
-      :type="item.type"
-      :checked="item.checked"
-      :icon="item.icon"
-      :label="item.label"
-      :arrow="item.arrow"
       @click="handleClick(item)"
       @update:checked="handleChecked(item, $event)"
     />

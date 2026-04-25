@@ -4,15 +4,25 @@ permalink: /components/np-cell/
 
 # NpCell
 
-单元格组件，支持 checkbox / radio / switch 控件，图标，标签及右侧箭头。
+单元格组件。
 
 ## 基础用法
+
+通过 type 指定控件类型，支持 checkbox / radio / switch 控件，并支持图标及右侧箭头
 
 <demo src="../__demos__/basic.vue"></demo>
 
 ## 尺寸
 
+通过 size 指定尺寸
+
 <demo src="../__demos__/size.vue"></demo>
+
+## 下边框
+
+通过 bordered 指定下边框
+
+<demo src="../__demos__/bordered.vue"></demo>
 
 ## Props
 

@@ -79,6 +79,6 @@ np-example/
 
 - 新增或修改组件后，请确保组件的文档和测试用例是否更新
 - 新增或修改组件后，请使用 `code-simplifier` SKILL 简化代码
-- 新增或修改组件后，请使用 `pnpm ui:test` 命令运行组件测试
-- 新增或修改组件后，请运行 `pnpm ui:type-check` 和 `pnpm lint:eslint` 和 `pnpm lint:prettier` 三个命令，确保代码格式和规范没有问题
-- 新增或修改文档或组件后，请运行 `pnpm ui:build && pnpm docs:dev` 构建并检查对应页面。
+- 新增或修改组件后，请使用 `pnpm lint` 确保代码格式和规范没有问题
+- 新增或修改组件后，请使用 `pnpm check` 命令检验所有
+- 新增或修改文档或组件后，请使用 `agent-browser` skill 打开页面并检验结果。

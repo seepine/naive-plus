@@ -34,13 +34,11 @@
             ></NpCell>
           </template>
 
-          <NScrollbar style="max-height: 300px">
-            <FilterItem
-              :option="option"
-              :value="props.params?.[option.key]"
-              @update:value="handleUpdateValue(option.key, $event)"
-            />
-          </NScrollbar>
+          <FilterItem
+            :option="option"
+            :value="props.params?.[option.key]"
+            @update:value="handleUpdateValue(option.key, $event)"
+          />
         </NPopover>
       </div>
 

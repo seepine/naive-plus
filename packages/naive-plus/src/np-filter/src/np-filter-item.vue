@@ -5,24 +5,27 @@
         <NInput v-model:value="searchKey" size="small"></NInput>
       </div>
 
-      <NDivider style="margin: 4px 0"></NDivider>
+      <NDivider style="margin: 0"></NDivider>
     </template>
 
-    <div style="padding: 4px">
-      <NpCellGroup
-        v-for="(item, idx) in groups"
-        :key="`__${idx}`"
-        v-model:keys="selectedKeys"
-        :title="item.title"
-        :options="item.options"
-        size="small"
-        :type="item.type"
-        @change="handleChange"
-      ></NpCellGroup>
-      <NEmpty v-if="groups.length === 0" size="tiny"></NEmpty>
-    </div>
+    <NScrollbar style="max-height: 300px">
+      <div style="padding: 4px">
+        <NpCellGroup
+          v-for="(item, idx) in groups"
+          :key="`__${idx}`"
+          v-model:keys="selectedKeys"
+          :title="item.title"
+          :options="item.options"
+          size="small"
+          :type="item.type"
+          @change="handleChange"
+        ></NpCellGroup>
+        <NEmpty v-if="groups.length === 0" size="tiny"></NEmpty>
+      </div>
+    </NScrollbar>
   </div>
 </template>
+
 <script setup lang="tsx">
 import { ref, watch } from 'vue'
 import { useCreate } from '../../_hooks/create'

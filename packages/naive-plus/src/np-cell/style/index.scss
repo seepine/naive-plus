@@ -4,7 +4,7 @@
   --np-cell-font-size: 14px;
   --np-cell-padding-x: 12px;
   --np-cell-padding-y: 6px;
-  --np-cell-radius: 3px;
+  --np-cell-radius: 4px;
   --np-cell-control-gap: 6px;
   --np-cell-left-gap: 4px;
   --np-cell-right-gap: 4px;
@@ -31,9 +31,8 @@
   }
 
   &__small {
-    --np-cell-padding-x: 10px;
+    --np-cell-padding-x: 8px;
     --np-cell-padding-y: 4px;
-    --np-cell-radius: 2px;
   }
 
   &__large {

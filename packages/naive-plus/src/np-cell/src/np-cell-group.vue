@@ -6,32 +6,62 @@
     <NpCell
       v-for="(item, idx) in props.options"
       v-bind="item"
-      :key="idx"
+      :key="item.key"
+      :type="props.type"
+      :size="props.size"
+      :bordered="props.bordered && idx < props.options.length - 1"
+      :checked="selectedKeys.includes(item.key === undefined ? idx : item.key)"
       @click="handleClick(item)"
-      @update:checked="handleChecked(item, $event)"
     />
   </div>
 </template>
-
 <script setup lang="ts">
 import { useCreate } from '../../_hooks/create'
-import { npCellGroupProps, type NpCellOption } from './props'
+import {
+  npCellGroupProps,
+  type NpCellGroupKeys,
+  type NpCellOption,
+} from './props'
 import NpCell from './np-cell.vue'
+import { ref, watch } from 'vue'
 
 const { bemClass } = useCreate('np-cell-group')
 
 const props = defineProps(npCellGroupProps)
 
 const emit = defineEmits<{
-  (e: 'click', item: NpCellOption): void
+  (e: 'update:keys', keys: NpCellGroupKeys): void
+  (e: 'change', keys: NpCellGroupKeys, item: NpCellOption): void
 }>()
 
-const handleClick = (item: NpCellOption) => {
-  item.onClick?.()
-  emit('click', item)
-}
+const selectedKeys = ref<NpCellGroupKeys>([])
+watch(
+  () => props.keys,
+  () => {
+    selectedKeys.value = props.keys
+  },
+  { immediate: true, deep: true }
+)
 
-const handleChecked = (item: NpCellOption, value: boolean) => {
-  item.checked = value
+const handleClick = (item: NpCellOption) => {
+  const key = item.key === undefined ? props.options.indexOf(item) : item.key
+  if (props.type === 'radio') {
+    if (selectedKeys.value.includes(key)) {
+      selectedKeys.value = []
+    } else {
+      selectedKeys.value = [key]
+    }
+  } else {
+    if (selectedKeys.value.includes(key)) {
+      selectedKeys.value = selectedKeys.value.filter(k => k !== key)
+    } else {
+      selectedKeys.value.push(key)
+    }
+  }
+
+  emit('change', selectedKeys.value, item)
+  emit('update:keys', selectedKeys.value)
+
+  item.onClick?.()
 }
 </script>

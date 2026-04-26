@@ -4,17 +4,16 @@ import { NpCellGroup } from '../index'
 import type { NpCellOption } from '../index'
 
 const options = ref<NpCellOption[]>([
-  { label: '通知提醒', type: 'switch', checked: true },
-  { label: '声音', type: 'switch', checked: false },
-  { label: '震动', type: 'switch', checked: true },
+  { label: '通知提醒' },
+  { label: '声音' },
+  { label: '震动' },
 ])
 
 const navOptions: NpCellOption[] = [
-  { label: '个人信息', arrow: true, bordered: true },
+  { label: '个人信息', arrow: true },
   {
     label: '账号安全',
     arrow: true,
-    bordered: true,
     description: '账号安全设置',
   },
   { label: '隐私设置', arrow: true, value: '已设置' },

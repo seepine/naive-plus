@@ -4,7 +4,7 @@ import type { AsyncValue } from '../../types'
 export interface NpFilterItemOption {
   icon?: VNode | (() => VNode)
   label: string | (() => VNode)
-  value: any
+  value: string | number
 }
 
 export interface NpFilterItem {

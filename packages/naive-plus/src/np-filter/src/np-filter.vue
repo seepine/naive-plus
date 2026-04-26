@@ -22,39 +22,18 @@
           :class="`${bemClass}__category-option-popover`"
         >
           <template #trigger>
-            <div :class="`${bemClass}__category-item-content`">
-              <div :class="`${bemClass}__category-item-content-left`">
-                <div
-                  v-if="option.icon"
-                  :class="`${bemClass}__category-item-content-icon`"
-                >
-                  <component :is="option.icon" />
-                </div>
-                <div :class="`${bemClass}__category-item-content-label`">
-                  <component
-                    :is="option.label"
-                    v-if="isFunction(option.label)"
-                  />
-                  <span v-else>
-                    {{ option.label }}
-                  </span>
-                </div>
-              </div>
-              <div :class="`${bemClass}__category-item-content-right`">
-                <div
-                  v-if="optionCount(option) > 0"
-                  :class="`${bemClass}__category-item-content-count`"
-                >
-                  {{ optionCount(option) }}
-                </div>
-                <NIcon>
-                  <ArrowRightIcon />
-                </NIcon>
-              </div>
-            </div>
+            <NpCell
+              :icon="option.icon"
+              :label="option.label"
+              :value="
+                optionCount(option) > 0 ? `${optionCount(option)}` : undefined
+              "
+              :arrow="true"
+              size="small"
+            ></NpCell>
           </template>
 
-          <NpFilterOption
+          <FilterItem
             :option="option"
             :value="props.params?.[option.key]"
             @update:value="handleUpdateValue(option.key, $event)"
@@ -69,7 +48,7 @@
         :class="`${bemClass}__category-item ${bemClass}__category-item-clear`"
         @click="handleClear"
       >
-        <div :class="`${bemClass}__category-item-content`">清除所有筛选</div>
+        <NpCell label="清除所有筛选" size="small"></NpCell>
       </div>
     </div>
   </NPopover>
@@ -79,11 +58,10 @@
 import { computed, ref } from 'vue'
 import { useCreate } from '../../_hooks/create'
 import { npFilterProps, type NpFilterItem } from './props'
-import { NPopover, NIcon, NDivider, type PopoverInst } from 'naive-ui'
-import ArrowRightIcon from './icon/arrow-right.vue'
-import { isFunction } from '../../utils'
-import NpFilterOption from './np-filter-option.vue'
+import { NPopover, NDivider, type PopoverInst } from 'naive-ui'
+import { NpCell } from '../../np-cell'
 import { throttle } from 'lodash-es'
+import FilterItem from './np-filter-item.vue'
 
 const { bemClass } = useCreate('np-filter')
 const props = defineProps(npFilterProps)

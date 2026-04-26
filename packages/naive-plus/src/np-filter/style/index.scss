@@ -1,13 +1,6 @@
 @import './option.scss';
 
 .np-filter {
-  .dark &,
-  html[theme-mode='dark'] & {
-    --np-filter-color-hover: rgb(99 99 105);
-  }
-
-  --np-filter-color-hover: rgb(243 243 245);
-
   &.n-popover {
     --n-padding: 0 !important;
   }
@@ -19,44 +12,12 @@
     padding: 4px 0;
     user-select: none;
 
+    .np-cell {
+      padding: 0 4px 0 8px;
+    }
+
     &-item {
       padding: 0 4px;
-
-      &-content {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        padding: 4px 4px 4px 6px;
-
-        &:hover {
-          background-color: var(--np-filter-color-hover);
-          border-radius: 4px;
-        }
-
-        &-left {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-        }
-
-        &-right {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-        }
-
-        &-icon {
-          display: flex;
-          flex-direction: column;
-          padding-right: 4px;
-          padding-left: 1px;
-        }
-
-        &-count {
-          font-size: 12px;
-        }
-      }
 
       &-clear {
         cursor: pointer;
@@ -65,8 +26,8 @@
   }
 
   &__category-option-popover {
-    padding: 0 !important;
+    padding: 4px !important;
 
-    --n-space: 4px !important;
+    --n-space: 3px !important;
   }
 }

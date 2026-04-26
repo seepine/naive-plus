@@ -1,50 +1,14 @@
 .np-filter-option {
-  .dark &,
-  html[theme-mode='dark'] & {
-    --np-filter-option-group-title-color: rgb(160 160 170);
-  }
-
-  min-width: 140px;
-  padding: 4px;
-  user-select: none;
-
-  --np-filter-option-group-title-color: rgb(114 113 123);
-
-  &__group {
-    &-title {
-      padding: 4px 2px 2px;
-      font-size: 12px;
-      color: var(--np-filter-option-group-title-color);
-    }
-  }
-
-  &__item {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 4px 4px 4px 6px;
+  .np-cell {
+    padding: 0 4px 0 8px;
     cursor: pointer;
+  }
 
-    &:hover {
-      background-color: var(--np-filter-color-hover);
-      border-radius: 4px;
-    }
+  .np-cell-group {
+    min-width: 140px;
 
-    &-left {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-    }
-
-    &-status {
-      padding-right: 4px;
-    }
-
-    &-icon {
-      display: flex;
-      flex-direction: column;
-      padding-right: 4px;
-      padding-left: 1px;
+    &__title {
+      padding-left: 8px;
     }
   }
 }

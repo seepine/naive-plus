@@ -19,7 +19,8 @@
           :placement="secondPlacement"
           trigger="hover"
           :show-arrow="false"
-          :class="`${bemClass}__category-option-popover`"
+          display-directive="show"
+          style="--n-space: 3px; --n-padding: 4px 0"
         >
           <template #trigger>
             <NpCell
@@ -33,11 +34,13 @@
             ></NpCell>
           </template>
 
-          <FilterItem
-            :option="option"
-            :value="props.params?.[option.key]"
-            @update:value="handleUpdateValue(option.key, $event)"
-          />
+          <NScrollbar style="max-height: 300px">
+            <FilterItem
+              :option="option"
+              :value="props.params?.[option.key]"
+              @update:value="handleUpdateValue(option.key, $event)"
+            />
+          </NScrollbar>
         </NPopover>
       </div>
 
@@ -58,7 +61,7 @@
 import { computed, ref } from 'vue'
 import { useCreate } from '../../_hooks/create'
 import { npFilterProps, type NpFilterItem } from './props'
-import { NPopover, NDivider, type PopoverInst } from 'naive-ui'
+import { NPopover, NDivider, type PopoverInst, NScrollbar } from 'naive-ui'
 import { NpCell } from '../../np-cell'
 import { throttle } from 'lodash-es'
 import FilterItem from './np-filter-item.vue'

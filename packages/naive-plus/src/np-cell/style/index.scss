@@ -107,17 +107,14 @@
   .dark &,
   html[theme-mode='dark'] & {
     --np-cell-group-title-color: rgb(160 160 170);
-    // --np-cell-group-border-color: rgba(255, 255, 255, 0.09);
   }
 
   --np-cell-group-title-color: rgb(114 113 123);
-  // --np-cell-group-border-color: rgb(239, 239, 245);
-
   --np-cell-group-title-font-size: 12px;
   --np-cell-group-padding: 6px 12px;
 
   &__small {
-    --np-cell-group-padding: 4px 12px;
+    --np-cell-group-padding: 4px 8px;
   }
 
   &__large {
@@ -131,8 +128,4 @@
     color: var(--np-cell-group-title-color);
     user-select: none;
   }
-
-  // .np-cell + .np-cell {
-  //   border-top: 1px solid var(--np-cell-group-border-color);
-  // }
 }

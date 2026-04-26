@@ -1,21 +1,32 @@
 <template>
   <div :class="bemClass">
-    <NpCellGroup
-      v-for="(item, idx) in groups"
-      :key="`__${idx}`"
-      v-model:keys="selectedKeys"
-      :title="item.title"
-      :options="item.options"
-      size="small"
-      :type="item.type"
-      @change="handleChange"
-    ></NpCellGroup>
+    <template v-if="props.option.searchable">
+      <div style="padding: 4px">
+        <NInput v-model:value="searchKey" size="small"></NInput>
+      </div>
+
+      <NDivider style="margin: 4px 0"></NDivider>
+    </template>
+
+    <div style="padding: 4px">
+      <NpCellGroup
+        v-for="(item, idx) in groups"
+        :key="`__${idx}`"
+        v-model:keys="selectedKeys"
+        :title="item.title"
+        :options="item.options"
+        size="small"
+        :type="item.type"
+        @change="handleChange"
+      ></NpCellGroup>
+      <NEmpty v-if="groups.length === 0" size="tiny"></NEmpty>
+    </div>
   </div>
 </template>
 <script setup lang="tsx">
 import { ref, watch } from 'vue'
 import { useCreate } from '../../_hooks/create'
-import { computedAsync, isArray, runAsync } from '../../utils'
+import { computedAsync, isArray, isString, runAsync } from '../../utils'
 import type { NpFilterItem, NpFilterItemOption } from './props'
 import {
   NpCellGroup,
@@ -23,6 +34,7 @@ import {
   type NpCellGroupKeys,
   type NpCellOption,
 } from '../../np-cell'
+import { NDivider, NEmpty, NInput } from 'naive-ui'
 
 const { bemClass } = useCreate('np-filter-option')
 
@@ -36,6 +48,7 @@ const emit = defineEmits<{
 }>()
 
 const loading = ref(false)
+const searchKey = ref('')
 
 const selectedKeys = ref<NpCellGroupKeys>([])
 const initKeys = () => {
@@ -47,19 +60,6 @@ const initKeys = () => {
   }
 }
 initKeys()
-
-// watch(
-//   () => props.value,
-//   () => {
-//     if (isArray(props.value)) {
-//       selectedKeys.value = props.value
-//     } else {
-//       selectedKeys.value =
-//         props.value !== undefined && props.value !== null ? [props.value] : []
-//     }
-//   },
-//   { immediate: true, deep: true }
-// )
 
 const groupOption = computedAsync<
   {
@@ -104,6 +104,7 @@ const groupOption = computedAsync<
   [],
   { resetInitialStateEffect: true }
 )
+
 const groups = ref<
   {
     title?: string
@@ -111,27 +112,35 @@ const groups = ref<
     options: NpCellOption[]
   }[]
 >([])
-
-watch(
-  groupOption,
-  () => {
-    groups.value = groupOption.value.map(item => {
+const calcGroup = () => {
+  groups.value = groupOption.value
+    .map(item => {
       return {
         title: item.title,
-        type: props.option.multiple === false ? 'radio' : 'checkbox',
-        options: item.options.map(opt => {
-          return {
-            label: opt.label,
-            key: opt.value,
-            checked: false,
-            type: props.option.multiple === false ? 'radio' : 'checkbox',
-          }
-        }),
+        type:
+          props.option.multiple === false
+            ? ('radio' as const)
+            : ('checkbox' as const),
+        options: item.options
+          .filter(opt => {
+            if (searchKey.value && isString(opt.label)) {
+              return opt.label.includes(searchKey.value)
+            }
+            return true
+          })
+          .map(opt => {
+            return {
+              label: opt.label,
+              key: opt.value,
+            }
+          }),
       }
     })
-  },
-  { immediate: true }
-)
+    .filter(group => group.options.length > 0)
+}
+
+watch(groupOption, calcGroup, { immediate: true, deep: true })
+watch(searchKey, calcGroup, { immediate: true })
 
 const handleChange = (keys: NpCellGroupKeys, item: NpCellOption) => {
   // 多选

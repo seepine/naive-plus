@@ -1,12 +1,16 @@
 <template>
-  <div :class="bemClass">
+  <div :class="`${bemClass} ${bemClass}__${props.size}`">
     <div v-if="props.title" :class="`${bemClass}__title`">
       {{ props.title }}
     </div>
     <NpCell
       v-for="(item, idx) in props.options"
-      v-bind="item"
       :key="item.key"
+      :label="item.label"
+      :icon="item.icon"
+      :value="item.value"
+      :description="item.description"
+      :arrow="item.arrow"
       :type="props.type"
       :size="props.size"
       :bordered="props.bordered && idx < props.options.length - 1"

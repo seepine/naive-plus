@@ -4,6 +4,9 @@ export const npCellProps = {
   type: {
     type: String as PropType<'checkbox' | 'radio' | 'switch'>,
   },
+  hover: {
+    type: Boolean,
+  },
   checked: {
     type: Boolean,
     default: false,
@@ -44,6 +47,7 @@ export interface NpCellOption {
   icon?: VNode | (() => VNode)
   value?: string | VNode | (() => VNode)
   description?: string | VNode | (() => VNode)
+  hover?: boolean
   arrow?: boolean
   onClick?: () => void
 }

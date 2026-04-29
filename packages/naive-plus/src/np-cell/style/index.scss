@@ -16,11 +16,11 @@
   padding: 0 var(--np-cell-padding-x);
   font-size: var(--np-cell-font-size);
   user-select: none;
+  border-radius: var(--np-cell-radius);
   transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-  &:hover {
+  &__hover:hover {
     background-color: var(--np-cell-color-hover);
-    border-radius: var(--np-cell-radius);
   }
 
   .dark &,

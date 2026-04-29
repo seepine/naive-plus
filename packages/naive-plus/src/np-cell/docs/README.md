@@ -26,14 +26,15 @@ permalink: /components/np-cell/
 
 ## Props
 
-| 参数    | 说明           | 类型                                 | 默认值  |
+| 参数 | 说明 | 类型 | 默认值 |
 | ------- | -------------- | ------------------------------------ | ------- |
-| v-model:checked | 控件选中状态   | `boolean`                            | `false` |
-| type    | 左侧控件类型   | `'checkbox' \| 'radio' \| 'switch'`  | -       |
-| icon    | 左侧图标       | `VNode \| () => VNode`               | -       |
-| label   | 单元格标签     | `string \| VNode \| () => VNode`              | -       |
-| value   | 单元格值     | `string \| VNode \| () => VNode`              | -       |
-| arrow   | 是否显示右侧箭头 | `boolean`                          | `false` |
+| v-model:checked | 控件选中状态 | `boolean` | `false` |
+| type | 左侧控件类型 | `'checkbox' \| 'radio' \| 'switch'` | - |
+| hover | 是否启用悬停态，未传时在 `type` 非空时默认为 `true`，否则为 `false` | `boolean` | `type ? true : false` |
+| icon | 左侧图标 | `VNode \| () => VNode` | - |
+| label | 单元格标签 | `string \| VNode \| () => VNode` | - |
+| value | 单元格值 | `string \| VNode \| () => VNode` | - |
+| arrow | 是否显示右侧箭头 | `boolean` | `false` |
 
 ## Events
 

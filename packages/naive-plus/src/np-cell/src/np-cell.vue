@@ -1,5 +1,10 @@
 <template>
-  <div :class="`${bemClass} ${bemClass}__${props.size}`" @click="handleClick">
+  <div
+    :class="`${bemClass} ${bemClass}__${props.size} ${
+      isHover ? `${bemClass}__hover` : ''
+    }`"
+    @click="handleClick"
+  >
     <div v-if="props.type || props.icon" :class="`${bemClass}__control`">
       <NCheckbox
         v-if="props.type === 'checkbox'"
@@ -73,6 +78,8 @@ const typeSize = computed(() => {
   }
   return 'small'
 })
+
+const isHover = computed(() => props.hover ?? props.type !== undefined)
 
 const handleClick = () => {
   if (props.type) {

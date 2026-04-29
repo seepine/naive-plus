@@ -10,6 +10,7 @@
       :icon="item.icon"
       :value="item.value"
       :description="item.description"
+      :hover="item.hover"
       :arrow="item.arrow"
       :type="props.type"
       :size="props.size"

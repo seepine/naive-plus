@@ -1,6 +1,6 @@
 import type { ExtractPropTypes, PropType } from 'vue'
-import type { TableColumn } from '../../interface'
-import type { NpFilterItem } from '../../../../np-filter'
+import type { TableColumn } from '../interface'
+import type { NpFilterItem } from '../../../np-filter'
 
 export const npTableHeaderProps = {
   filters: {

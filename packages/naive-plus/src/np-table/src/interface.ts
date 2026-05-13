@@ -1,30 +1,38 @@
 import type { VNode } from 'vue'
 import type {
   DataTableProps,
+  OnUpdateCheckedRowKeys,
   TableBaseColumn,
-  TableExpandColumn,
-  TableSelectionColumn,
 } from 'naive-ui/es/data-table/src/interface'
 import type { AnyObject } from '../../types'
 import type { PaginationProps } from 'naive-ui'
 import type { NpFilterItem } from '../../np-filter'
+import type { FormColumn } from '../../np-form'
 
-export type NTableColumn<T = AnyObject> =
-  | TableBaseColumn<T>
-  | TableSelectionColumn<T>
-  | TableExpandColumn<T>
+export type NTableColumn<T extends AnyObject = AnyObject> = TableBaseColumn<T>
+// | TableSelectionColumn<T>
+// | TableExpandColumn<T>
 
-export interface TableColumn<T = AnyObject> {
-  key: string
-  title?: string
-  render?: (rowData: any, rowIndex: number) => VNode
-  type?: 'selection' | 'index' | 'expand'
-
-  props?: Omit<NTableColumn<T>, 'key' | 'title' | 'render' | 'type'>
+export type NTableColumnExt = NTableColumn & {
   display?: boolean
+  key: string
+  label: string
 }
 
-export interface TableApiFetchResult<T = AnyObject> {
+export type TableColumn<T extends AnyObject = AnyObject> = {
+  key: string
+  label: string
+  render?: (rowData: any, rowIndex: number) => VNode
+  props?: Omit<NTableColumn<T>, 'key' | 'title' | 'render' | 'type'>
+  display?: boolean
+  formProps?: Partial<FormColumn<T>> & {
+    addProps?: Partial<FormColumn<T>>
+    editProps?: Partial<FormColumn<T>>
+    viewProps?: Partial<FormColumn<T>>
+  }
+}
+
+export interface TableApiFetchResult<T extends AnyObject = AnyObject> {
   /**
    * 总条数
    */
@@ -35,7 +43,7 @@ export interface TableApiFetchResult<T = AnyObject> {
   items: T[]
 }
 
-export interface TableOption<T = AnyObject> {
+export interface TableOption<T extends AnyObject = AnyObject> {
   api: {
     fetch: (
       pageParams: {
@@ -48,8 +56,30 @@ export interface TableOption<T = AnyObject> {
   rowKey?: string
   props?: Omit<
     DataTableProps,
-    'columns' | 'pagination' | 'data' | 'loading' | 'rowKey'
-  >
+    | 'columns'
+    | 'pagination'
+    | 'data'
+    | 'loading'
+    | 'rowKey'
+    | 'onUpdateCheckedRowKeys'
+  > & {}
+
+  selection?:
+    | boolean
+    | {
+        multiple?: boolean
+        disabled?: (row: T) => boolean
+        onChange?: OnUpdateCheckedRowKeys
+      }
+
+  operation?:
+    | false
+    | (Omit<NTableColumn<T>, 'key' | 'title' | 'render' | 'type'> & {
+        label?: string
+        prefixRender?: (rowData: any, rowIndex: number) => VNode
+        suffixRender?: (rowData: any, rowIndex: number) => VNode
+      })
+
   pagination?:
     | false
     | {

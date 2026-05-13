@@ -1,4 +1,4 @@
-import type { TableColumn } from '../../interface'
+import type { TableColumn } from '../interface'
 
 export type { TableColumn }
 

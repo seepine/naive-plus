@@ -21,9 +21,9 @@ for (let i = 4; i <= 100; i++) {
 }
 const option: TableOption = {
   columns: [
-    { key: 'name', title: 'Name' },
-    { key: 'age', title: 'Age' },
-    { key: 'address', title: 'Address' },
+    { key: 'name', label: 'Name' },
+    { key: 'age', label: 'Age' },
+    { key: 'address', label: 'Address' },
   ],
   api: {
     fetch: async ({ page, pageSize }) => {

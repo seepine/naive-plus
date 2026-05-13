@@ -64,6 +64,7 @@ export const zh: SidebarConfig = {
       children: [
         { text: '基础用法', link: '/table/base/' },
         { text: '筛选功能', link: '/table/filter/' },
+        { text: '多选功能', link: '/table/selection/' },
       ],
     },
   ],

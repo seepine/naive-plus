@@ -14,9 +14,9 @@ const mockData = Array.from({ length: 50 }, (_, i) => ({
 
 const option: TableOption = {
   columns: [
-    { key: 'name', title: '姓名' },
-    { key: 'age', title: '年龄' },
-    { key: 'status', title: '状态' },
+    { key: 'name', label: '姓名' },
+    { key: 'age', label: '年龄' },
+    { key: 'status', label: '状态' },
   ],
   filters: [
     {
@@ -27,6 +27,15 @@ const option: TableOption = {
         { label: '禁用', value: 'disabled' },
         { label: '待处理', value: 'pending' },
       ],
+      multiple: true,
+    },
+    {
+      key: 'users',
+      label: '用户',
+      options: mockData.map(item => ({
+        label: item.name,
+        value: item.id,
+      })),
       multiple: true,
       searchable: true,
     },
@@ -43,6 +52,13 @@ const option: TableOption = {
           ? queryParams.status
           : [queryParams.status]
         items = items.filter(item => statuses.includes(item.status))
+      }
+      // 根据筛选条件过滤
+      if (queryParams.users && queryParams.users.length > 0) {
+        const users = Array.isArray(queryParams.users)
+          ? queryParams.users
+          : [queryParams.users]
+        items = items.filter(item => users.includes(item.id))
       }
 
       return {

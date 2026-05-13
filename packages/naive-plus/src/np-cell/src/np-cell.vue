@@ -44,7 +44,7 @@
         </div>
       </div>
       <div :class="`${bemClass}__right`">
-        <div :class="`${bemClass}__value`">
+        <div v-if="props.value" :class="`${bemClass}__value`">
           <span v-if="isString(props.value)">{{ props.value }}</span>
           <component :is="props.value" v-else />
         </div>

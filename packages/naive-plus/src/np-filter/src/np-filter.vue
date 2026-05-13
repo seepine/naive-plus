@@ -30,6 +30,7 @@
                 optionCount(option) > 0 ? `${optionCount(option)}` : undefined
               "
               :arrow="true"
+              :hover="true"
               size="small"
             ></NpCell>
           </template>
@@ -49,7 +50,7 @@
         :class="`${bemClass}__category-item ${bemClass}__category-item-clear`"
         @click="handleClear"
       >
-        <NpCell label="清除所有筛选" size="small"></NpCell>
+        <NpCell label="清除所有筛选" size="small" :hover="true"></NpCell>
       </div>
     </div>
   </NPopover>

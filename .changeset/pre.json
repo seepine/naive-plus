@@ -9,13 +9,22 @@
     "@seepine/stylelint-config": "0.1.0"
   },
   "changesets": [
+    "breezy-carpets-greet",
     "brown-elephants-add",
     "dirty-cheetahs-act",
+    "famous-kings-provide",
+    "forty-beers-obey",
     "funny-singers-exercise",
+    "hip-rules-perform",
+    "honest-dragons-appear",
     "lucky-falcons-help",
+    "moody-hotels-drive",
     "shiny-mails-speak",
     "smart-feet-jump",
     "stupid-lemons-grow",
+    "sweet-stingrays-punch",
+    "tall-boats-mix",
+    "tasty-jars-invite",
     "unlucky-trainers-leave"
   ]
 }

@@ -1,5 +1,27 @@
 # naive-plus
 
+## 0.1.0-beta.7
+
+### Minor Changes
+
+- [`371a774`](https://github.com/seepine/naive-plus/commit/371a774cf5a86316ee0ee4d38a131ee640c67e02) Thanks [@seepine](https://github.com/seepine)! - feat(cell): add NpCell and NpCellGroup components
+
+- [`814da95`](https://github.com/seepine/naive-plus/commit/814da955ba3f1639007e5445a58275f243c1f7fc) Thanks [@seepine](https://github.com/seepine)! - feat(cell): add key-based selection support to NpCellGroup
+
+- [`b4f8979`](https://github.com/seepine/naive-plus/commit/b4f8979a1bb1e318244402534f8fb0baf88e20c4) Thanks [@seepine](https://github.com/seepine)! - feat(filter): add searchable filter options with scrollable popover
+
+- [`132efcf`](https://github.com/seepine/naive-plus/commit/132efcffdc70649366c5af1b33adff73717ce439) Thanks [@seepine](https://github.com/seepine)! - refactor(filter): move scrollbar wrapper from parent to filter item component
+
+- [`15b4888`](https://github.com/seepine/naive-plus/commit/15b4888588e503eed3d59f1a7cb3b7b8c7298afa) Thanks [@seepine](https://github.com/seepine)! - feat: add NpFilter and NpTable components
+
+- [`c6d3eef`](https://github.com/seepine/naive-plus/commit/c6d3eef6cf039721283727c599f4392da05799cb) Thanks [@seepine](https://github.com/seepine)! - feat(cell): add bordered and description props to NpCell
+
+- [`602cd64`](https://github.com/seepine/naive-plus/commit/602cd6428524a4ba7140863ee9bf4c13a1d1287d) Thanks [@seepine](https://github.com/seepine)! - refactor(filter): replace custom filter option with NpCellGroup-based implementation
+
+- [`ad97d5a`](https://github.com/seepine/naive-plus/commit/ad97d5a5ed165850941b6ad85b2c810b837fbabc) Thanks [@seepine](https://github.com/seepine)! - feat(np-table): introduce table props sanitizer and operation action component
+
+- [`cb2a7fa`](https://github.com/seepine/naive-plus/commit/cb2a7fae387afd77d8e0af470aa1544b7f5fb21a) Thanks [@seepine](https://github.com/seepine)! - feat(cell): add hover prop to control cell hover state
+
 ## 0.1.0-beta.6
 
 ### Patch Changes

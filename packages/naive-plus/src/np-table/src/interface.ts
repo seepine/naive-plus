@@ -4,10 +4,10 @@ import type {
   OnUpdateCheckedRowKeys,
   TableBaseColumn,
 } from 'naive-ui/es/data-table/src/interface'
-import type { AnyObject } from '../../types'
-import type { PaginationProps } from 'naive-ui'
+import type { AnyObject, AsyncValue } from '../../types'
+import type { DropdownOption, PaginationProps } from 'naive-ui'
 import type { NpFilterItem } from '../../np-filter'
-import type { FormColumn } from '../../np-form'
+import type { FormColumn, FormOption } from '../../np-form'
 
 export type NTableColumn<T extends AnyObject = AnyObject> = TableBaseColumn<T>
 // | TableSelectionColumn<T>
@@ -28,8 +28,11 @@ export type TableColumn<T extends AnyObject = AnyObject> = {
   formProps?: Partial<FormColumn<T>> & {
     addProps?: Partial<FormColumn<T>>
     editProps?: Partial<FormColumn<T>>
-    viewProps?: Partial<FormColumn<T>>
   }
+}
+
+export type TableOperationOption = DropdownOption & {
+  type?: 'edit' | 'del'
 }
 
 export interface TableApiFetchResult<T extends AnyObject = AnyObject> {
@@ -52,7 +55,12 @@ export interface TableOption<T extends AnyObject = AnyObject> {
       },
       queryParams: Record<string, any>
     ) => TableApiFetchResult<T> | Promise<TableApiFetchResult<T>>
+
+    add?: (rowData: T) => AsyncValue<T | boolean | void>
+    edit?: (rowData: T) => AsyncValue<T | boolean | void>
+    del?: (rowData: T) => AsyncValue<T | boolean | void>
   }
+
   rowKey?: string
   props?: Omit<
     DataTableProps,
@@ -68,16 +76,26 @@ export interface TableOption<T extends AnyObject = AnyObject> {
     | boolean
     | {
         multiple?: boolean
-        disabled?: (row: T) => boolean
+        disabled?: (rowData: T) => boolean
         onChange?: OnUpdateCheckedRowKeys
       }
+
+  formProps?: FormOption['props']
 
   operation?:
     | false
     | (Omit<NTableColumn<T>, 'key' | 'title' | 'render' | 'type'> & {
         label?: string
-        prefixRender?: (rowData: any, rowIndex: number) => VNode
-        suffixRender?: (rowData: any, rowIndex: number) => VNode
+        prefixRender?: (rowData: T, rowIndex: number) => VNode
+        suffixRender?: (rowData: T, rowIndex: number) => VNode
+
+        options?: TableOperationOption[]
+        onSelect?: (key: string) => void | boolean
+
+        onBefore?: (
+          rowData: T,
+          type: 'add' | 'edit' | 'del'
+        ) => boolean | T | void | Promise<boolean | T | void>
       })
 
   pagination?:

@@ -10,13 +10,14 @@ const options = ref<NpCellOption[]>([
 ])
 
 const navOptions: NpCellOption[] = [
-  { label: '个人信息', arrow: true },
+  { label: '个人信息', arrow: true, hover: true },
   {
     label: '账号安全',
     arrow: true,
+    hover: true,
     description: '账号安全设置',
   },
-  { label: '隐私设置', arrow: true, value: '已设置' },
+  { label: '隐私设置', arrow: true, hover: true, value: '已设置' },
 ]
 
 const handleClick = (item: NpCellOption) => {

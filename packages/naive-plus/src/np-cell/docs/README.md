@@ -30,7 +30,7 @@ permalink: /components/np-cell/
 | ------- | -------------- | ------------------------------------ | ------- |
 | v-model:checked | 控件选中状态 | `boolean` | `false` |
 | type | 左侧控件类型 | `'checkbox' \| 'radio' \| 'switch'` | - |
-| hover | 是否启用悬停态，未传时在 `type` 非空时默认为 `true`，否则为 `false` | `boolean` | `type ? true : false` |
+| hover | 是否启用悬停态 | `boolean` | 未传时 `type` 非空为 `true`，否则 `false` |
 | icon | 左侧图标 | `VNode \| () => VNode` | - |
 | label | 单元格标签 | `string \| VNode \| () => VNode` | - |
 | value | 单元格值 | `string \| VNode \| () => VNode` | - |

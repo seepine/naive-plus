@@ -11,10 +11,13 @@ import {
 } from 'naive-ui'
 import { isFunction, isObject } from '../../utils'
 import IconButtonGroup from './np-table-header/icon-button-group.vue'
+import NpTableAction from './np-table-action.vue'
+import NpTableCrudDialog from './components/np-table-crud-dialog.vue'
+import NpTableDelDialog from './components/np-table-del-dialog.vue'
 import type { NTableColumn, NTableColumnExt } from './interface'
-import IconEdit from './icon/edit.vue'
-import IconDel from './icon/del.vue'
 import IconAdd from './icon/add.vue'
+import { sanitizeTableProps } from './use-table-props'
+import { useCrud } from './use-crud'
 
 const { name, bemClass } = useCreate('np-table')
 
@@ -67,32 +70,35 @@ export default defineComponent({
         .filter(item => item.display)
     }
 
+    const {
+      dialogVisible,
+      delVisible,
+      crudMode,
+      formData,
+      dialogLoading,
+      delLoading,
+      delRow,
+      openAction,
+      handleSubmit,
+      handleDel,
+    } = useCrud(() => props.option, fetchData)
+
     onMounted(() => {
       resetColumn()
       fetchData()
     })
 
-    const paginationInfo = computed(() => {
-      const basePagination: PaginationProps = {
+    const pagination = computed<PaginationProps | false>(() => {
+      if (props.option.pagination === false) {
+        return false
+      }
+      return {
         pageSizes: [10, 20, 50, 100],
         showSizePicker: true,
         showQuickJumper: false,
         showQuickJumpDropdown: true,
         pageSlot: 5,
-      }
-
-      return {
-        ...basePagination,
         ...props.option.pagination,
-      }
-    })
-
-    const pagination = computed(() => {
-      if (props.option.pagination === false) {
-        return false
-      }
-      return {
-        ...paginationInfo.value,
         page: page.value,
         pageSize: pageSize.value,
         itemCount: itemCount.value,
@@ -109,13 +115,15 @@ export default defineComponent({
     })
 
     const tableProps = computed<DataTableProps>(() => {
+      const mergedProps = sanitizeTableProps(props.option.props)
+
       return {
         rowKey: (item: Record<string, any>): string | number => {
           return item[props.option.rowKey || 'id']
         },
         bordered: false,
         remote: true,
-        ...props.option.props,
+        ...mergedProps,
         onUpdateCheckedRowKeys: (keys, rows, meta) => {
           if (isObject(props.option.selection)) {
             props.option.selection?.onChange?.(keys, rows, meta)
@@ -134,8 +142,6 @@ export default defineComponent({
 
     const displayColumns = computed<NTableColumn[]>(() => {
       const list: NTableColumn[] = columns.value.filter(item => item.display)
-      // selection
-      console.log(props.option.selection)
 
       if (props.option.selection) {
         let selectionColumn: any
@@ -150,49 +156,36 @@ export default defineComponent({
         }
         list.splice(0, 0, selectionColumn)
       }
-      // operation
       if (props.option.operation !== false) {
-        const operation = {
-          ...props.option.operation,
+        // onBefore 由 useCrud 消费，这里复制 operation 并移除该字段，避免误传给列对象
+        const operation: Record<string, any> = {
+          ...(props.option.operation ?? {}),
         }
+        delete operation.onBefore
 
         list.push({
-          title: operation.label || '操作',
-          width: 80,
           ...operation,
+          title: operation.label ?? '',
+          width: 80,
           key: '__operation',
           render(rowData, rowIndex) {
             return (
-              <div class={`${bemClass.value}__operation`}>
-                {operation.prefixRender?.(rowData, rowIndex)}
-                <NButton
-                  size="small"
-                  secondary
-                  class={`${bemClass.value}__operation-button`}
-                >
-                  {{
-                    icon: () => (
-                      <NIcon>
-                        <IconEdit></IconEdit>
-                      </NIcon>
-                    ),
-                  }}
-                </NButton>
-                <NButton
-                  size="small"
-                  secondary
-                  class={`${bemClass.value}__operation-button`}
-                >
-                  {{
-                    icon: () => (
-                      <NIcon>
-                        <IconDel></IconDel>
-                      </NIcon>
-                    ),
-                  }}
-                </NButton>
-                {operation.suffixRender?.(rowData, rowIndex)}
-              </div>
+              <NpTableAction
+                rowData={rowData}
+                rowIndex={rowIndex}
+                options={operation.options}
+                prefixRender={operation.prefixRender}
+                suffixRender={operation.suffixRender}
+                onSelect={key => {
+                  if (key === 'edit') {
+                    openAction('edit', rowData)
+                  } else if (key === 'delete') {
+                    openAction('del', rowData)
+                  } else {
+                    operation.onSelect?.(key)
+                  }
+                }}
+              />
             )
           },
         })
@@ -207,22 +200,22 @@ export default defineComponent({
           <div class={`${bemClass.value}__header-left`}>{slots.headerLeft}</div>
           <div class={`${bemClass.value}__header-right`}>
             {slots.headerRight}
-            <NButton type="primary">
-              {{
-                icon: () => (
-                  <NIcon>
-                    <IconAdd></IconAdd>
-                  </NIcon>
-                ),
-                default: () => <span>添加</span>,
-              }}
-            </NButton>
+            {props.option.operation !== false && props.option.api?.add && (
+              <NButton type="primary" onClick={() => openAction('add')}>
+                {{
+                  icon: () => (
+                    <NIcon>
+                      <IconAdd></IconAdd>
+                    </NIcon>
+                  ),
+                  default: () => <span>添加</span>,
+                }}
+              </NButton>
+            )}
             <IconButtonGroup
               filters={props.option.filters}
               columns={columns.value}
-              onUpdate:columns={(nextColumns: NTableColumnExt[]) => {
-                columns.value = nextColumns
-              }}
+              onUpdate:columns={next => (columns.value = next)}
               onRefresh={fetchData}
               onFilterChange={handleFilterChange}
             ></IconButtonGroup>
@@ -242,6 +235,28 @@ export default defineComponent({
             <NPagination {...pagination.value}></NPagination>
           ) : undefined}
         </div>
+
+        <NpTableCrudDialog
+          visible={dialogVisible.value}
+          mode={crudMode.value}
+          columns={props.option.columns}
+          modelValue={formData.value}
+          loading={dialogLoading.value}
+          formProps={props.option.formProps}
+          onUpdate:visible={(val: boolean) => (dialogVisible.value = val)}
+          onUpdate:modelValue={(val: Record<string, any>) =>
+            (formData.value = val)
+          }
+          onSubmit={handleSubmit}
+        />
+
+        <NpTableDelDialog
+          visible={delVisible.value}
+          row={delRow.value}
+          loading={delLoading.value}
+          onUpdate:visible={(val: boolean) => (delVisible.value = val)}
+          onConfirm={handleDel}
+        />
       </div>
     )
   },

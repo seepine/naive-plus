@@ -33,8 +33,8 @@ import type { TableOption, TableColumn, TableFilter } from 'naive-plus'
 | 属性       | 说明                              | 类型                                                                                 | 默认值 |
 | ---------- | --------------------------------- | ------------------------------------------------------------------------------------ | ------ |
 | columns    | 表格列                            | Array<[TableColumn](#tablecolumn)>                                                   | -      |
-| api        | 数据接口                          | `{ fetch: (pageParams, otherParams) => Promise<{ items, pageCount?, pageSizes? }> }` | -      |
-| props      | 表格属性，会透传给 `n-data-table` | object                                                                               | -      |
+| api        | 数据接口                          | `{ fetch: (pageParams, otherParams) => Promise<{ items, itemCount? }> }`            | -      |
+| props      | 表格属性，会透传给 `n-data-table`。为避免表格内部纵向滚动遮挡页面内容，会忽略 `maxHeight`、`flexHeight`、`virtualScroll` 等纵向滚动相关配置 | object                                                                               | -      |
 | pagination | 分页配置，设为 `false` 可禁用分页 | `false` / `PaginationConfig`                                                         | -      |
 | filters    | 筛选器配置                        | Array<[TableFilter](/table/filter/)>                                                   | -      |
 

@@ -3,7 +3,7 @@ import type { TableOption } from './interface'
 
 export const npTableProps = {
   option: {
-    type: Object as PropType<TableOption>,
+    type: Object as PropType<TableOption<any>>,
     required: true,
     default: () => {
       return { columns: [], api: { fetch: async () => ({ items: [] }) } }

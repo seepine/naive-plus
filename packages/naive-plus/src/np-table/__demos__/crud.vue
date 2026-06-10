@@ -11,42 +11,51 @@ type User = {
   age: number
   address: string
 }
-// Mock API
+
 const mockData: User[] = [
   { id: 1, name: 'John', age: 30, address: 'New York' },
   { id: 2, name: 'Jane', age: 25, address: 'Los Angeles' },
   { id: 3, name: 'Bob', age: 35, address: 'Chicago' },
 ]
-for (let i = 4; i <= 100; i++) {
-  mockData.push({
-    id: i,
-    name: `User ${i}`,
-    age: 20 + (i % 30),
-    address: `City ${i}`,
-  })
-}
+
 const option: TableOption<User> = {
   columns: [
     {
       key: 'name',
-      label: 'Name',
+      label: '姓名',
+      formProps: { type: 'input' },
     },
     {
       key: 'age',
-      label: 'Age',
+      label: '年龄',
       formProps: { type: 'number' },
     },
     {
       key: 'address',
-      label: 'Address',
+      label: '地址',
+      formProps: { type: 'input' },
     },
   ],
   api: {
     fetch: async ({ page, pageSize }) => {
-      await new Promise<void>(resolve => setTimeout(resolve, 500))
       return {
         items: mockData.slice((page - 1) * pageSize, page * pageSize),
         itemCount: mockData.length,
+      }
+    },
+    add: async rowData => {
+      mockData.unshift({ ...rowData, id: mockData.length + 1 })
+    },
+    edit: async rowData => {
+      const idx = mockData.findIndex(item => item.id === rowData.id)
+      if (idx !== -1) {
+        mockData[idx] = { ...mockData[idx], ...rowData }
+      }
+    },
+    del: async rowData => {
+      const idx = mockData.findIndex(item => item.id === rowData.id)
+      if (idx !== -1) {
+        mockData.splice(idx, 1)
       }
     },
   },

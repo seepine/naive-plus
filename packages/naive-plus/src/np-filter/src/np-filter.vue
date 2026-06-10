@@ -20,7 +20,7 @@
           trigger="hover"
           :show-arrow="false"
           display-directive="show"
-          style="--n-space: 3px; --n-padding: 4px 0"
+          :style="{ '--n-space': '3px', '--n-padding': '4px 0' }"
         >
           <template #trigger>
             <NpCell

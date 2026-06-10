@@ -106,11 +106,14 @@ const handleColumnDisplay = (key: string, val: boolean) => {
 }
 
 const displayOptions = computed<NpCellOption[]>(() => {
-  return props.columns.map(col => ({
-    key: col.key,
-    label: col.label,
-    value: () => <NSwitch size="small" value={col.display} />,
-    onClick: () => handleColumnDisplay(col.key, col.display === false),
-  }))
+  return props.columns.map(
+    (col): NpCellOption => ({
+      key: col.key,
+      label: col.label,
+      hover: true,
+      value: () => <NSwitch size="small" value={col.display} />,
+      onClick: () => handleColumnDisplay(col.key, col.display === false),
+    })
+  )
 })
 </script>

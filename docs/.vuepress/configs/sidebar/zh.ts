@@ -63,6 +63,8 @@ export const zh: SidebarConfig = {
       text: '表格',
       children: [
         { text: '基础用法', link: '/table/base/' },
+        { text: '增删改查', link: '/table/crud/' },
+        { text: '自定义操作列', link: '/table/operation/' },
         { text: '筛选功能', link: '/table/filter/' },
         { text: '多选功能', link: '/table/selection/' },
       ],

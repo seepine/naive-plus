@@ -40,6 +40,12 @@ jobs:
           pnpm lint:stylelint
           pnpm lint:prettier
 
+      - name: Test example
+        run: |
+          pnpm ui:build
+          cd examples
+          pnpm build-only
+
       # https://github.com/changesets/action
       - name: Create Release Pull Request or Publish to npm
         uses: changesets/action@v1

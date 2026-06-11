@@ -1,5 +1,11 @@
 # naive-plus
 
+## 0.1.0-beta.9
+
+### Minor Changes
+
+- [#10](https://github.com/seepine/naive-plus/pull/10) [`abcbbf1`](https://github.com/seepine/naive-plus/commit/abcbbf1a8039555123aa1112548b8f2021b940ef) Thanks [@seepine](https://github.com/seepine)! - chore(naive-plus): simplify package exports field
+
 ## 0.1.0-beta.8
 
 ### Minor Changes

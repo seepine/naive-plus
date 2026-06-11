@@ -19,23 +19,17 @@
       "import": "./es/resolver.mjs",
       "require": "./lib/resolver.js"
     },
-    "./dist/*": "./dist/*",
     "./es": {
       "types": "./es/index.d.ts",
       "import": "./es/index.mjs"
     },
-    "./es/*": {
-      "types": "./es/*.d.ts",
-      "import": "./es/*.mjs"
-    },
+    "./es/*": "./es/*",
     "./lib": {
       "types": "./lib/index.d.ts",
       "require": "./lib/index.js"
     },
-    "./lib/*": {
-      "types": "./lib/*.d.ts",
-      "require": "./lib/*.js"
-    },
+    "./lib/*": "./lib/*",
+    "./dist/*": "./dist/*",
     "./index.css": "./dist/index.css",
     "./index.scss": "./es/index.scss",
     "./package.json": "./package.json"

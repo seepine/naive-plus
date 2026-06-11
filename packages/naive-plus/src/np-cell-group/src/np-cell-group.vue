@@ -27,7 +27,7 @@ import {
   type NpCellGroupKeys,
   type NpCellOption,
 } from './props'
-import NpCell from './np-cell.vue'
+import NpCell from '../../np-cell/src/np-cell.vue'
 import { ref, watch } from 'vue'
 
 const { bemClass } = useCreate('np-cell-group')

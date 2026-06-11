@@ -29,33 +29,23 @@ describe('NaivePlusResolver', () => {
     })
   })
 
-  test('maps np-cell-group to the owning np-cell directory', () => {
+  test('resolves np-cell-group to its own directory', () => {
     expect(resolve('NpCellGroup')).toEqual({
       name: 'NpCellGroup',
-      from: 'naive-plus/es/np-cell',
-      sideEffects: 'naive-plus/es/np-cell/style/index.css',
+      from: 'naive-plus/es/np-cell-group',
+      sideEffects: 'naive-plus/es/np-cell-group/style/index.css',
     })
   })
 
-  test('does not emit a non-existent np-cell-group style path', () => {
-    const result = resolve('NpCellGroup')
-    expect(typeof result?.sideEffects).toBe('string')
-    expect(result?.sideEffects as string).not.toContain('np-cell-group/style')
-  })
-
-  test('honors scss importStyle for sub-components', () => {
+  test('honors scss importStyle', () => {
     const resolver = NaivePlusResolver({ importStyle: 'scss' })
-    const result = resolver.resolve!('NpCellGroup') as {
-      sideEffects?: string
-    }
-    expect(result.sideEffects).toBe('naive-plus/es/np-cell/style/index.scss')
+    const result = resolver.resolve!('NpButton') as { sideEffects?: string }
+    expect(result.sideEffects).toBe('naive-plus/es/np-button/style/index.scss')
   })
 
   test('skips sideEffects when importStyle is false', () => {
     const resolver = NaivePlusResolver({ importStyle: false })
-    const result = resolver.resolve!('NpCellGroup') as {
-      sideEffects?: string
-    }
+    const result = resolver.resolve!('NpButton') as { sideEffects?: string }
     expect(result.sideEffects).toBeUndefined()
   })
 

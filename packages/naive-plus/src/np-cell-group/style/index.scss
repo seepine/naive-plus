@@ -1,0 +1,26 @@
+.np-cell-group {
+  .dark &,
+  html[theme-mode='dark'] & {
+    --np-cell-group-title-color: rgb(160 160 170);
+  }
+
+  --np-cell-group-title-color: rgb(114 113 123);
+  --np-cell-group-title-font-size: 12px;
+  --np-cell-group-padding: 6px 12px;
+
+  &__small {
+    --np-cell-group-padding: 4px 8px;
+  }
+
+  &__large {
+    --np-cell-group-padding: 8px 12px;
+    --np-cell-group-title-font-size: 14px;
+  }
+
+  &__title {
+    padding: var(--np-cell-group-padding);
+    font-size: var(--np-cell-group-title-font-size);
+    color: var(--np-cell-group-title-color);
+    user-select: none;
+  }
+}

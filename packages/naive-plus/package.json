@@ -21,7 +21,7 @@
     },
     "./dist/*": "./dist/*",
     "./es": "./es/index.mjs",
-    "./es/*": "./es/*",
+    "./es/*": "./es/*/index.mjs",
     "./lib": "./lib/index.js",
     "./lib/*": "./lib/*",
     "./index.css": "./dist/index.css",

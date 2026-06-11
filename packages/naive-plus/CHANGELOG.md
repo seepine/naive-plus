@@ -1,5 +1,13 @@
 # naive-plus
 
+## 0.1.0-beta.8
+
+### Minor Changes
+
+- [`de2a605`](https://github.com/seepine/naive-plus/commit/de2a60557dbcad0fa75e7130c900a3cdc9c90d46) Thanks [@seepine](https://github.com/seepine)! - feat(np-cell-group): split cell group into its own module
+
+- [`3c612df`](https://github.com/seepine/naive-plus/commit/3c612dfa38755130d41dd076f31738d785e91e6d) Thanks [@seepine](https://github.com/seepine)! - refactor(np-cell-group): rename option type to NpCellGroupOption
+
 ## 0.1.0-beta.7
 
 ### Minor Changes

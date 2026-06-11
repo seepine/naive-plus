@@ -25,9 +25,9 @@ import { useCreate } from '../../_hooks/create'
 import {
   npCellGroupProps,
   type NpCellGroupKeys,
-  type NpCellOption,
+  type NpCellGroupOption,
 } from './props'
-import NpCell from './np-cell.vue'
+import { NpCell } from '../../np-cell'
 import { ref, watch } from 'vue'
 
 const { bemClass } = useCreate('np-cell-group')
@@ -36,7 +36,7 @@ const props = defineProps(npCellGroupProps)
 
 const emit = defineEmits<{
   (e: 'update:keys', keys: NpCellGroupKeys): void
-  (e: 'change', keys: NpCellGroupKeys, item: NpCellOption): void
+  (e: 'change', keys: NpCellGroupKeys, item: NpCellGroupOption): void
 }>()
 
 const selectedKeys = ref<NpCellGroupKeys>([])
@@ -48,7 +48,7 @@ watch(
   { immediate: true, deep: true }
 )
 
-const handleClick = (item: NpCellOption) => {
+const handleClick = (item: NpCellGroupOption) => {
   const key = item.key === undefined ? props.options.indexOf(item) : item.key
   if (props.type === 'radio') {
     if (selectedKeys.value.includes(key)) {

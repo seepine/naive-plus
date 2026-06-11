@@ -36,7 +36,7 @@ import {
   type NpCellGroupKey,
   type NpCellGroupKeys,
   type NpCellOption,
-} from '../../np-cell'
+} from '../../np-cell-group'
 import { NDivider, NEmpty, NInput } from 'naive-ui'
 
 const { bemClass } = useCreate('np-filter-option')

@@ -62,7 +62,7 @@ import { NpFilter, type NpFilterItem } from '../../../np-filter'
 import FilterIcon from '../icon/filter.vue'
 import DisplayIcon from '../icon/display.vue'
 import RefreshIcon from '../icon/refresh.vue'
-import { NpCellGroup, type NpCellOption } from '../../../np-cell'
+import { NpCellGroup, type NpCellOption } from '../../../np-cell-group'
 
 const props = defineProps<{
   filters?: NpFilterItem[]

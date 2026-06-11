@@ -20,10 +20,22 @@
       "require": "./lib/resolver.js"
     },
     "./dist/*": "./dist/*",
-    "./es": "./es/index.mjs",
-    "./es/*": "./es/*",
-    "./lib": "./lib/index.js",
-    "./lib/*": "./lib/*",
+    "./es": {
+      "types": "./es/index.d.ts",
+      "import": "./es/index.mjs"
+    },
+    "./es/*": {
+      "types": "./es/*.d.ts",
+      "import": "./es/*.mjs"
+    },
+    "./lib": {
+      "types": "./lib/index.d.ts",
+      "require": "./lib/index.js"
+    },
+    "./lib/*": {
+      "types": "./lib/*.d.ts",
+      "require": "./lib/*.js"
+    },
     "./index.css": "./dist/index.css",
     "./index.scss": "./es/index.scss",
     "./package.json": "./package.json"

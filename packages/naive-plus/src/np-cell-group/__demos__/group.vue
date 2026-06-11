@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { NpCellGroup } from '../index'
-import type { NpCellOption } from '../index'
+import type { NpCellGroupOption } from '../index'
 
-const options = ref<NpCellOption[]>([
+const options = ref<NpCellGroupOption[]>([
   { label: '通知提醒' },
   { label: '声音' },
   { label: '震动' },
 ])
 
-const navOptions: NpCellOption[] = [
+const navOptions: NpCellGroupOption[] = [
   { label: '个人信息', arrow: true, hover: true },
   {
     label: '账号安全',
@@ -20,7 +20,7 @@ const navOptions: NpCellOption[] = [
   { label: '隐私设置', arrow: true, hover: true, value: '已设置' },
 ]
 
-const handleClick = (item: NpCellOption) => {
+const handleClick = (item: NpCellGroupOption) => {
   console.log('clicked:', item.label)
 }
 </script>

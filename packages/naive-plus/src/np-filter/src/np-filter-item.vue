@@ -35,7 +35,7 @@ import {
   NpCellGroup,
   type NpCellGroupKey,
   type NpCellGroupKeys,
-  type NpCellOption,
+  type NpCellGroupOption,
 } from '../../np-cell-group'
 import { NDivider, NEmpty, NInput } from 'naive-ui'
 
@@ -112,7 +112,7 @@ const groups = ref<
   {
     title?: string
     type: 'checkbox' | 'radio'
-    options: NpCellOption[]
+    options: NpCellGroupOption[]
   }[]
 >([])
 const calcGroup = () => {
@@ -145,7 +145,7 @@ const calcGroup = () => {
 watch(groupOption, calcGroup, { immediate: true, deep: true })
 watch(searchKey, calcGroup, { immediate: true })
 
-const handleChange = (keys: NpCellGroupKeys, item: NpCellOption) => {
+const handleChange = (keys: NpCellGroupKeys, item: NpCellGroupOption) => {
   // 多选
   if (props.option.multiple !== false) {
     emit('update:value', keys)

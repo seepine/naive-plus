@@ -17,9 +17,9 @@ options 支持所有 `np-cell` 属性
 | 参数    | 说明           | 类型              | 默认值 |
 | ------- | -------------- | ----------------- | ------ |
 | title   | 分组标题       | `string`          | -      |
-| options | 单元格配置列表 | `NpCellOption[]`  | `[]`   |
+| options | 单元格配置列表 | `NpCellGroupOption[]`  | `[]`   |
 
-## NpCellOption
+## NpCellGroupOption
 
 | 参数    | 说明                   | 类型                                | 默认值  |
 | ------- | ---------------------- | ----------------------------------- | ------- |
@@ -34,4 +34,4 @@ options 支持所有 `np-cell` 属性
 
 | 事件名 | 说明               | 参数                         |
 | ------ | ------------------ | ---------------------------- |
-| click  | 点击某个单元格时触发 | `(item: NpCellOption) => void` |
+| click  | 点击某个单元格时触发 | `(item: NpCellGroupOption) => void` |

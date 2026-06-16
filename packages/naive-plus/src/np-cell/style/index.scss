@@ -6,13 +6,10 @@
   --np-cell-padding-y: 6px;
   --np-cell-radius: 4px;
   --np-cell-control-gap: 6px;
-  --np-cell-left-gap: 4px;
+  --np-cell-left-gap: 0px;
   --np-cell-right-gap: 4px;
   --np-cell-border-color: rgb(239 239 245);
 
-  display: flex;
-  flex-direction: row;
-  align-items: center;
   padding: 0 var(--np-cell-padding-x);
   font-size: var(--np-cell-font-size);
   user-select: none;
@@ -40,8 +37,14 @@
     --np-cell-font-size: 16px;
     --np-cell-radius: 4px;
     --np-cell-control-gap: 8px;
-    --np-cell-left-gap: 6px;
-    --np-cell-right-gap: 6px;
+    --np-cell-left-gap: 4px;
+    --np-cell-right-gap: 4px;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 
   &__control {
@@ -100,5 +103,9 @@
   &__arrow {
     font-size: var(--np-cell-font-size);
     color: var(--np-cell-value-color);
+  }
+
+  &__footer {
+    padding-bottom: var(--np-cell-padding-y);
   }
 }

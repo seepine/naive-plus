@@ -5,7 +5,7 @@
     </div>
     <NpCell
       v-for="(item, idx) in props.options"
-      :key="item.key"
+      :key="getKey(item, idx)"
       :label="item.label"
       :icon="item.icon"
       :value="item.value"
@@ -15,15 +15,17 @@
       :type="props.type"
       :size="props.size"
       :bordered="props.bordered && idx < props.options.length - 1"
-      :checked="selectedKeys.includes(item.key === undefined ? idx : item.key)"
-      @click="handleClick(item)"
-    />
+      :checked="selectedKeys.includes(getKey(item, idx))"
+      :footer="item.footer"
+      @click="handleClick(item, idx)"
+    ></NpCell>
   </div>
 </template>
 <script setup lang="ts">
 import { useCreate } from '../../_hooks/create'
 import {
   npCellGroupProps,
+  type NpCellGroupKey,
   type NpCellGroupKeys,
   type NpCellGroupOption,
 } from './props'
@@ -48,8 +50,12 @@ watch(
   { immediate: true, deep: true }
 )
 
-const handleClick = (item: NpCellGroupOption) => {
-  const key = item.key === undefined ? props.options.indexOf(item) : item.key
+const getKey = (item: NpCellGroupOption, index: number): NpCellGroupKey => {
+  return item.key === undefined ? index : item.key
+}
+
+const handleClick = (item: NpCellGroupOption, index: number) => {
+  const key = getKey(item, index)
   if (props.type === 'radio') {
     if (selectedKeys.value.includes(key)) {
       selectedKeys.value = []

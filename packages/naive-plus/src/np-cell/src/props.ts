@@ -1,28 +1,35 @@
 import type { VNode, PropType, ExtractPropTypes } from 'vue'
 
+export type NpCellRender = () => VNode
+export type NpCellContent = string | VNode | NpCellRender
+
 export const npCellProps = {
   type: {
     type: String as PropType<'checkbox' | 'radio' | 'switch'>,
   },
   hover: {
     type: Boolean,
+    default: undefined,
   },
   checked: {
     type: Boolean,
     default: false,
   },
   icon: {
-    type: [Object, Function] as PropType<VNode | (() => VNode)>,
+    type: [Object, Function] as PropType<VNode | NpCellRender>,
   },
   label: {
-    type: [String, Function] as PropType<string | VNode | (() => VNode)>,
+    type: [String, Object, Function] as PropType<NpCellContent>,
     required: true as const,
   },
   value: {
-    type: [String, Function] as PropType<string | VNode | (() => VNode)>,
+    type: [String, Object, Function] as PropType<NpCellContent>,
   },
   description: {
-    type: [String, Function] as PropType<string | VNode | (() => VNode)>,
+    type: [String, Object, Function] as PropType<NpCellContent>,
+  },
+  footer: {
+    type: [Object, Function] as PropType<VNode | NpCellRender>,
   },
   arrow: {
     type: Boolean,

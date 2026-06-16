@@ -19,12 +19,42 @@ describe('NpCell', () => {
     expect(wrapper.text()).toContain('测试标签')
   })
 
+  test('renders content render functions', () => {
+    const wrapper = mount(NpCell, {
+      props: {
+        label: () => <span>标签</span>,
+        value: () => <span>值</span>,
+        size: 'large',
+      },
+      global: { stubs },
+    })
+
+    expect(wrapper.text()).toContain('标签')
+    expect(wrapper.text()).toContain('值')
+  })
+
   test('renders control when type is set', () => {
     const wrapper = mount(NpCell, {
       props: { label: '选项', type: 'checkbox', checked: false },
       global: { stubs },
     })
     expect(wrapper.find('.np-cell__control').exists()).toBe(true)
+  })
+
+  test('renders footer below content', () => {
+    const wrapper = mount(NpCell, {
+      props: { label: '选项' },
+      slots: { footer: '底部内容' },
+      global: { stubs },
+    })
+    const cell = wrapper.find('.np-cell')
+    const content = wrapper.find('.np-cell__content')
+    const footer = wrapper.find('.np-cell__footer')
+
+    expect(footer.exists()).toBe(true)
+    expect(footer.text()).toBe('底部内容')
+    expect(cell.element.children[0]).toBe(content.element)
+    expect(cell.element.children[1]).toBe(footer.element)
   })
 
   test('enables hover by default when type is set', () => {

@@ -34,7 +34,14 @@ permalink: /components/np-cell/
 | icon | 左侧图标 | `VNode \| () => VNode` | - |
 | label | 单元格标签 | `string \| VNode \| () => VNode` | - |
 | value | 单元格值 | `string \| VNode \| () => VNode` | - |
+| description | 单元格描述 | `string \| VNode \| () => VNode` | - |
 | arrow | 是否显示右侧箭头 | `boolean` | `false` |
+
+## Slots
+
+| 名称 | 说明 |
+| ------- | ---------------- |
+| footer | 底部内容，显示在主内容区域下方 |
 
 ## Events
 

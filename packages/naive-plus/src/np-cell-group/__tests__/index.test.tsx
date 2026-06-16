@@ -52,6 +52,34 @@ describe('NpCellGroup', () => {
     expect(cells[0].props('hover')).toBe(true)
   })
 
+  test('renders content render functions', () => {
+    const wrapper = mount(NpCellGroup, {
+      props: {
+        options: [
+          {
+            key: 'notice',
+            label: () => <span>标签</span>,
+            value: () => <span>值</span>,
+            footer: () => <span>底部</span>,
+          },
+        ],
+      },
+      global: {
+        stubs: {
+          'n-checkbox': true,
+          'n-radio': true,
+          'n-switch': true,
+          'n-icon': true,
+          'arrow-right-icon': true,
+        },
+      },
+    })
+
+    expect(wrapper.text()).toContain('标签')
+    expect(wrapper.text()).toContain('值')
+    expect(wrapper.text()).toContain('底部')
+  })
+
   test('radio: emits update:keys with single key and clears on re-click', async () => {
     const wrapper = mount(NpCellGroup, {
       props: { type: 'radio', options: [{ label: 'A' }, { label: 'B' }] },

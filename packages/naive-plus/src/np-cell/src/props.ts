@@ -1,7 +1,5 @@
-import type { VNode, PropType, ExtractPropTypes } from 'vue'
-
-export type NpCellRender = () => VNode
-export type NpCellContent = string | VNode | NpCellRender
+import type { PropType, ExtractPropTypes } from 'vue'
+import type { CustomVNode } from '../../types'
 
 export const npCellProps = {
   type: {
@@ -16,20 +14,20 @@ export const npCellProps = {
     default: false,
   },
   icon: {
-    type: [Object, Function] as PropType<VNode | NpCellRender>,
+    type: [Object, Function] as PropType<CustomVNode>,
   },
   label: {
-    type: [String, Object, Function] as PropType<NpCellContent>,
+    type: [String, Object, Function] as PropType<string | CustomVNode>,
     required: true as const,
   },
   value: {
-    type: [String, Object, Function] as PropType<NpCellContent>,
+    type: [String, Object, Function] as PropType<string | CustomVNode>,
   },
   description: {
-    type: [String, Object, Function] as PropType<NpCellContent>,
+    type: [String, Object, Function] as PropType<string | CustomVNode>,
   },
   footer: {
-    type: [Object, Function] as PropType<VNode | NpCellRender>,
+    type: [Object, Function] as PropType<CustomVNode>,
   },
   arrow: {
     type: Boolean,

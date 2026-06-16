@@ -70,3 +70,5 @@ export type Btn<T = AnyObject> = {
    */
   onSubmit?: Run<T, void>
 }
+
+export type CustomVNode = VNode | (() => VNode | undefined)

@@ -1,5 +1,11 @@
 # naive-plus
 
+## 0.1.0-beta.10
+
+### Minor Changes
+
+- [`04bbd96`](https://github.com/seepine/naive-plus/commit/04bbd962cf1a7645ec7b4ad88ca8b7e1c4479661) Thanks [@seepine](https://github.com/seepine)! - feat(np-cell): add footer slot/prop and support render functions for content
+
 ## 0.1.0-beta.9
 
 ### Minor Changes

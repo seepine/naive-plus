@@ -1,5 +1,11 @@
 # naive-plus
 
+## 0.1.0-beta.13
+
+### Patch Changes
+
+- [#18](https://github.com/seepine/naive-plus/pull/18) [`a9e282b`](https://github.com/seepine/naive-plus/commit/a9e282b0057ae26189c4eca5b448ac26b053671a) Thanks [@niloubot](https://github.com/niloubot)! - fix(np-cell): allow long text to wrap in left area
+
 ## 0.1.0-beta.12
 
 ### Minor Changes

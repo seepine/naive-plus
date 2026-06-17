@@ -1,5 +1,17 @@
 # naive-plus
 
+## 0.1.0-beta.11
+
+### Minor Changes
+
+- [#13](https://github.com/seepine/naive-plus/pull/13) [`e06e3f2`](https://github.com/seepine/naive-plus/commit/e06e3f2c7523d13165847489341ee0b61e443ba5) Thanks [@seepine](https://github.com/seepine)! - refactor(np-cell): extract RenderContent component and unify CustomVNode type
+
+### Patch Changes
+
+- [#13](https://github.com/seepine/naive-plus/pull/13) [`0445a24`](https://github.com/seepine/naive-plus/commit/0445a24f8591b1225edbc127f5f4329202b35fb6) Thanks [@seepine](https://github.com/seepine)! - fix(np-form): remove unused rule parameter from validator examples
+
+- [#13](https://github.com/seepine/naive-plus/pull/13) [`2ab9206`](https://github.com/seepine/naive-plus/commit/2ab920657beb7861940793c73616d8ba1b9966e5) Thanks [@seepine](https://github.com/seepine)! - chore(tsconfig): add paths alias for naive-plus module resolution
+
 ## 0.1.0-beta.10
 
 ### Minor Changes

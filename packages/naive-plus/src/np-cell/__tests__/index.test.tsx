@@ -41,20 +41,34 @@ describe('NpCell', () => {
     expect(wrapper.find('.np-cell__control').exists()).toBe(true)
   })
 
-  test('renders footer below content', () => {
+  test('renders footer below wrapper in the content column', () => {
     const wrapper = mount(NpCell, {
-      props: { label: '选项' },
+      props: { label: '选项', type: 'checkbox' },
       slots: { footer: '底部内容' },
       global: { stubs },
     })
-    const cell = wrapper.find('.np-cell')
     const content = wrapper.find('.np-cell__content')
+    const control = wrapper.find('.np-cell__control')
+    const contentWrapper = wrapper.find('.np-cell__wrapper')
     const footer = wrapper.find('.np-cell__footer')
 
     expect(footer.exists()).toBe(true)
     expect(footer.text()).toBe('底部内容')
-    expect(cell.element.children[0]).toBe(content.element)
-    expect(cell.element.children[1]).toBe(footer.element)
+    expect(content.element.children[0]).toBe(control.element)
+    expect(content.element.children[1]).toBe(contentWrapper.element)
+    expect(content.element.children[2]).toBe(footer.element)
+  })
+
+  test('renders border below body content', () => {
+    const wrapper = mount(NpCell, {
+      props: { label: '选项', bordered: true },
+      slots: { footer: '底部内容' },
+      global: { stubs },
+    })
+
+    expect(wrapper.find('.np-cell__content-border').exists()).toBe(true)
+    expect(wrapper.find('.np-cell__body-border').exists()).toBe(false)
+    expect(wrapper.find('.np-cell__wrapper-border').exists()).toBe(false)
   })
 
   test('enables hover by default when type is set', () => {

@@ -5,7 +5,11 @@
     }`"
     @click="handleClick"
   >
-    <div :class="`${bemClass}__content`">
+    <div
+      :class="`${bemClass}__content ${
+        props.bordered ? `${bemClass}__content-border` : ''
+      }`"
+    >
       <div v-if="props.type || props.icon" :class="`${bemClass}__control`">
         <NCheckbox
           v-if="props.type === 'checkbox'"
@@ -27,11 +31,7 @@
           <RenderContent :is="props.icon" />
         </div>
       </div>
-      <div
-        :class="`${bemClass}__wrapper ${
-          props.bordered ? `${bemClass}__wrapper-border` : ''
-        }`"
-      >
+      <div :class="`${bemClass}__wrapper`">
         <div :class="`${bemClass}__left`">
           <div :class="`${bemClass}__label`">
             <RenderContent :is="props.label" />
@@ -49,11 +49,11 @@
           </NIcon>
         </div>
       </div>
-    </div>
-    <div v-if="$slots.footer || props.footer" :class="`${bemClass}__footer`">
-      <slot name="footer">
-        <RenderContent :is="props.footer" />
-      </slot>
+      <div v-if="$slots.footer || props.footer" :class="`${bemClass}__footer`">
+        <slot name="footer">
+          <RenderContent :is="props.footer" />
+        </slot>
+      </div>
     </div>
   </div>
 </template>

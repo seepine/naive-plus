@@ -1,5 +1,11 @@
 # naive-plus
 
+## 0.1.0-beta.12
+
+### Minor Changes
+
+- [#15](https://github.com/seepine/naive-plus/pull/15) [`32453fc`](https://github.com/seepine/naive-plus/commit/32453fcbf2ee53494dd91d421ce81818e35a22fd) Thanks [@seepine](https://github.com/seepine)! - feat(np-cell): relocate bordered divider below body and move footer into content column
+
 ## 0.1.0-beta.11
 
 ### Minor Changes

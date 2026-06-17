@@ -1,18 +1,16 @@
-import type { VNode, PropType, ExtractPropTypes } from 'vue'
-import type { NpCellContent, NpCellRender } from '../../np-cell'
+import type { PropType, ExtractPropTypes } from 'vue'
+import type { CustomVNode } from '../../types'
 
 export type NpCellGroupKey = number | string
 export type NpCellGroupKeys = NpCellGroupKey[]
-export type NpCellGroupContent = NpCellContent
-export type NpCellGroupRender = NpCellRender
 
 export interface NpCellGroupOption {
   key?: NpCellGroupKey
-  label: NpCellGroupContent
-  icon?: VNode | NpCellGroupRender
-  value?: NpCellGroupContent
-  description?: NpCellGroupContent
-  footer?: VNode | NpCellGroupRender
+  label: string | CustomVNode
+  icon?: CustomVNode
+  value?: string | CustomVNode
+  description?: string | CustomVNode
+  footer?: CustomVNode
   hover?: boolean
   arrow?: boolean
   onClick?: () => void

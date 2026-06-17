@@ -62,12 +62,12 @@ const option: FormOption<User> = {
             trigger: ['change'],
           },
           {
-            validator: (_rule: any, value: number) => value >= 0,
+            validator: (value: number) => value >= 0,
             message: '年龄必须为正数',
             trigger: ['change'],
           },
           {
-            validator: (_rule: any, value: number) => value <= formData.ageMax,
+            validator: (value: number) => value <= formData.ageMax,
             message: `年龄不能超过${formData.ageMax}岁`,
             trigger: ['change'],
           },

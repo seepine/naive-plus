@@ -36,6 +36,7 @@ import type {
   TreeSelectProps,
   TreeSelectSlots,
   UploadProps,
+  FormInst as NFormInst,
 } from 'naive-ui'
 import type { NpRadioProps, RadioOption, RadioValue } from '../../np-radio'
 import type {
@@ -332,6 +333,10 @@ export interface FormOption<FormData extends AnyObject = AnyObject> {
               props?: Omit<ButtonProps, 'onClick'>
             }
       }
+}
+
+export interface FormInst extends NFormInst {
+  validateFields: (fields: string | string[]) => Promise<void> | void
 }
 
 export interface FormInjection<FormData extends AnyObject = AnyObject> {

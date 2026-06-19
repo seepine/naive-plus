@@ -1,11 +1,16 @@
 <template>
   <div>
     {{ data }}
-    <np-form v-model="data" :option="option" />
+    <n-space style="margin: 12px 0">
+      <n-button @click="validateAge">校验年龄</n-button>
+      <n-button @click="validateInfo">校验信息</n-button>
+    </n-space>
+    <np-form ref="formRef" v-model="data" :option="option" />
   </div>
 </template>
 <script setup lang="ts">
-import type { FormOption } from 'naive-plus'
+import type { FormOption, FormInst } from 'naive-plus'
+import { NButton, NSpace } from 'naive-ui'
 import { ref } from 'vue'
 
 type User = {
@@ -16,6 +21,15 @@ type User = {
 }
 
 const data = ref<User>()
+const formRef = ref<FormInst>()
+
+const validateAge = () => {
+  formRef.value?.validateFields('age')
+}
+
+const validateInfo = () => {
+  formRef.value?.validateFields(['fullName', 'tel'])
+}
 
 const option: FormOption<User> = {
   onSubmit: async form => {
@@ -42,7 +56,7 @@ const option: FormOption<User> = {
       label: '年龄最大值',
       key: 'ageMax',
       type: 'number',
-      defaultValue: 99,
+      defaultValue: 50,
       rule: {
         required: true,
         message: '年龄最大值不能为空',

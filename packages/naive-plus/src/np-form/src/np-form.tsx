@@ -1,4 +1,11 @@
-import { defineComponent, provide, ref, watch, type StyleValue } from 'vue'
+import {
+  defineComponent,
+  getCurrentInstance,
+  provide,
+  ref,
+  watch,
+  type StyleValue,
+} from 'vue'
 import { useCreate } from '../../_hooks/create'
 import { npFormProps } from './props'
 import { NForm, NFormItem, NSpin, type FormInst } from 'naive-ui'
@@ -14,16 +21,53 @@ const { name, bemClass } = useCreate('np-form')
 
 export default defineComponent({
   name,
+  inheritAttrs: false,
   props: npFormProps,
   emits: ['update:modelValue'],
   setup(props, { emit, expose }) {
     const injectKey = Symbol('np-form-inject-key')
-    const formRef = ref<FormInst>()
     const data = ref<AnyObject>({})
     const backData = ref<AnyObject>({})
     const event = new EventBus<{
       'data-change': AnyObject
     }>()
+    const vm = getCurrentInstance()
+    const formRef = ref<FormInst>()
+    const formExpose = (v: any) => {
+      if (!v || formRef.value !== undefined) {
+        return
+      }
+      formRef.value = v
+      if (vm) {
+        // @ts-ignore
+        vm.exposed = Object.assign(
+          v,
+          // 额外暴露的方法
+          {
+            validateFields: async (fields: string | string[]) => {
+              const fieldsArr = typeof fields === 'string' ? [fields] : fields
+              await formRef.value?.validate(
+                () => {},
+                rule => {
+                  if (!rule.key) {
+                    return false
+                  }
+                  // 直接等于
+                  if (fieldsArr.includes(rule.key)) {
+                    return true
+                  }
+                  // 包含前缀
+                  const findIdx = fieldsArr.findIndex(
+                    field => rule.key?.startsWith(`${field}__`)
+                  )
+                  return findIdx >= 0
+                }
+              )
+            },
+          }
+        )
+      }
+    }
 
     const loading = ref(false)
 
@@ -100,19 +144,21 @@ export default defineComponent({
       submit,
     })
 
-    expose(
-      new Proxy(
-        {},
-        {
-          get(_, p) {
-            return ((formRef.value || {}) as any)[p]
-          },
-          has(_, p) {
-            return p in (formRef.value || {})
-          },
-        }
-      )
-    )
+    expose({})
+
+    // expose(
+    //   new Proxy(
+    //     {},
+    //     {
+    //       get(_, p) {
+    //         return ((formRef.value || {}) as any)[p]
+    //       },
+    //       has(_, p) {
+    //         return p in (formRef.value || {})
+    //       },
+    //     }
+    //   )
+    // )
 
     const footer = () => {
       if (props.option.footer === false) {
@@ -173,7 +219,7 @@ export default defineComponent({
         stroke-width={0}
       >
         <NForm
-          ref={formRef}
+          ref={formExpose}
           model={data.value}
           class={bemClass.value}
           {...props.option.props}

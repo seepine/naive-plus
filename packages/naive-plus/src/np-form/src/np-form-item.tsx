@@ -108,15 +108,20 @@ export default defineComponent({
         res.push(uploadBlobRule)
       }
       rule.value = res.map(item => {
+        const ruleKey = `${columnKey}${item.key ? `__${item.key}` : ''}`
         if (item.validator !== undefined) {
           return {
             ...item,
+            key: ruleKey,
             validator: (rule, value, callback) => {
               return item.validator?.(value, rule as any, callback)
             },
           }
         }
-        return item
+        return {
+          ...item,
+          key: ruleKey,
+        }
       })
     }
 

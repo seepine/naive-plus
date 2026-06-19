@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-f9db2c06","path":"/table/selection/","title":"np-table 多选","lang":"zh-CN","frontmatter":{"permalink":"/table/selection/"},"headers":[],"git":{"updatedTime":1781888051000,"contributors":[{"name":"seepine","email":"seepine@outlook.com","commits":1}]},"filePathRelative":"../packages/naive-plus/src/np-table/docs/selection.md"}');export{e as data};

@@ -25,10 +25,12 @@ export const buildFormColumns = (
   return columns
     .map(col => {
       const { key, label, formProps } = col
-      if (!formProps && !key) return null
+      if (!key) return null
 
-      const modeKey = MODE_PROPS_KEY[mode] as keyof typeof formProps
-      const { [modeKey]: modeProps = {}, ...baseFormProps } = formProps
+      const props = formProps ?? {}
+      const modeKey = MODE_PROPS_KEY[mode] as 'addProps' | 'editProps'
+      const { addProps, editProps, ...baseFormProps } = props
+      const modeProps = (modeKey === 'addProps' ? addProps : editProps) ?? {}
 
       const merged: FormColumn = {
         key,

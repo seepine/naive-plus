@@ -1,5 +1,5 @@
 ---
-permalink: /components/np-radio
+permalink: /components/np-radio/
 ---
 
 # np-radio 单选框

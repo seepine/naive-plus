@@ -1,5 +1,5 @@
 ---
-permalink: /form/base
+permalink: /form/base/
 ---
 
 # np-form 表单

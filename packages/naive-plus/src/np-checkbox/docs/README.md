@@ -1,5 +1,5 @@
 ---
-permalink: /components/np-checkbox
+permalink: /components/np-checkbox/
 ---
 
 # np-checkbox 多选框

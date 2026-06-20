@@ -1,5 +1,5 @@
 ---
-permalink: /form/display
+permalink: /form/display/
 ---
 
 # np-form 显隐控制

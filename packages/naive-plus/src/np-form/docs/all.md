@@ -1,5 +1,5 @@
 ---
-permalink: /form/all
+permalink: /form/all/
 ---
 
 # np-form 所有类型

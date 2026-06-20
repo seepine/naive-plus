@@ -15,6 +15,7 @@ export const codeBlockPlugin = (): Plugin => {
     },
 
     async extendsPage(page) {
+      page.data.headers ??= page.headers ?? []
       resolveScriptSetup(page, store)
     },
 

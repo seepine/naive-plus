@@ -1,5 +1,5 @@
 ---
-permalink: /form/custom
+permalink: /form/custom/
 ---
 
 # np-form 自定义类型

@@ -1,5 +1,5 @@
 ---
-permalink: /form/upload
+permalink: /form/upload/
 ---
 
 # np-form 文件上传

@@ -1,5 +1,5 @@
 ---
-permalink: /form/footer
+permalink: /form/footer/
 ---
 
 # np-form 自定义底部

@@ -46,6 +46,10 @@ import EventBus from '../../utils/event-bus'
 
 const { name, bemClass } = useCreate('np-form-item')
 
+const getControlledValue = <T,>(value: T | undefined, emptyValue: T) => {
+  return value ?? emptyValue
+}
+
 export default defineComponent({
   name,
   props: npFormItemProps,
@@ -217,7 +221,7 @@ export default defineComponent({
           <NInput
             clearable
             {...props.column.props}
-            value={value.value}
+            value={getControlledValue(value.value, '')}
             onUpdateValue={onChange}
             onBlur={() => onBlur(value.value)}
             onKeyup={handleKeyupEnter}
@@ -231,7 +235,7 @@ export default defineComponent({
           <NInput
             type="textarea"
             {...props.column.props}
-            value={value.value}
+            value={getControlledValue(value.value, '')}
             onUpdateValue={onChange}
             onBlur={() => onBlur(value.value, 'trimEnd')}
           >
@@ -244,7 +248,7 @@ export default defineComponent({
           <NInput
             type="password"
             {...props.column.props}
-            value={value.value}
+            value={getControlledValue(value.value, '')}
             onUpdateValue={onChange}
             onBlur={() => onBlur(value.value)}
             onKeyup={handleKeyupEnter}
@@ -260,7 +264,7 @@ export default defineComponent({
             style="width:100%"
             showButton={false}
             {...props.column.props}
-            value={value.value}
+            value={getControlledValue(value.value, null)}
             onUpdateValue={onChange}
             onKeyup={handleKeyupEnter}
           >
@@ -275,7 +279,7 @@ export default defineComponent({
             clearable
             {...props.column.props}
             options={options.value}
-            value={value.value}
+            value={getControlledValue(value.value, '')}
             onBlur={() => onBlur(value.value)}
             onUpdateValue={onChange}
             onKeyup={handleKeyupEnter}

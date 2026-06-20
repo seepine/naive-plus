@@ -1,5 +1,15 @@
 # naive-plus
 
+## 0.1.0-beta.14
+
+### Minor Changes
+
+- [#20](https://github.com/seepine/naive-plus/pull/20) [`b34e716`](https://github.com/seepine/naive-plus/commit/b34e7161002f12122f3b9e5129bc26a0394ab72a) Thanks [@seepine](https://github.com/seepine)! - feat(np-form): add validateFields method for partial form validation
+
+### Patch Changes
+
+- [#22](https://github.com/seepine/naive-plus/pull/22) [`24ea872`](https://github.com/seepine/naive-plus/commit/24ea872ee947facdf5412837aa1a3ece606465ff) Thanks [@seepine](https://github.com/seepine)! - fix(np-form): reset input controls when model data becomes undefined
+
 ## 0.1.0-beta.13
 
 ### Patch Changes

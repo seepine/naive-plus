@@ -1,0 +1,851 @@
+---
+url: /index.md
+---
+# 首页
+## 一、快速入门
+
+### 1. 安装 naive-ui
+
+> `naive-plus` 基于 [naiveUI](https://www.naiveui.com/zh-CN/os-theme/docs/installation) 封装
+
+```shell
+npm i naive-ui -D
+```
+
+### 2. 安装 naive-plus
+
+```shell
+npm i naive-plus -D
+```
+
+### 3. 安装 unplugin
+
+通过 `unplugin-vue-components` 和 `unplugin-auto-import` 来实现按需引入和自动导入
+
+```shell
+npm install -D unplugin-vue-components unplugin-auto-import
+```
+
+### 4. 按需引入
+
+```js
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
+
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
+
+import { NaivePlusResolver } from 'naive-plus/resolver'
+
+export default {
+  plugins: [
+    // ...
+    AutoImport({
+       imports: ['vue'],
+    }),
+    Components({
+      resolvers: [
+        NaiveUiResolver(),
+        // 添加按需引入
+        NaivePlusResolver(),
+      ],
+    }),
+  ],
+};
+```
+
+### 5. 使用
+
+```vue
+<np-button>按钮</np-button>
+```
+
+---
+
+---
+url: /components/np-button/index.md
+---
+# NpButton
+
+对 `n-button` 进行封装，扩展了节流和异步能力。
+
+## 基础用法
+
+默认点击事件已做节流处理
+
+## 异步按钮
+
+使用 `:click` 属性代替原来的 `@click` 事件
+
+## 按钮类型
+
+## 属性
+
+### Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| ---- | -------- | ------ | ------ |
+| throttle-delay | 节流延迟 | number | 350 |
+| loading-delay | 加载延迟 | number | 250 |
+| click | 点击函数 | `() => Promise<void>` | - |
+| tyoe | 主题风格 | `primary/danger/warning/success` | default |
+| props | 其他按钮属性 | object -> [Button Props](https://www.naiveui.com/zh-CN/light/components/button#Button-Props) | |
+
+### Events
+
+| 事件名 | 说明           | 参数                          |
+| ------ | -------------- | ----------------------------- |
+| click  | 点击触发的事件 | `() => void` |
+
+### Slots
+
+| 插槽名  | 说明           |
+| ------- | -------------- |
+| default | 自定义默认内容 |
+
+## 类型
+
+组件导出以下类型定义
+
+```ts
+import type { NpButtonProps } from 'naive-plus'
+```
+
+---
+
+---
+url: /components/np-cell-group/index.md
+---
+# NpCellGroup
+
+单元格组，通过 `options` 配置批量渲染 NpCell，支持分组标题。
+
+## 基础用法
+
+options 支持所有 `np-cell` 属性
+
+## Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+| ------- | -------------- | --------------------- | ------ |
+| title | 分组标题 | `string` | - |
+| options | 单元格配置列表 | `NpCellGroupOption[]` | `[]` |
+| type | 左侧控件类型 | `'checkbox' \| 'radio' \| 'switch'` | - |
+| size | 尺寸 | `'small' \| 'medium' \| 'large'` | `medium` |
+| bordered | 是否显示分割线 | `boolean` | `false` |
+
+## NpCellGroupOption
+
+| 参数 | 说明 | 类型 | 默认值 |
+| ------- | ---------------------- | ----------------------------------- | ------- |
+| key | 选项标识 | `string \| number` | 当前索引 |
+| icon | 左侧图标 | `VNode \| () => VNode` | - |
+| label | 单元格标签 | `string \| VNode \| () => VNode` | - |
+| value | 单元格值 | `string \| VNode \| () => VNode` | - |
+| description | 单元格描述 | `string \| VNode \| () => VNode` | - |
+| footer | 底部内容 | `VNode \| () => VNode` | - |
+| hover | 是否启用悬停态 | `boolean` | - |
+| arrow | 是否显示右侧箭头 | `boolean` | `false` |
+| onClick | 点击时的回调函数 | `() => void` | - |
+
+## Events
+
+| 事件名 | 说明 | 参数 |
+| ------ | ------------------ | ---------------------------- |
+| change | 选中项变化时触发 | `(keys: NpCellGroupKeys, item: NpCellGroupOption) => void` |
+| update:keys | 控件状态变更时触发 | `(keys: NpCellGroupKeys) => void` |
+
+---
+
+---
+url: /components/np-cell/index.md
+---
+# NpCell
+
+单元格组件。
+
+## 基础用法
+
+通过 type 指定控件类型，支持 checkbox / radio / switch 控件，并支持图标及右侧箭头
+
+## 尺寸
+
+通过 size 指定尺寸
+
+## 下边框
+
+通过 bordered 指定下边框
+
+## Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+| ------- | -------------- | ------------------------------------ | ------- |
+| v-model:checked | 控件选中状态 | `boolean` | `false` |
+| type | 左侧控件类型 | `'checkbox' \| 'radio' \| 'switch'` | - |
+| hover | 是否启用悬停态 | `boolean` | 未传时 `type` 非空为 `true`，否则 `false` |
+| icon | 左侧图标 | `VNode \| () => VNode` | - |
+| label | 单元格标签 | `string \| VNode \| () => VNode` | - |
+| value | 单元格值 | `string \| VNode \| () => VNode` | - |
+| description | 单元格描述 | `string \| VNode \| () => VNode` | - |
+| arrow | 是否显示右侧箭头 | `boolean` | `false` |
+
+## Slots
+
+| 名称 | 说明 |
+| ------- | ---------------- |
+| footer | 底部内容，显示在主内容区域下方 |
+
+## Events
+
+| 事件名         | 说明                 | 参数                      |
+| -------------- | -------------------- | ------------------------- |
+| update:checked | 控件状态变更时触发   | `(value: boolean) => void` |
+
+---
+
+---
+url: /components/np-checkbox/index.md
+---
+# np-checkbox 多选框
+
+对 `n-checkbox-group` 进行封装，扩展了异步选项能力。
+
+## 基础用法
+
+通过 `options` 指定选项，通过 `v-model` 双向绑定值。
+
+## 异步选项
+
+选项 `options` 支持异步方法，例如一般会从后端接口获取字典。
+
+## 异步计算选项
+
+选项 `options` 支持异步计算方法，例如根据不同类型需要从后端不同接口获取。
+
+## 自定义字段名
+
+通常我们会从后端接口获取数据，但数据类型并不一定是 `{label,value}` 的结构，此时可通过 `keys` 指定选项字段名
+
+## 改变事件
+
+通过 `change` 事件获取值变化。
+
+## 组件配置
+
+### Props
+
+| 属性 | 说明     | 类型   | 默认值 |
+| ---- | -------- | ------ | ------ |
+| v-model | 选中值 | CheckboxGroupValue\[] | -      |
+| options | 配置项 | AsyncValue\<CheckboxOption\[]> | - |
+| keys | 自定义字段名 | {label:string, value:string} | { label: 'label', value: 'value' }   |
+| loadingDelay| 加载出现延迟，当 options 异步时有效 | number | 250 |
+| props| TCheckboxGroup 属性 | [TCheckboxGroup Props](https://tdesign.tencent.com/vue-next/components/checkbox?tab=api#checkboxgroup-props)  | - |
+| onChange | 改变事件 |(value: T, context: CheckboxGroupChangeContext) | |
+
+### Events
+
+| 事件名 | 说明           | 参数                          |
+| ------ | -------------- | ----------------------------- |
+| change | 改变事件 |(value: T, context: CheckboxGroupChangeContext) |
+
+## 类型定义
+
+组件导出以下类型定义
+
+```ts
+import type { NpCheckboxProps } from 'naive-plus'
+```
+
+---
+
+---
+url: /components/np-filter/index.md
+---
+# NpFilter
+
+表格列筛选组件，提供两级筛选交互。
+
+## 基础用法
+
+## 分组选项
+
+## 弹出位置
+
+## Props
+
+| 参数     | 说明         | 类型                                    | 默认值    |
+| -------- | ------------ | --------------------------------------- | --------- |
+| params   | 筛选参数     | `Record<string, any>`                   | `{}`      |
+| options  | 筛选选项配置 | `FilterOption[]`                        | `[]`      |
+| trigger  | 触发方式     | `'click' \| 'hover'`                    | `'click'` |
+| placement | 弹出位置    | `'left' \| 'right'`                     | -         |
+
+## FilterOption
+
+| 参数       | 说明                    | 类型                                             | 默认值  |
+| ---------- | ----------------------- | ------------------------------------------------ | ------- |
+| label      | 分类标题                | `string \| () => VNode`                          | -       |
+| key        | 对应 params 的 key      | `string`                                         | -       |
+| icon       | 分类图标                | `VNode \| () => VNode`                           | -       |
+| multiple   | 是否支持多选，默认 true | `boolean`                                        | `true`  |
+| searchable | 是否支持搜索            | `boolean`                                        | `false` |
+| options    | 选项配置                | `Array<ParamsOption> \| Array<{title, options}>` | -       |
+
+## Events
+
+| 事件名        | 说明              | 参数                                    |
+| ------------- | ----------------- | --------------------------------------- |
+| change        | 筛选变化时触发    | `(params: Record<string, any>) => void` |
+| update:params | params 更新时触发 | `(params: Record<string, any>) => void` |
+
+---
+
+---
+url: /components/np-radio/index.md
+---
+# np-radio 单选框
+
+对 `n-radio-group` 进行封装，扩展了异步选项能力，并支持按钮组形态。
+
+## 基础用法
+
+通过 `options` 指定选项，通过 `v-model` 双向绑定值。
+
+## 按钮组
+
+设置 `button` 以使用按钮组样式。
+
+## 异步选项
+
+选项 `options` 支持异步方法，例如一般会从后端接口获取字典。
+
+## 异步计算选项
+
+选项 `options` 支持异步计算方法，例如根据不同类型需要从后端不同接口获取。
+
+## 自定义字段名
+
+通常我们会从后端接口获取数据，但数据类型并不一定是 `{label,value}` 的结构，此时可通过 `labelField` 和 `valueField` 指定选项字段名。
+
+## 改变事件
+
+通过 `change` 事件获取值变化。
+
+## 组件配置
+
+### Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| ---- | ---- | ---- | ---- |
+| v-model | 选中值 | RadioGroupValue | - |
+| options | 配置项 | AsyncValue\<RadioOption\[]> | - |
+| labelField | 自定义标签字段名 | string | label |
+| valueField | 自定义值字段名 | string | value |
+| button | 是否按钮组样式 | boolean | false |
+| loadingDelay | 加载出现延迟，当 options 异步时有效 | number | 250 |
+| props | NRadioGroup 属性 | [NRadioGroup Props](https://www.naiveui.com/zh-CN/light/components/radio#RadioGroup-Props) | - |
+| onChange | 改变事件 | (value: RadioGroupValue) => void | - |
+
+### Events
+
+| 事件名 | 说明 | 参数 |
+| ------ | ---- | ---- |
+| update:modelValue | 值变更事件 | (value: RadioGroupValue) |
+| change | 改变事件 | (value: RadioGroupValue) |
+
+## 类型定义
+
+组件导出以下类型定义
+
+```ts
+import type { NpRadioProps } from 'naive-plus'
+```
+
+---
+
+---
+url: /components/np-upload/index.md
+---
+# np-upload 上传
+
+对 `n-upload` 进行封装，提供了 `v-model` 双向绑定文件列表的能力。
+
+`v-model` 绑定值为 `string[]` 类型，默认每项为 `{name, url, type}` 的 JSON 字符串。当 `listType` 为 `image-card` 且 `urlOnly` 为 `true` 时，每项仅保存文件的 `url` 字符串。
+
+## 基础用法
+
+通过 `v-model` 双向绑定文件列表，通过 `props` 传递 `n-upload` 的属性。
+
+## 自定义上传区域
+
+通过默认插槽自定义上传触发区域的内容，例如结合 `listType: 'image-card'` 实现图片卡片上传。
+
+## urlOnly 模式
+
+当 `listType` 为 `image-card` 时，设置 `urlOnly` 为 `true`，`v-model` 绑定值将简化为 url 字符串数组。
+
+## 组件配置
+
+### Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| ---- | ---- | ---- | ---- |
+| v-model | 文件列表，每项为 `{name,url,type}` 的 JSON 字符串；`urlOnly` 模式下为 url 字符串 | string\[] | \[] |
+| urlOnly | 仅在 `listType: 'image-card'` 时生效，`v-model` 值简化为 url 字符串数组 | boolean | false |
+| props | NUpload 属性 | [NUpload Props](https://www.naiveui.com/zh-CN/os-theme/components/upload#Upload-Props) | - |
+| onChange | 文件列表改变事件，第一个参数为 v-model 的值，第二个参数为实际的 fileList | `(value: string[], fileList: UploadFileInfo[]) => void` | - |
+
+### Slots
+
+| 插槽名 | 说明 |
+| ------ | ---- |
+| default | 上传触发区域内容 |
+
+## 类型定义
+
+组件导出以下类型定义
+
+```ts
+import type { NpUploadProps } from 'naive-plus'
+```
+
+---
+
+---
+url: /form/all/index.md
+---
+# np-form 所有类型
+
+通过 `type` 指定不同类型。
+
+## 组件配置
+
+### FormColumn Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| ---- | ---- | ---- | ---- |
+| type | 类型 | input/number/select/checkbox/... | - |
+
+---
+
+---
+url: /form/base/index.md
+---
+# np-form 表单
+
+配置驱动视图的表单，通过 `columns` 动态生成表单，用法简单且具有高扩展性。
+
+## 基础用法
+
+表单项主要通过 `label, key, type` 用以设置表单显示标签、表单属性和表单项类型。
+更多配置在设置了 `type` 表单项类型后，根据实际类型的 `props` 而定。
+
+## 组件配置
+
+### Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| ---- | ---- | ---- | ---- |
+| option | 配置参数 | [FormOption](#formoption) | - |
+
+## 类型定义
+
+组件导出以下类型定义
+
+```ts
+import type { FormOption } from 'naive-plus'
+```
+
+### FormOption
+
+| 属性 | 说明 | 类型 | 默认值 |
+| ---- | ---- | ---- | ---- |
+| columns | 表单项 | Array<[FormColumn](#formcolumn)> | - |
+| onSubmit | 提交事件 | `(data)=>Promise<void>` | - |
+| onReset | 重置事件 | `(data)=>Promise<void>` | - |
+| props | 表单属性 | object | - |
+
+### FormColumn
+
+| 属性 | 说明 | 类型 | 默认值 |
+| ---- | ---- | ---- | ---- |
+| label | 字段标签名称 | string / VNode | - |
+| key | 表单字段名称 | string | - |
+| type | 表单项类型 | string / `(data)=>VNode` | - |
+| defaultValue | 表单项默认值 | any | - |
+| options | 字典项，例如 checkbox、select 等 | `Array<any>` / `()=>Promise<Array<any>>` | - |
+| props | 组件 Props，会透传给实际组件 | object | - |
+| formItemProps | 表单项 Props，会透传给 `n-form-item` | object | - |
+
+---
+
+---
+url: /form/change/index.md
+---
+# np-form 改变事件
+
+通过 `onChange` 监听值变化。
+
+## 组件配置
+
+### FormColumn Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| ---- | ---- | ---- | ---- |
+| onChange | 改变事件，可通过 `ctx.data` 改变表单值 | `(val:T, ctx: { data:FormData, ... })=>void` | - |
+
+---
+
+---
+url: /form/custom/index.md
+---
+# np-form 自定义类型
+
+## 自定义类型
+
+表单项 `type` 除了支持默认组件之外，也支持自定义 `VNode`。
+
+## 完全自定义渲染
+
+使用 `render` 完全自定义渲染，例如实现分组表单。
+
+## 组件配置
+
+### FormColumn Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| ---- | ---- | ---- | ---- |
+| type | 类型函数，只会渲染输入区域 | `(data: AnyObject)=>VNode` | - |
+| render | 渲染函数，会渲染整个form-item | `(data: AnyObject)=>VNode` | - |
+
+---
+
+---
+url: /form/display/index.md
+---
+# np-form 显隐控制
+
+通过 `display` 控制是否显示。
+
+## 组件配置
+
+### FormColumn Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| ---- | ---- | ---- | ---- |
+| display | 是否显示 | `boolean / (data)=>boolean` | true |
+
+---
+
+---
+url: /form/enter-submit/index.md
+---
+# np-form 回车提交表单
+
+支持在表单中的单行输入框按回车键触发表单提交。
+
+## last 模式
+
+仅在最后一个表单项按回车时提交。
+
+## all 模式
+
+在任意表单项按回车都提交。
+
+## false 模式
+
+禁用回车提交功能。
+
+## 组件配置
+
+| 属性               | 说明               | 类型                       | 默认值   |
+| ------------------ | ------------------ | -------------------------- | -------- |
+| enterSubmitMode | 回车提交表单的方式 | `'last' \| 'all' \| false` | `false` |
+
+---
+
+---
+url: /form/footer/index.md
+---
+# np-form 自定义底部
+
+通过 `footer` 属性自定义底部。
+
+## 组件配置
+
+### FormOption Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| ---- | ---- | ---- | ---- |
+| footer | 底部属性，`false` 则隐藏整个底部 | boolean / [FooterProps](#footer-props) | - |
+
+### Footer Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| ---- | ---- | ---- | ---- |
+| submitBtn | 提交按钮是否显示 | boolean | true |
+| resetBtn | 重置按钮是否显示 | boolean | true |
+| prefixRender | 前缀渲染函数 | `(data)=>VNode` | - |
+| suffixRender | 后缀渲染函数 | `(data)=>VNode` | - |
+
+---
+
+---
+url: /form/options/index.md
+---
+# np-form 字典选项
+
+通过 `options` 指定选项，具体查看示例代码用法。
+
+## 组件配置
+
+### FormColumn Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| ---- | ---- | ---- | ---- |
+| options | 选项，支持 `radio/checkbox/select/cascader/autoComplete/transfer/tree` 类型 | `Array<any> / (data)=>Promise<Array<any>>` | - |
+
+---
+
+---
+url: /form/rules/index.md
+---
+# np-form 规则校验
+
+通过 `rule` 指定校验规则。
+
+## 组件配置
+
+### FormColumn Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| ---- | ---- | ---- | ---- |
+| rule | 校验规则 | `FormItemRule / FormItemRule[]` | - |
+
+---
+
+---
+url: /form/upload/index.md
+---
+# np-form 文件上传
+
+通过设置 `type: 'upload'` 可在表单中使用文件上传组件，底层使用 `np-upload` 封装。
+
+`v-model` 绑定值为 `string[]` 类型，默认每项为 `{name, url, type}` 的 JSON 字符串。当 `listType` 为 `image-card` 且 `urlOnly` 为 `true` 时，每项仅保存文件的 `url` 字符串。
+
+## 组件配置
+
+### FormColumn Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| ---- | ---- | ---- | ---- |
+| type | 设置为 `'upload'` | string | - |
+| props | NUpload 属性，会透传给 `n-upload` | [NUpload Props](https://www.naiveui.com/zh-CN/os-theme/components/upload#Upload-Props) | - |
+| urlOnly | 仅在 `listType: 'image-card'` 时生效，值简化为 url 字符串数组 | boolean | false |
+| defaultValue | 默认文件列表 | string\[] | - |
+| onChange | 文件列表改变事件 | `(value: string[], ctx) => void` | - |
+
+---
+
+---
+url: /table/base/index.md
+---
+# np-table 表格
+
+配置驱动视图的表格，通过 `columns` 动态生成表格，用法简单且具有高扩展性。
+
+## 基础用法
+
+表格主要通过 `option` 配置 `columns` 动态生成表格，`api.fetch` 获取数据。
+
+## 组件配置
+
+### Props
+
+| 属性   | 说明     | 类型                        | 默认值 |
+| ------ | -------- | --------------------------- | ------ |
+| option | 配置参数 | [TableOption](#tableoption) | -      |
+
+## 类型定义
+
+组件导出以下类型定义
+
+```ts
+import type { TableOption, TableColumn, TableFilter } from 'naive-plus'
+```
+
+### TableOption
+
+| 属性       | 说明                              | 类型                                                                                 | 默认值 |
+| ---------- | --------------------------------- | ------------------------------------------------------------------------------------ | ------ |
+| columns    | 表格列                            | Array<[TableColumn](#tablecolumn)>                                                   | -      |
+| api        | 数据接口                          | `{ fetch: (pageParams, otherParams) => Promise<{ items, itemCount? }> }`            | -      |
+| props      | 表格属性，会透传给 `n-data-table`。为避免表格内部纵向滚动遮挡页面内容，会忽略 `maxHeight`、`flexHeight`、`virtualScroll` 等纵向滚动相关配置 | object                                                                               | -      |
+| pagination | 分页配置，设为 `false` 可禁用分页 | `false` / `PaginationConfig`                                                         | -      |
+| filters    | 筛选器配置                        | Array<[TableFilter](/table/filter/)>                                                   | -      |
+
+### TableColumn
+
+| 属性     | 说明           | 类型                                    | 默认值 |
+| -------- | -------------- | --------------------------------------- | ------ |
+| key      | 列字段名称     | string                                  | -      |
+| title    | 列标题         | string / ComputedRef\<string>          | -      |
+| render   | 自定义渲染函数 | `(rowData, rowIndex) => VNode`          | -      |
+| type     | 列类型         | `'selection'` / `'index'` / `'expand'`  | -      |
+| width    | 列宽度         | string / number                         | -      |
+| minWidth | 列最小宽度     | string / number                         | -      |
+| fixed    | 列固定位置     | `'left'` / `'right'`                    | -      |
+| display  | 列是否显示     | boolean                                 | true   |
+
+---
+
+---
+url: /table/crud/index.md
+---
+# CRUD 增删改查
+
+通过 `api` 配置新增、编辑、删除接口，结合 `formProps` 定义表单字段，即可快速实现完整的增删改查功能。
+
+## 基础用法
+
+在 `columns` 的 `formProps` 中配置表单字段类型，`api` 中提供 `add`、`edit`、`del` 方法即可启用 CRUD。
+
+* 点击「**添加**」按钮弹出新增表单
+* 点击行操作「**编辑**」弹出带回填数据的编辑表单
+* 点击行操作「**删除**」弹出二次确认弹窗
+* `api.add/edit/del` 抛出异常或返回 `false` 时弹窗不关闭
+
+## onBefore 钩子
+
+`operation.onBefore` 在弹窗打开前触发，可用于：
+
+* **阻断操作**：返回 `false` 或抛出异常，弹窗不打开
+* **替换数据**：返回新对象，以该对象作为表单初始数据
+* **正常打开**：返回 `void` / `undefined` / `true`，按默认逻辑处理
+
+## 类型定义
+
+### formProps
+
+`TableColumn.formProps` 用于配置该列在表单中的展示方式，支持通过 `addProps`、`editProps` 为不同操作模式覆盖配置。
+
+```ts
+formProps?: Partial<FormColumn> & {
+  addProps?: Partial<FormColumn>   // 新增模式额外配置，会覆盖 formProps
+  editProps?: Partial<FormColumn>  // 编辑模式额外配置，会覆盖 formProps
+}
+```
+
+### operation.onBefore
+
+```ts
+onBefore?: (
+  rowData: T,
+  type: 'add' | 'edit' | 'del'
+) => boolean | T | void | Promise<boolean | T | void>
+```
+
+| 返回值 | 说明 |
+| --- | --- |
+| `false` | 阻断操作，弹窗不打开 |
+| 抛出异常 | 阻断操作，弹窗不打开 |
+| 对象 `T` | 用返回的对象替换表单初始数据 |
+| `void` / `undefined` / `true` | 正常打开弹窗 |
+
+### api
+
+| 方法 | 说明 | 类型 |
+| --- | --- | --- |
+| `add` | 新增接口 | `(rowData: T) => Promise<T \| boolean \| void>` |
+| `edit` | 编辑接口 | `(rowData: T) => Promise<T \| boolean \| void>` |
+| `del` | 删除接口 | `(rowData: T) => Promise<T \| boolean \| void>` |
+
+> 三个方法均为可选。返回 `false` 或抛出异常时弹窗不关闭；返回其他值则关闭弹窗并刷新表格。
+
+---
+
+---
+url: /table/filter/index.md
+---
+# np-table 筛选
+
+通过 `filters` 配置表格筛选器，支持单选/多选、搜索功能。
+
+## 类型定义
+
+```ts
+import type { TableFilter } from 'naive-plus'
+```
+
+### TableFilter
+
+| 属性       | 说明         | 类型                                   | 默认值 |
+| ---------- | ------------ | ------------------------------------ | ------ |
+| key        | 筛选字段名   | string                               | -      |
+| label      | 筛选器标签   | string                               | -      |
+| options    | 筛选选项列表 | `Array<{ label: string, value: any }>` | -      |
+| multiple   | 是否支持多选 | boolean                              | false  |
+| searchable | 是否可搜索   | boolean                              | false  |
+
+---
+
+---
+url: /table/operation/index.md
+---
+# 自定义操作列
+
+通过 `operation` 配置项灵活控制操作列的显示与行为。
+
+## 隐藏操作列
+
+将 `operation` 设为 `false`，同时隐藏操作列和顶部「添加」按钮。
+
+## 前后插槽
+
+通过 `prefixRender` 和 `suffixRender` 在默认操作按钮的前后插入自定义内容。
+
+## 自定义选项与 onSelect
+
+通过 `options` 配置下拉菜单选项，使用 `onSelect` 处理自定义项的点击事件。
+
+* `{ type: 'edit' }` / `{ type: 'del' }` 会复用内置的编辑/删除逻辑（触发 `onBefore`、弹窗等）
+* 自定义 `key` 的选项点击后触发 `onSelect` 回调
+
+## 类型定义
+
+### operation
+
+```ts
+operation?:
+  | false
+  | {
+      label?: string
+      width?: number | string
+      prefixRender?: (rowData: T, rowIndex: number) => VNode
+      suffixRender?: (rowData: T, rowIndex: number) => VNode
+      options?: TableOperationOption[]
+      onSelect?: (key: string) => void | boolean
+      onBefore?: (rowData: T, type: 'add' | 'edit' | 'del') => boolean | T | void | Promise<...>
+    }
+```
+
+### TableOperationOption
+
+| 字段 | 说明 | 类型 |
+| --- | --- | --- |
+| `type` | 使用内置类型，复用编辑/删除逻辑 | `'edit'` | `'del'` |
+| `key` | 自定义选项标识，触发 `onSelect` 回调 | `string \| number` |
+| `label` | 自定义选项显示文字 | `string \| (() => VNode)` |
+
+> 可同时混合内置 type 与自定义 key，例如 `[{ type: 'edit' }, { type: 'del' }, { key: 'export', label: '导出' }]`。
+
+---
+
+---
+url: /table/selection/index.md
+---
+# np-table 多选
+
+在 `columns` 中添加 `type: 'selection'` 列开启多选，通过 `option.props` 传入 `checkedRowKeys` 和 `onUpdateCheckedRowKeys` 控制选中状态。
+
+> 注意：需将 `option` 定义为 `computed`，以保证 `checkedRowKeys` 的响应式更新能同步到表格。

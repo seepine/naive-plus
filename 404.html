@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="generator" content="VuePress 2.0.0-beta.60">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="generator" content="VuePress 2.0.0-rc.26" />
     <style>
       :root {
         --c-bg: #fff;
@@ -11,23 +11,27 @@
       html.dark {
         --c-bg: #22272e;
       }
-      html, body {
+      html,
+      body {
         background-color: var(--c-bg);
       }
     </style>
     <script>
-      const userMode = localStorage.getItem('vuepress-color-scheme');
-			const systemDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-			if (userMode === 'dark' || (userMode !== 'light' && systemDarkMode)) {
-				document.documentElement.classList.toggle('dark', true);
-			}
+      const userMode = localStorage.getItem('vuepress-color-scheme')
+      const systemDarkMode =
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+      if (userMode === 'dark' || (userMode !== 'light' && systemDarkMode)) {
+        document.documentElement.classList.toggle('dark', true)
+      }
     </script>
     <link rel="icon" href="/favicon.png"><title>NaivePlus</title><meta name="description" content="一个基于 Vue3 和 NaiveUI 的组件库">
-    <link rel="preload" href="/assets/style-efb7a8f2.css" as="style"><link rel="stylesheet" href="/assets/style-efb7a8f2.css">
-    <link rel="modulepreload" href="/assets/app-89039d16.js"><link rel="modulepreload" href="/assets/framework-293578d6.js"><link rel="modulepreload" href="/assets/404.html-a3bbe600.js"><link rel="modulepreload" href="/assets/404.html-f9875e7b.js"><link rel="prefetch" href="/assets/index.html-81367365.js" as="script"><link rel="prefetch" href="/assets/index.html-ce896402.js" as="script"><link rel="prefetch" href="/assets/index.html-294bdb8c.js" as="script"><link rel="prefetch" href="/assets/index.html-0ee6bd90.js" as="script"><link rel="prefetch" href="/assets/2026-04-21-np-table-design.html-500b5267.js" as="script"><link rel="prefetch" href="/assets/index.html-a60a972b.js" as="script"><link rel="prefetch" href="/assets/index.html-97ce23bd.js" as="script"><link rel="prefetch" href="/assets/index.html-e81c86cc.js" as="script"><link rel="prefetch" href="/assets/index.html-530bfe14.js" as="script"><link rel="prefetch" href="/assets/index.html-4ee5615c.js" as="script"><link rel="prefetch" href="/assets/index.html-dcda7a43.js" as="script"><link rel="prefetch" href="/assets/index.html-0328b583.js" as="script"><link rel="prefetch" href="/assets/index.html-f492027a.js" as="script"><link rel="prefetch" href="/assets/index.html-0fddc398.js" as="script"><link rel="prefetch" href="/assets/index.html-559ae2f4.js" as="script"><link rel="prefetch" href="/assets/index.html-1142a503.js" as="script"><link rel="prefetch" href="/assets/index.html-3aa861cc.js" as="script"><link rel="prefetch" href="/assets/index.html-b095a2a7.js" as="script"><link rel="prefetch" href="/assets/index.html-2ca0fa7d.js" as="script"><link rel="prefetch" href="/assets/index.html-16c46f80.js" as="script"><link rel="prefetch" href="/assets/index.html-256ea932.js" as="script"><link rel="prefetch" href="/assets/index.html-7bf397fa.js" as="script"><link rel="prefetch" href="/assets/index.html-e1485414.js" as="script"><link rel="prefetch" href="/assets/index.html-2845dc5b.js" as="script"><link rel="prefetch" href="/assets/index.html-9909be95.js" as="script"><link rel="prefetch" href="/assets/index.html-237b05a0.js" as="script"><link rel="prefetch" href="/assets/index.html-6d8d4aee.js" as="script"><link rel="prefetch" href="/assets/index.html-4970e982.js" as="script"><link rel="prefetch" href="/assets/index.html-49d51f97.js" as="script"><link rel="prefetch" href="/assets/index.html-fca9de12.js" as="script"><link rel="prefetch" href="/assets/index.html-650b3a2b.js" as="script"><link rel="prefetch" href="/assets/2026-04-21-np-table-design.html-08353749.js" as="script"><link rel="prefetch" href="/assets/index.html-c1720280.js" as="script"><link rel="prefetch" href="/assets/index.html-9bdb1d1a.js" as="script"><link rel="prefetch" href="/assets/index.html-0e7b07d6.js" as="script"><link rel="prefetch" href="/assets/index.html-508685d8.js" as="script"><link rel="prefetch" href="/assets/index.html-611c7457.js" as="script"><link rel="prefetch" href="/assets/index.html-8cb6865e.js" as="script"><link rel="prefetch" href="/assets/index.html-88175020.js" as="script"><link rel="prefetch" href="/assets/index.html-a60bfccc.js" as="script"><link rel="prefetch" href="/assets/index.html-afd85ade.js" as="script"><link rel="prefetch" href="/assets/index.html-5329d770.js" as="script"><link rel="prefetch" href="/assets/index.html-e1526f9f.js" as="script"><link rel="prefetch" href="/assets/index.html-374d8585.js" as="script"><link rel="prefetch" href="/assets/index.html-aa20ef4d.js" as="script"><link rel="prefetch" href="/assets/index.html-2c1ee4fa.js" as="script"><link rel="prefetch" href="/assets/index.html-b484b70a.js" as="script"><link rel="prefetch" href="/assets/index.html-f385c059.js" as="script"><link rel="prefetch" href="/assets/index.html-865c5bc9.js" as="script"><link rel="prefetch" href="/assets/index.html-bbb24775.js" as="script"><link rel="prefetch" href="/assets/index.html-dda9216a.js" as="script"><link rel="prefetch" href="/assets/index.html-3c9eaa33.js" as="script"><link rel="prefetch" href="/assets/index.html-b5cc0e52.js" as="script"><link rel="prefetch" href="/assets/index.html-381a259f.js" as="script">
+    <link rel="preload" href="/assets/style-CEZo_Jd6.css" as="style"><link rel="stylesheet" href="/assets/style-CEZo_Jd6.css">
+    <link rel="modulepreload" href="/assets/app-DypS9_Yj.js"><link rel="modulepreload" href="/assets/404.html-BA1lj0Y3.js">
+    <link rel="prefetch" href="/assets/index.html-CaKE2wLc.js" as="script"><link rel="prefetch" href="/assets/index.html-Dk1yzL-w.js" as="script"><link rel="prefetch" href="/assets/index.html-DTMnb5pe.js" as="script"><link rel="prefetch" href="/assets/index.html-DZwmPvqG.js" as="script"><link rel="prefetch" href="/assets/index.html-CAd1uY4n.js" as="script"><link rel="prefetch" href="/assets/index.html-DMqKMsnp.js" as="script"><link rel="prefetch" href="/assets/index.html-Bl-fqirr.js" as="script"><link rel="prefetch" href="/assets/index.html-BaoUgwzL.js" as="script"><link rel="prefetch" href="/assets/index.html-id1nnWN9.js" as="script"><link rel="prefetch" href="/assets/index.html-mv9rtGmf.js" as="script"><link rel="prefetch" href="/assets/index.html-D4fpSHUu.js" as="script"><link rel="prefetch" href="/assets/index.html-DRvGFFO3.js" as="script"><link rel="prefetch" href="/assets/index.html-DMdZc2Uh.js" as="script"><link rel="prefetch" href="/assets/index.html-QsQhazVx.js" as="script"><link rel="prefetch" href="/assets/index.html-CVfRTK6J.js" as="script"><link rel="prefetch" href="/assets/index.html-CcCGe7l9.js" as="script"><link rel="prefetch" href="/assets/index.html-nfDTMXsw.js" as="script"><link rel="prefetch" href="/assets/index.html-DsWB8Qm_.js" as="script"><link rel="prefetch" href="/assets/index.html-BryqxJdj.js" as="script"><link rel="prefetch" href="/assets/index.html-DL5uU701.js" as="script"><link rel="prefetch" href="/assets/index.html-Dzr8PCCU.js" as="script"><link rel="prefetch" href="/assets/index.html-BuTFclr1.js" as="script"><link rel="prefetch" href="/assets/index.html-CsUdi0XT.js" as="script"><link rel="prefetch" href="/assets/index.html-D0gws4qR.js" as="script"><link rel="prefetch" href="/assets/index.html-CxY7aR2n.js" as="script"><link rel="prefetch" href="/assets/index.html-C__1GCUc.js" as="script"><link rel="prefetch" href="/assets/index.html-uyet7p52.js" as="script"><link rel="prefetch" href="/assets/index.html-CQotbKjY.js" as="script"><link rel="prefetch" href="/assets/index.html-C4X9Yksb.js" as="script"><link rel="prefetch" href="/assets/index.html-6hBJQqyj.js" as="script"><link rel="prefetch" href="/assets/index.html-B4sHyE-3.js" as="script"><link rel="prefetch" href="/assets/index.html-Dhqz2SG4.js" as="script"><link rel="prefetch" href="/assets/index.html-7MyvjVJU.js" as="script"><link rel="prefetch" href="/assets/index.html-C_gzgmtM.js" as="script"><link rel="prefetch" href="/assets/index.html-B9Mi_Kl0.js" as="script"><link rel="prefetch" href="/assets/index.html-BMRCS0iQ.js" as="script"><link rel="prefetch" href="/assets/index.html-09zT7hBc.js" as="script"><link rel="prefetch" href="/assets/index.html-D6l8vv9J.js" as="script"><link rel="prefetch" href="/assets/index.html-ubeAPUII.js" as="script"><link rel="prefetch" href="/assets/index.html-DNnKcFPa.js" as="script"><link rel="prefetch" href="/assets/index.html-CSGJXAis.js" as="script"><link rel="prefetch" href="/assets/index.html-CtIGBX-d.js" as="script"><link rel="prefetch" href="/assets/index.html-SmAl-Otv.js" as="script"><link rel="prefetch" href="/assets/index.html-BRGA5vtQ.js" as="script"><link rel="prefetch" href="/assets/index.html-B7Djd6Yx.js" as="script"><link rel="prefetch" href="/assets/index.html-BYYkiSA8.js" as="script">
   </head>
   <body>
-    <div id="app"><!--[--><div class="theme-container"><main class="page"><div class="theme-default-content"><h1>404</h1><blockquote>Looks like we&#39;ve got some broken links.</blockquote><a href="/" class="">Take me home</a></div></main></div><!----><!--]--></div>
-    <script type="module" src="/assets/app-89039d16.js" defer></script>
+    <div id="app"><!--[--><div class="theme-container"><main class="page"><div class="theme-default-content"><h1>404</h1><blockquote>There&#39;s nothing here.</blockquote><a class="route-link" href="/">Take me home</a></div></main></div><!--[--><!----><!--]--><!--]--></div>
+    <script type="module" src="/assets/app-DypS9_Yj.js" defer></script>
   </body>
 </html>

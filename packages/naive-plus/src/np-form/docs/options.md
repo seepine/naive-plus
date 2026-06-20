@@ -1,5 +1,5 @@
 ---
-permalink: /form/options
+permalink: /form/options/
 ---
 
 # np-form 字典选项

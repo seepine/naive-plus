@@ -1,5 +1,5 @@
 ---
-permalink: /form/change
+permalink: /form/change/
 ---
 
 # np-form 改变事件

@@ -1,48 +1,49 @@
 ---
 home: true
-title: 首页
+title: Home
 heroImage: logo.png
+lang: en-US
 actions:
-  - text: 开始使用
-    link: /form/base/
+  - text: Get Started
+    link: /en/form/base/
     type: primary
 
 features:
-- title: 快速开发
-  details: 坚实贯彻配置驱动视图的思想，落实万物皆可 option。
-- title: 极简代码
-  details: 坚决贯彻极简封装和最少代码原则，让枯燥的crud在几秒内即可完成。
-- title: 最佳实践
-  details: 提供最佳实践代码，让每一位开发者都能以正确的姿势使用。
+- title: Rapid Development
+  details: A configuration-driven approach that lets every UI element be defined through options.
+- title: Minimal Code
+  details: Embrace the principle of minimal abstraction and the least code, completing tedious CRUD in seconds.
+- title: Best Practices
+  details: Best practice code is provided so every developer can use it the right way.
 footer: MIT Licensed | Copyright © 2026 seepine 
 ---
 
 
-## 一、快速入门
+## Quick Start
 
-### 1. 安装 naive-ui
+### 1. Install naive-ui
 
-> `naive-plus` 基于 [naiveUI](https://www.naiveui.com/zh-CN/os-theme/docs/installation) 封装
+> `naive-plus` is built on top of [naiveUI](https://www.naiveui.com/en-US/os-theme/docs/installation)
 
 ```shell
 npm i naive-ui -D
 ```
 
-### 2. 安装 naive-plus
+### 2. Install naive-plus
 
 ```shell
 npm i naive-plus -D
 ```
 
-### 3. 安装 unplugin
+### 3. Install unplugin
 
-通过 `unplugin-vue-components` 和 `unplugin-auto-import` 来实现按需引入和自动导入
+Use `unplugin-vue-components` and `unplugin-auto-import` to enable on-demand import and auto-import.
 
 ```shell
 npm install -D unplugin-vue-components unplugin-auto-import
 ```
 
-### 4. 按需引入
+### 4. On-demand Import
 
 ```js
 import AutoImport from 'unplugin-auto-import/vite';
@@ -61,7 +62,7 @@ export default {
     Components({
       resolvers: [
         NaiveUiResolver(),
-        // 添加按需引入
+        // On-demand import
         NaivePlusResolver(),
       ],
     }),
@@ -69,8 +70,8 @@ export default {
 };
 ```
 
-### 5. 使用
+### 5. Usage
 
 ```vue
-<np-button>按钮</np-button>
+<np-button>Button</np-button>
 ```

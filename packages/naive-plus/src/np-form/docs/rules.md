@@ -1,5 +1,5 @@
 ---
-permalink: /form/rules
+permalink: /form/rules/
 ---
 
 # np-form 规则校验

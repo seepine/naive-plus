@@ -1,0 +1,14 @@
+<template>
+  <div>
+    {{ value }}
+  </div>
+  <np-checkbox
+    v-model="value"
+    :options="['Beijing', 'Shanghai', 'Guangzhou']"
+  />
+</template>
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+const value = ref([])
+</script>

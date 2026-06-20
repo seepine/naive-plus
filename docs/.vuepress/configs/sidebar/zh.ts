@@ -5,39 +5,18 @@ export const zh: SidebarConfig = {
     {
       text: '基础组件',
       children: [
-        {
-          text: 'Button 按钮',
-          link: '/components/np-button/',
-        },
-        {
-          text: 'Radio 单选框',
-          link: '/components/np-radio/',
-        },
-        {
-          text: 'Checkbox 多选框',
-          link: '/components/np-checkbox/',
-        },
-        {
-          text: 'Upload 上传',
-          link: '/components/np-upload/',
-        },
-        {
-          text: 'Filter 筛选',
-          link: '/components/np-filter/',
-        },
+        { text: 'Button 按钮', link: '/components/np-button/' },
+        { text: 'Radio 单选框', link: '/components/np-radio/' },
+        { text: 'Checkbox 多选框', link: '/components/np-checkbox/' },
+        { text: 'Upload 上传', link: '/components/np-upload/' },
+        { text: 'Filter 筛选', link: '/components/np-filter/' },
       ],
     },
     {
       text: 'Cell 单元格',
       children: [
-        {
-          text: 'Cell 单元格',
-          link: '/components/np-cell/',
-        },
-        {
-          text: 'CellGroup 单元格组',
-          link: '/components/np-cell-group/',
-        },
+        { text: 'Cell 单元格', link: '/components/np-cell/' },
+        { text: 'CellGroup 单元格组', link: '/components/np-cell-group/' },
       ],
     },
   ],

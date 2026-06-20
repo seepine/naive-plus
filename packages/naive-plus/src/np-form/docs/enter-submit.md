@@ -1,5 +1,5 @@
 ---
-permalink: /form/enter-submit
+permalink: /form/enter-submit/
 ---
 
 # np-form 回车提交表单
@@ -29,4 +29,3 @@ permalink: /form/enter-submit
 | 属性               | 说明               | 类型                       | 默认值   |
 | ------------------ | ------------------ | -------------------------- | -------- |
 | enterSubmitMode | 回车提交表单的方式 | `'last' \| 'all' \| false` | `false` |
-

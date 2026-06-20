@@ -1,5 +1,5 @@
 ---
-permalink: /components/np-upload
+permalink: /components/np-upload/
 ---
 
 # np-upload 上传

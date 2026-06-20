@@ -1,5 +1,15 @@
 # naive-plus
 
+## 0.1.0-beta.15
+
+### Minor Changes
+
+- [#24](https://github.com/seepine/naive-plus/pull/24) [`e84ecff`](https://github.com/seepine/naive-plus/commit/e84ecff90811c9221c910b1ae6b7e049f192d6f8) Thanks [@seepine](https://github.com/seepine)! - chore(deps): bump @vitejs/plugin-vue-jsx to ^3.1.0
+
+### Patch Changes
+
+- [#26](https://github.com/seepine/naive-plus/pull/26) [`d34b485`](https://github.com/seepine/naive-plus/commit/d34b485d672c6fe6b062cc7cfec20745a44e977b) Thanks [@niloubot](https://github.com/niloubot)! - fix(np-table): default `formProps` to `{}` in `buildFormColumns` to avoid destructuring `undefined`
+
 ## 0.1.0-beta.14
 
 ### Minor Changes

@@ -24,7 +24,7 @@ export const buildFormColumns = (
 ): FormColumn[] => {
   return columns
     .map(col => {
-      const { key, label, formProps } = col
+      const { key, label, formProps = {} } = col
       if (!formProps && !key) return null
 
       const modeKey = MODE_PROPS_KEY[mode] as keyof typeof formProps

@@ -11,13 +11,68 @@ url: /components/np-upload/index.md
 
 通过 `v-model` 双向绑定文件列表，通过 `props` 传递 `n-upload` 的属性。
 
+```vue
+<template>
+  <div>
+    {{ fileList }}
+    <np-upload
+      v-model="fileList"
+      :props="{
+        action: '/api/file/upload',
+        name: 'file',
+      }"
+    >
+      <n-button>上传文件</n-button>
+    </np-upload>
+  </div>
+</template>
+<script setup lang="ts">
+import { NButton } from 'naive-ui'
+import { ref } from 'vue'
+
+const fileList = ref<string[]>([])
+</script>
+```
+
 ## 自定义上传区域
 
 通过默认插槽自定义上传触发区域的内容，例如结合 `listType: 'image-card'` 实现图片卡片上传。
 
+```vue
+<template>
+  <div>
+    {{ fileList }}
+    <np-upload v-model="fileList" :props="{ listType: 'image-card' }">
+      点击上传
+    </np-upload>
+  </div>
+</template>
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const fileList = ref<string[]>([])
+</script>
+```
+
 ## urlOnly 模式
 
 当 `listType` 为 `image-card` 时，设置 `urlOnly` 为 `true`，`v-model` 绑定值将简化为 url 字符串数组。
+
+```vue
+<template>
+  <div>
+    {{ fileList }}
+    <np-upload v-model="fileList" url-only :props="{ listType: 'image-card' }">
+      点击上传
+    </np-upload>
+  </div>
+</template>
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const fileList = ref<string[]>([])
+</script>
+```
 
 ## 组件配置
 

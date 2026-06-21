@@ -72,11 +72,101 @@ url: /components/np-button/index.md
 
 默认点击事件已做节流处理
 
+```vue
+<template>
+  <np-button style="margin-right: 8px" @click="handleClick">
+    默认节流350ms
+  </np-button>
+  <np-button :throttle-delay="1000" type="primary" @click="handleClick">
+    设置节流1000ms
+  </np-button>
+  <!-- 点击日志 -->
+  <div v-for="(item, idx) in logs" :key="idx">
+    {{ item }}
+  </div>
+</template>
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const logs = ref<string[]>([])
+const handleClick = async () => {
+  if (logs.value.length > 5) {
+    logs.value.splice(0, 1)
+  }
+  logs.value.push(`点击了: ${Date().toString()}`)
+}
+</script>
+```
+
 ## 异步按钮
 
 使用 `:click` 属性代替原来的 `@click` 事件
 
+```vue
+<template>
+  <div class="flex-row gap-2">
+    <np-button :click="handleClick">异步按钮</np-button>
+    <np-button type="primary" :click="handleClick">异步按钮</np-button>
+    <np-button type="error" :click="handleClick">异步按钮</np-button>
+    <np-button type="warning" :click="handleClick">异步按钮</np-button>
+    <np-button
+      type="success"
+      :click="(e: any) => handleClick(e, 5000)"
+      :loading-delay="1000"
+    >
+      异步按钮
+    </np-button>
+  </div>
+</template>
+<script setup lang="ts">
+const handleClick = async (e: MouseEvent, delay = 2000) => {
+  console.log('点击按钮', delay)
+  // 模拟耗时操作
+  await new Promise<void>(resolve => setTimeout(resolve, delay))
+}
+</script>
+<style>
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.gap-2 {
+  gap: 8px;
+}
+</style>
+```
+
 ## 按钮类型
+
+```vue
+<template>
+  <div class="flex-row gap-2">
+    <np-button :click="handleClick">按钮</np-button>
+    <np-button type="primary" :click="handleClick">按钮</np-button>
+    <np-button type="success" :click="handleClick">按钮</np-button>
+    <np-button type="warning" :click="handleClick">按钮</np-button>
+    <np-button type="error" :click="handleClick">按钮</np-button>
+  </div>
+</template>
+<script setup lang="ts">
+const handleClick = async (e: MouseEvent, delay = 2000) => {
+  console.log('点击按钮', delay)
+  // 模拟耗时操作
+  await new Promise<void>(resolve => setTimeout(resolve, delay))
+}
+</script>
+<style>
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.gap-2 {
+  gap: 8px;
+}
+</style>
+```
 
 ## 属性
 
@@ -123,6 +213,57 @@ url: /components/np-cell-group/index.md
 
 options 支持所有 `np-cell` 属性
 
+```vue
+<script setup lang="tsx">
+import { ref } from 'vue'
+import { NpCellGroup } from '../index'
+import type { NpCellGroupOption } from '../index'
+
+const options = ref<NpCellGroupOption[]>([
+  { label: '通知提醒' },
+  { label: '声音' },
+  { label: '震动' },
+])
+
+const navOptions: NpCellGroupOption[] = [
+  { label: '个人信息', arrow: true, hover: true },
+  {
+    label: '账号安全',
+    arrow: true,
+    hover: true,
+    description: '账号安全设置',
+  },
+  { label: '隐私设置', arrow: true, hover: true, value: '已设置' },
+  {
+    key: 'storage',
+    label: '存储空间',
+    arrow: true,
+    hover: true,
+    value: () => <span style="color: #18a058">storage</span>,
+    footer: () => (
+      <span style="font-size: 12px; color: #8a8a8a">支持渲染函数</span>
+    ),
+  },
+]
+
+const handleChange = (_keys: unknown[], item: NpCellGroupOption) => {
+  console.log('changed:', item.label)
+}
+</script>
+
+<template>
+  <div style="display: flex; flex-direction: column; gap: 16px">
+    <NpCellGroup title="通知设置" :options="options" />
+    <NpCellGroup
+      title="账号"
+      bordered
+      :options="navOptions"
+      @change="handleChange"
+    />
+  </div>
+</template>
+```
+
 ## Props
 
 | 参数 | 说明 | 类型 | 默认值 |
@@ -167,13 +308,126 @@ url: /components/np-cell/index.md
 
 通过 type 指定控件类型，支持 checkbox / radio / switch 控件，并支持图标及右侧箭头
 
+```vue
+<script setup lang="tsx">
+import { ref } from 'vue'
+import { NpCell } from '../index'
+
+const checkbox = ref(false)
+const radio = ref(false)
+const switchVal = ref(false)
+
+const iconRender = () => {
+  return <img src="/logo.png" alt="icon" />
+}
+
+const valueRender = () => {
+  return <span style="color: #18a058">Render 值</span>
+}
+</script>
+
+<template>
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <np-cell v-model:checked="checkbox" type="checkbox" label="Checkbox 类型" />
+    <np-cell v-model:checked="radio" type="radio" label="Radio 类型" />
+    <np-cell
+      v-model:checked="switchVal"
+      type="switch"
+      label="Switch 类型"
+      :value="switchVal ? '开' : '关'"
+    />
+    <np-cell label="带箭头" :arrow="true" value="跳转" />
+    <np-cell label="有图标" :icon="iconRender" />
+    <np-cell
+      v-model:checked="checkbox"
+      type="checkbox"
+      label="带底部内容"
+      value="说明"
+      description="底部内容位于主内容下方，不影响左侧控件与内容区域居中"
+    >
+      <template #footer>
+        <div style="font-size: 12px; color: #8a8a8a">
+          底部内容位于主内容下方，不影响左侧控件与内容区域居中
+        </div>
+      </template>
+    </np-cell>
+    <np-cell label="渲染函数" :value="valueRender" />
+    <np-cell label="纯文本，无控件" />
+  </div>
+</template>
+```
+
 ## 尺寸
 
 通过 size 指定尺寸
 
+```vue
+<script setup lang="tsx">
+import { ref } from 'vue'
+import { NpCell } from '../index'
+
+const checkbox = ref(false)
+
+const iconRender = () => {
+  return <img src="/logo.png" alt="icon" />
+}
+</script>
+
+<template>
+  <div>
+    <NpCell
+      v-model:checked="checkbox"
+      size="small"
+      :icon="iconRender"
+      type="checkbox"
+      label="Checkbox 类型"
+      :arrow="true"
+    />
+    <NpCell
+      v-model:checked="checkbox"
+      :icon="iconRender"
+      type="checkbox"
+      label="Checkbox 类型"
+      :arrow="true"
+    />
+    <NpCell
+      v-model:checked="checkbox"
+      size="large"
+      :icon="iconRender"
+      type="checkbox"
+      label="Checkbox 类型"
+      :arrow="true"
+    />
+  </div>
+</template>
+```
+
 ## 下边框
 
 通过 bordered 指定下边框
+
+```vue
+<script setup lang="tsx">
+import { ref } from 'vue'
+import { NpCell } from '../index'
+
+const iconRender = () => {
+  return <img src="/logo.png" alt="icon" />
+}
+</script>
+
+<template>
+  <div>
+    <np-cell type="checkbox" label="个人信息" :icon="iconRender" arrow bordered>
+      <template #footer>
+        <span style="font-size: 12px; color: #8a8a8a">基础资料与头像信息</span>
+      </template>
+    </np-cell>
+    <np-cell type="checkbox" label="账号设置" arrow bordered />
+    <np-cell type="checkbox" label="隐私安全" arrow />
+  </div>
+</template>
+```
 
 ## Props
 
@@ -213,21 +467,154 @@ url: /components/np-checkbox/index.md
 
 通过 `options` 指定选项，通过 `v-model` 双向绑定值。
 
+```vue
+<template>
+  <div>
+    {{ value }}
+  </div>
+  <np-checkbox v-model="value" :options="['北京', '上海', '广州']" />
+
+  <!-- <div style="margin-top: 8px">支持全选</div>
+  <np-checkbox
+    v-model="value"
+    :options="[
+      { label: '全选', checkAll: true },
+      { label: '北京', value: 'beijing' },
+      { label: '上海', value: 'shanghai' },
+      { label: '广州', value: 'guangzhou' },
+    ]"
+  /> -->
+</template>
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+const value = ref([])
+</script>
+```
+
 ## 异步选项
 
 选项 `options` 支持异步方法，例如一般会从后端接口获取字典。
+
+```vue
+<template>
+  <div>
+    {{ value }}
+  </div>
+  <np-checkbox v-model="value" :options="options" />
+</template>
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+const value = ref([])
+
+const options = async () => {
+  // 模拟网络请求
+  await new Promise<any[]>(resolve => setTimeout(resolve, 2000))
+  return [
+    { label: '北京', value: 'beijing' },
+    { label: '上海', value: 'shanghai' },
+    { label: '广州', value: 'guangzhou' },
+  ]
+}
+</script>
+```
 
 ## 异步计算选项
 
 选项 `options` 支持异步计算方法，例如根据不同类型需要从后端不同接口获取。
 
+```vue
+<template>
+  <div>
+    {{ value }}
+  </div>
+  <div>
+    <np-button
+      :type="type === '福建' ? 'primary' : undefined"
+      @click="() => (type = '福建')"
+    >
+      福建
+    </np-button>
+    <np-button
+      :type="type === '广东' ? 'primary' : undefined"
+      @click="() => (type = '广东')"
+    >
+      广东
+    </np-button>
+  </div>
+  <np-checkbox v-model="value" :options="options" />
+</template>
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+const value = ref([])
+
+const type = ref('福建')
+
+const options = async () => {
+  return type.value === '福建'
+    ? await new Promise<any[]>(resolve => {
+        setTimeout(() => resolve(['福州', '厦门', '龙岩', '三明']), 1500)
+      })
+    : await new Promise<any[]>(resolve => {
+        setTimeout(() => resolve(['广州', '深圳', '珠海']), 1500)
+      })
+}
+</script>
+```
+
 ## 自定义字段名
 
 通常我们会从后端接口获取数据，但数据类型并不一定是 `{label,value}` 的结构，此时可通过 `keys` 指定选项字段名
 
+```vue
+<template>
+  <div>
+    {{ value }}
+  </div>
+  <np-checkbox
+    v-model="value"
+    :options="[
+      { name: '北京', id: 'beijing' },
+      { name: '上海', id: 'shanghai' },
+      { name: '广州', id: 'guangzhou' },
+    ]"
+    value-field="id"
+    label-field="name"
+  />
+</template>
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+const value = ref([])
+</script>
+```
+
 ## 改变事件
 
 通过 `change` 事件获取值变化。
+
+```vue
+<template>
+  <div>
+    {{ value }}
+  </div>
+  <np-checkbox
+    :options="[
+      { label: '北京', value: 'beijing' },
+      { label: '上海', value: 'shanghai' },
+      { label: '广州', value: 'guangzhou' },
+    ]"
+    @change="(val: any) => (value = val)"
+  />
+</template>
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+const value = ref([])
+</script>
+```
 
 ## 组件配置
 
@@ -267,9 +654,159 @@ url: /components/np-filter/index.md
 
 ## 基础用法
 
+```vue
+<script setup lang="tsx">
+import { ref } from 'vue'
+import { NpFilter } from '../index'
+
+const params = ref({})
+
+const items = [
+  {
+    label: '状态',
+    key: 'status',
+    options: [
+      {
+        label: '进行中',
+        value: 'ongoing',
+      },
+      { label: '已暂停', value: 'paused' },
+      { label: '已完成', value: 'done' },
+    ],
+  },
+  {
+    label: '优先级',
+    key: 'priority',
+    searchable: true,
+    multiple: false,
+    options: [
+      { label: '高', value: 'high' },
+      { label: '中', value: 'medium' },
+      { label: '低', value: 'low' },
+    ],
+  },
+  {
+    label: '创建人',
+    key: 'creator',
+    searchable: true,
+    options: [
+      { label: '张三', value: 'zhangsan' },
+      { label: '李四', value: 'lisi' },
+      { label: '王五', value: 'wangwu' },
+    ],
+  },
+]
+
+const handleChange = (newParams: Record<string, any>) => {
+  console.log('filter change:', newParams)
+}
+</script>
+
+<template>
+  <div>
+    <NpFilter v-model:params="params" :items="items" @change="handleChange">
+      <n-button>点击筛选</n-button>
+    </NpFilter>
+
+    <pre>{{ JSON.stringify(params, null, 2) }}</pre>
+  </div>
+</template>
+```
+
 ## 分组选项
 
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { NpFilter } from '../index'
+
+const params = ref({})
+
+const items = [
+  {
+    label: '优先级',
+    key: 'priority',
+    searchable: true,
+    options: [
+      { title: '紧急', options: [{ label: '高', value: 'high' }] },
+      {
+        title: '普通',
+        options: [
+          { label: '中', value: 'medium' },
+          { label: '低', value: 'low' },
+        ],
+      },
+    ],
+  },
+]
+
+const handleChange = (newParams: Record<string, any>) => {
+  console.log('filter change:', newParams)
+}
+</script>
+
+<template>
+  <div>
+    <NpFilter v-model:params="params" :items="items" @change="handleChange">
+      <n-button>点击筛选</n-button>
+    </NpFilter>
+
+    <pre>{{ JSON.stringify(params, null, 2) }}</pre>
+  </div>
+</template>
+```
+
 ## 弹出位置
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { NpFilter } from '../index'
+
+const leftParams = ref({})
+const rightParams = ref({})
+
+const items = [
+  {
+    label: '状态',
+    key: 'status',
+    options: [
+      { label: '进行中', value: 'ongoing' },
+      { label: '已暂停', value: 'paused' },
+      { label: '已完成', value: 'done' },
+    ],
+  },
+  {
+    label: '优先级',
+    key: 'priority',
+    multiple: false,
+    options: [
+      { label: '高', value: 'high' },
+      { label: '中', value: 'medium' },
+      { label: '低', value: 'low' },
+    ],
+  },
+]
+</script>
+
+<template>
+  <div style="display: flex; gap: 16px; justify-content: space-between">
+    <div>
+      <NpFilter v-model:params="leftParams" :items="items" placement="right">
+        <n-button>向右侧弹出</n-button>
+      </NpFilter>
+      <pre>{{ JSON.stringify(leftParams, null, 2) }}</pre>
+    </div>
+
+    <div style="text-align: right">
+      <NpFilter v-model:params="rightParams" :items="items" placement="left">
+        <n-button>向左侧弹出</n-button>
+      </NpFilter>
+      <pre>{{ JSON.stringify(rightParams, null, 2) }}</pre>
+    </div>
+  </div>
+</template>
+```
 
 ## Props
 
@@ -311,25 +848,168 @@ url: /components/np-radio/index.md
 
 通过 `options` 指定选项，通过 `v-model` 双向绑定值。
 
+```vue
+<template>
+  <div>
+    {{ value }}
+  </div>
+  <np-radio v-model="value" :options="['北京', '上海', '广州']" />
+</template>
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+const value = ref<string | null>(null)
+</script>
+```
+
 ## 按钮组
 
 设置 `button` 以使用按钮组样式。
+
+```vue
+<template>
+  <div>
+    {{ value }}
+  </div>
+  <np-radio
+    v-model="value"
+    type="button"
+    :options="[
+      { label: '上海', value: 'shanghai' },
+      { label: '北京', value: 'beijing' },
+      { label: '深圳', value: 'shenzhen' },
+    ]"
+  />
+</template>
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+const value = ref<string | null>('shanghai')
+</script>
+```
 
 ## 异步选项
 
 选项 `options` 支持异步方法，例如一般会从后端接口获取字典。
 
+```vue
+<template>
+  <div>
+    {{ value }}
+  </div>
+  <np-radio v-model="value" :options="options" />
+</template>
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+const value = ref<string | null>(null)
+
+const options = async () => {
+  await new Promise<any[]>(resolve => setTimeout(resolve, 2000))
+  return [
+    { label: '北京', value: 'beijing' },
+    { label: '上海', value: 'shanghai' },
+    { label: '广州', value: 'guangzhou' },
+  ]
+}
+</script>
+```
+
 ## 异步计算选项
 
 选项 `options` 支持异步计算方法，例如根据不同类型需要从后端不同接口获取。
+
+```vue
+<template>
+  <div>
+    {{ value }}
+  </div>
+  <div>
+    <np-button
+      :type="type === '福建' ? 'primary' : undefined"
+      @click="() => (type = '福建')"
+    >
+      福建
+    </np-button>
+    <np-button
+      :type="type === '广东' ? 'primary' : undefined"
+      @click="() => (type = '广东')"
+    >
+      广东
+    </np-button>
+  </div>
+  <np-radio v-model="value" :options="options" />
+</template>
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+const value = ref<string | null>(null)
+
+const type = ref('福建')
+
+const options = async () => {
+  return type.value === '福建'
+    ? await new Promise<any[]>(resolve => {
+        setTimeout(() => resolve(['福州', '厦门', '龙岩', '三明']), 1500)
+      })
+    : await new Promise<any[]>(resolve => {
+        setTimeout(() => resolve(['广州', '深圳', '珠海']), 1500)
+      })
+}
+</script>
+```
 
 ## 自定义字段名
 
 通常我们会从后端接口获取数据，但数据类型并不一定是 `{label,value}` 的结构，此时可通过 `labelField` 和 `valueField` 指定选项字段名。
 
+```vue
+<template>
+  <div>
+    {{ value }}
+  </div>
+  <np-radio
+    v-model="value"
+    :options="[
+      { name: '北京', id: 'beijing' },
+      { name: '上海', id: 'shanghai' },
+      { name: '广州', id: 'guangzhou' },
+    ]"
+    value-field="id"
+    label-field="name"
+  />
+</template>
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+const value = ref<string | null>(null)
+</script>
+```
+
 ## 改变事件
 
 通过 `change` 事件获取值变化。
+
+```vue
+<template>
+  <div>
+    {{ value }}
+  </div>
+  <np-radio
+    :options="[
+      { label: '北京', value: 'beijing' },
+      { label: '上海', value: 'shanghai' },
+      { label: '广州', value: 'guangzhou' },
+    ]"
+    @change="(val: any) => (value = val)"
+  />
+</template>
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+const value = ref<string | number | boolean | null>(null)
+</script>
+```
 
 ## 组件配置
 
@@ -376,13 +1056,68 @@ url: /components/np-upload/index.md
 
 通过 `v-model` 双向绑定文件列表，通过 `props` 传递 `n-upload` 的属性。
 
+```vue
+<template>
+  <div>
+    {{ fileList }}
+    <np-upload
+      v-model="fileList"
+      :props="{
+        action: '/api/file/upload',
+        name: 'file',
+      }"
+    >
+      <n-button>上传文件</n-button>
+    </np-upload>
+  </div>
+</template>
+<script setup lang="ts">
+import { NButton } from 'naive-ui'
+import { ref } from 'vue'
+
+const fileList = ref<string[]>([])
+</script>
+```
+
 ## 自定义上传区域
 
 通过默认插槽自定义上传触发区域的内容，例如结合 `listType: 'image-card'` 实现图片卡片上传。
 
+```vue
+<template>
+  <div>
+    {{ fileList }}
+    <np-upload v-model="fileList" :props="{ listType: 'image-card' }">
+      点击上传
+    </np-upload>
+  </div>
+</template>
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const fileList = ref<string[]>([])
+</script>
+```
+
 ## urlOnly 模式
 
 当 `listType` 为 `image-card` 时，设置 `urlOnly` 为 `true`，`v-model` 绑定值将简化为 url 字符串数组。
+
+```vue
+<template>
+  <div>
+    {{ fileList }}
+    <np-upload v-model="fileList" url-only :props="{ listType: 'image-card' }">
+      点击上传
+    </np-upload>
+  </div>
+</template>
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const fileList = ref<string[]>([])
+</script>
+```
 
 ## 组件配置
 
@@ -418,6 +1153,106 @@ url: /form/all/index.md
 
 通过 `type` 指定不同类型。
 
+```vue
+<template>
+  <div>
+    {{ data }}
+    <np-form v-model="data" :option="option" />
+  </div>
+</template>
+<script setup lang="ts">
+import type { FormOption } from 'naive-plus'
+import { ref } from 'vue'
+
+const data = ref({})
+
+const option: FormOption = {
+  columns: [
+    { label: '输入框', key: 'input' },
+    { label: '数字输入框', key: 'number', type: 'number' },
+    {
+      label: '自动补全',
+      key: 'autoComplete',
+      type: 'autoComplete',
+      options: async formData => {
+        if (!formData.autoComplete) {
+          return []
+        }
+        return ['@gmail.com', '@qq.com', '@icloud.com'].map(
+          item => `${formData.autoComplete}${item}`
+        )
+      },
+    },
+    {
+      label: '级联选择',
+      type: 'cascader',
+      key: 'cascader',
+      options: [
+        {
+          label: 'a',
+          value: 'a',
+          children: [
+            { label: 'a1', value: 'a1' },
+            { label: 'a2', value: 'a2' },
+          ],
+        },
+        { label: 'b', value: 'b' },
+      ],
+    },
+    {
+      label: '多选框',
+      key: 'checkbox',
+      type: 'checkbox',
+      options: ['a', 'b', 'c'],
+    },
+    { label: '日期选择器', key: 'date', type: 'date' },
+    { label: '单选框', key: 'radio', type: 'radio', options: ['a', 'b'] },
+    { label: '评分', key: 'rate', type: 'rate' },
+    {
+      label: '选择器',
+      key: 'select',
+      type: 'select',
+      options: ['A', 'B', 'C'],
+    },
+    { label: '滑块', key: 'slider', type: 'slider' },
+    { label: '开关', key: 'switch', type: 'switch' },
+    { label: '多行文本框', key: 'textarea', type: 'textarea' },
+    {
+      label: '穿梭框',
+      key: 'transfer',
+      type: 'transfer',
+      options: ['A', 'B', 'C'],
+    },
+    { label: '时间选择器', key: 'time', type: 'time' },
+    {
+      label: '树选择器',
+      key: 'tree',
+      type: 'tree',
+      options: [
+        {
+          label: 'a',
+          value: 'a',
+          children: [
+            { label: 'a1', value: 'a1' },
+            { label: 'a2', value: 'a2' },
+          ],
+        },
+        { label: 'b', value: 'b' },
+      ],
+    },
+    {
+      label: '文件上传',
+      key: 'upload',
+      type: 'upload',
+      props: {
+        action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+      },
+    },
+  ],
+}
+</script>
+```
+
 ## 组件配置
 
 ### FormColumn Props
@@ -439,6 +1274,83 @@ url: /form/base/index.md
 
 表单项主要通过 `label, key, type` 用以设置表单显示标签、表单属性和表单项类型。
 更多配置在设置了 `type` 表单项类型后，根据实际类型的 `props` 而定。
+
+```vue
+<template>
+  <div>
+    {{ data }}
+    <np-form v-model="data" :option="option" />
+  </div>
+</template>
+<script setup lang="ts">
+import type { FormOption } from 'naive-plus'
+import { ref, h } from 'vue'
+
+type User = {
+  fullName?: string
+  tel?: number
+  age?: number
+  gender?: 'man' | 'feman'
+  hobby?: Array<'唱' | '跳' | 'rapper'>
+}
+
+const data = ref<User>({
+  hobby: ['唱'],
+})
+
+const option: FormOption<User> = {
+  onSubmit: async form => {
+    console.log('点击了提交', form)
+    await new Promise<void>(resolve => setTimeout(() => resolve(), 1200))
+  },
+  onReset: form => {
+    console.log('点击了重置', form)
+  },
+  columns: [
+    {
+      label: '姓名',
+      key: 'fullName',
+    },
+    {
+      label: '电话',
+      key: 'tel',
+      type: 'number',
+    },
+    {
+      label: '年龄',
+      key: 'age',
+      // type 声明内部使用的组件，例如 number 为 naive-ui 的 n-input[type=number] 组件
+      type: 'number',
+      // 透传给组件的属性，拥有哪些属性可查看 naive-ui 的 InputProps
+      props: {
+        min: 0,
+        max: 99,
+      },
+      // 透传给组件的插槽，拥有哪些插槽可查看 naive-ui 的 InputSlots
+      slots: {
+        suffix: () => [h('span', null, '岁')],
+      },
+    },
+    {
+      label: '性别',
+      key: 'gender',
+      type: 'radio',
+      defaultValue: 'man',
+      options: [
+        { label: '男', value: 'man' },
+        { label: '女', value: 'feman' },
+      ],
+    },
+    {
+      label: '喜好',
+      key: 'hobby',
+      type: 'checkbox',
+      options: ['唱', '跳', 'rapper'],
+    },
+  ],
+}
+</script>
+```
 
 ## 组件配置
 
@@ -486,6 +1398,49 @@ url: /form/change/index.md
 
 通过 `onChange` 监听值变化。
 
+```vue
+<template>
+  {{ form }}
+  <np-form v-model="form" :option="option" />
+</template>
+<script setup lang="ts">
+import type { FormOption } from 'naive-plus'
+import { ref } from 'vue'
+
+type User = {
+  fullName?: string
+  gender?: 'man' | 'feman'
+}
+
+const form = ref<User>()
+
+const option: FormOption<User> = {
+  columns: [
+    {
+      label: '姓名',
+      key: 'fullName',
+      onChange: val => {
+        console.log(val)
+      },
+    },
+    {
+      label: '性别',
+      key: 'gender',
+      type: 'radio',
+      options: [
+        { label: '男', value: 'man' },
+        { label: '女', value: 'feman' },
+      ],
+      onChange: (val, ctx) => {
+        console.log(val)
+        ctx.data.fullName = `选择了 ${val}`
+      },
+    },
+  ],
+}
+</script>
+```
+
 ## 组件配置
 
 ### FormColumn Props
@@ -505,9 +1460,95 @@ url: /form/custom/index.md
 
 表单项 `type` 除了支持默认组件之外，也支持自定义 `VNode`。
 
+```vue
+<template>
+  <div>
+    {{ data }}
+    <np-form v-model="data" :option="option" />
+  </div>
+</template>
+<script setup lang="tsx">
+import type { FormOption } from 'naive-plus'
+import { NInput } from 'naive-ui'
+import { ref } from 'vue'
+
+type User = {
+  fullName?: string
+  tel?: number
+  range: string[]
+}
+
+const data = ref<User>()
+
+const option: FormOption<User> = {
+  columns: [
+    { label: '姓名', key: 'fullName' },
+    { label: '电话', key: 'tel', type: 'number' },
+    {
+      label: '自定义组件',
+      key: 'range',
+      defaultValue: ['', ''],
+      type: form => {
+        return (
+          <div style="display:flex; align-items:center; gap: 8px;">
+            <NInput
+              value={form.range?.[0]}
+              onUpdateValue={(val: string) => (form.range[0] = val)}
+            ></NInput>
+            <span>~</span>
+            <NInput
+              value={form.range?.[1]}
+              onUpdateValue={(val: string) => (form.range[1] = val)}
+            ></NInput>
+          </div>
+        )
+      },
+    },
+  ],
+}
+</script>
+```
+
 ## 完全自定义渲染
 
 使用 `render` 完全自定义渲染，例如实现分组表单。
+
+```vue
+<template>
+  <np-form :option="option" />
+</template>
+<script setup lang="tsx">
+import type { FormOption } from 'naive-plus'
+
+const option: FormOption = {
+  props: {
+    labelPlacement: 'left',
+    labelWidth: 60,
+  },
+  onSubmit: async () => {
+    await new Promise<void>(resolve => setTimeout(() => resolve(), 1200))
+  },
+  columns: [
+    {
+      render: data => <div class="title">基础信息 {data.fullName}</div>,
+    },
+    { label: '姓名', key: 'fullName' },
+    { label: '电话', key: 'tel', type: 'number' },
+    { render: () => <div class="title">更多信息</div> },
+    { label: '身份证', key: 'idCard' },
+    { label: '银行卡', key: 'bankCard' },
+  ],
+}
+</script>
+<style>
+.title {
+  padding-top: 8px;
+  padding-bottom: 16px;
+  font-size: 16px;
+  font-weight: bold;
+}
+</style>
+```
 
 ## 组件配置
 
@@ -526,6 +1567,57 @@ url: /form/display/index.md
 # np-form 显隐控制
 
 通过 `display` 控制是否显示。
+
+```vue
+<template>
+  <np-form :option="option" />
+</template>
+<script setup lang="ts">
+import type { FormOption } from 'naive-plus'
+
+type User = {
+  fullName?: string
+  gender?: 'man' | 'feman'
+  tel?: number
+  age?: number
+}
+
+const option: FormOption<User> = {
+  onSubmit: async data => {
+    console.log('点击了提交', data)
+    await new Promise<void>(resolve => setTimeout(() => resolve(), 1200))
+  },
+  props: {
+    labelWidth: 140,
+  },
+  columns: [
+    { label: '姓名', key: 'fullName' },
+    {
+      label: '性别',
+      key: 'gender',
+      type: 'radio',
+      defaultValue: 'man',
+      options: [
+        { label: '男', value: 'man' },
+        { label: '女', value: 'feman' },
+      ],
+    },
+    {
+      label: '电话',
+      key: 'tel',
+      type: 'number',
+      display: false,
+    },
+    {
+      label: '年龄(性别女隐藏)',
+      key: 'age',
+      type: 'number',
+      display: data => data.gender === 'man',
+    },
+  ],
+}
+</script>
+```
 
 ## 组件配置
 
@@ -548,13 +1640,106 @@ url: /form/enter-submit/index.md
 
 仅在最后一个表单项按回车时提交。
 
+```vue
+<template>
+  <np-form :option="option" />
+</template>
+<script setup lang="tsx">
+import type { FormOption } from 'naive-plus'
+
+const option: FormOption = {
+  enterSubmitMode: 'last',
+  onSubmit: data => {
+    console.log('提交:', data)
+    return new Promise(resolve => setTimeout(resolve, 1000))
+  },
+  columns: [
+    {
+      label: '用户名',
+      key: 'username',
+      type: 'input',
+      rule: { required: true, message: '请输入用户名' },
+    },
+    {
+      label: '密码',
+      key: 'password',
+      type: 'password',
+      rule: { required: true, message: '请输入密码' },
+    },
+  ],
+}
+</script>
+```
+
 ## all 模式
 
 在任意表单项按回车都提交。
 
+```vue
+<template>
+  <np-form :option="option" />
+</template>
+<script setup lang="tsx">
+import type { FormOption } from 'naive-plus'
+
+const option: FormOption = {
+  enterSubmitMode: 'all',
+  onSubmit: data => {
+    console.log('提交:', data)
+    return new Promise(resolve => setTimeout(resolve, 1000))
+  },
+  columns: [
+    {
+      label: '用户名',
+      key: 'username',
+      type: 'input',
+      rule: { required: true, message: '请输入用户名' },
+    },
+    {
+      label: '密码',
+      key: 'password',
+      type: 'password',
+      rule: { required: true, message: '请输入密码' },
+    },
+  ],
+}
+</script>
+```
+
 ## false 模式
 
 禁用回车提交功能。
+
+```vue
+<template>
+  <np-form :option="option" />
+</template>
+<script setup lang="tsx">
+import type { FormOption } from 'naive-plus'
+
+const option: FormOption = {
+  enterSubmitMode: false,
+  onSubmit: data => {
+    console.log('提交:', data)
+    return new Promise(resolve => setTimeout(resolve, 1000))
+  },
+  columns: [
+    {
+      label: '用户名',
+      key: 'username',
+      type: 'input',
+      rule: { required: true, message: '请输入用户名' },
+    },
+    {
+      label: '密码',
+      key: 'password',
+      type: 'password',
+      rule: { required: true, message: '请输入密码' },
+    },
+  ],
+}
+</script>
+```
 
 ## 组件配置
 
@@ -570,6 +1755,50 @@ url: /form/footer/index.md
 # np-form 自定义底部
 
 通过 `footer` 属性自定义底部。
+
+```vue
+<template>
+  <np-form :option="option" />
+</template>
+<script setup lang="tsx">
+import type { FormOption } from 'naive-plus'
+import { NButton } from 'naive-ui'
+
+const option: FormOption = {
+  footer: {
+    submitBtn: {
+      props: {
+        block: true,
+      },
+    },
+    resetBtn: false,
+    prefixRender: () => <span style="width:40px">前缀</span>,
+    suffixRender: () => <NButton onClick={() => {}}>自定义按钮</NButton>,
+  },
+  onSubmit: () =>
+    new Promise<void>(resolve => setTimeout(() => resolve(), 1200)),
+  columns: [
+    { label: '姓名', key: 'fullName' },
+    { label: '电话', key: 'tel', type: 'number' },
+    {
+      label: '性别',
+      key: 'gender',
+      type: 'radio',
+      options: [
+        { label: '男', value: 'man' },
+        { label: '女', value: 'feman' },
+      ],
+    },
+    {
+      label: '喜好',
+      key: 'hobby',
+      type: 'checkbox',
+      options: ['唱', '跳', 'rapper'],
+    },
+  ],
+}
+</script>
+```
 
 ## 组件配置
 
@@ -597,6 +1826,63 @@ url: /form/options/index.md
 
 通过 `options` 指定选项，具体查看示例代码用法。
 
+```vue
+<template>
+  <div>
+    {{ data }}
+    <np-form v-model="data" :option="option" />
+  </div>
+</template>
+<script setup lang="ts">
+import type { FormOption } from 'naive-plus'
+import { ref } from 'vue'
+
+const data = ref({})
+
+const option: FormOption = {
+  onSubmit: async () =>
+    await new Promise<void>(resolve => setTimeout(() => resolve(), 1200)),
+  columns: [
+    {
+      label: '性别',
+      key: 'gender',
+      type: 'radio',
+      defaultValue: 'man',
+      options: [
+        { label: '男', value: 'man' },
+        { label: '女', value: 'feman' },
+      ],
+    },
+    {
+      label: '喜好',
+      key: 'hobby',
+      type: 'select',
+      options: form =>
+        form.gender === 'man' ? ['唱', '跳', 'rapper'] : ['弹琴', '跳舞'],
+    },
+    {
+      label: '喜好多选',
+      key: 'hobbyArray',
+      type: 'checkbox',
+      options: async form => {
+        // 模仿从后端获取数据
+        const fetch = (gender: string) => {
+          return new Promise<any[]>(resolve => {
+            setTimeout(() => {
+              resolve(
+                gender === 'man' ? ['唱', '跳', 'rapper'] : ['弹琴', '跳舞']
+              )
+            }, 600)
+          })
+        }
+        return await fetch(form.gender)
+      },
+    },
+  ],
+}
+</script>
+```
+
 ## 组件配置
 
 ### FormColumn Props
@@ -613,6 +1899,102 @@ url: /form/rules/index.md
 # np-form 规则校验
 
 通过 `rule` 指定校验规则。
+
+```vue
+<template>
+  <div>
+    {{ data }}
+    <n-space style="margin: 12px 0">
+      <n-button @click="validateAge">校验年龄</n-button>
+      <n-button @click="validateInfo">校验信息</n-button>
+    </n-space>
+    <np-form ref="formRef" v-model="data" :option="option" />
+  </div>
+</template>
+<script setup lang="ts">
+import type { FormOption, FormInst } from 'naive-plus'
+import { NButton, NSpace } from 'naive-ui'
+import { ref } from 'vue'
+
+type User = {
+  fullName?: string
+  tel?: number
+  age?: number
+  ageMax: number
+}
+
+const data = ref<User>()
+const formRef = ref<FormInst>()
+
+const validateAge = () => {
+  formRef.value?.validateFields('age')
+}
+
+const validateInfo = () => {
+  formRef.value?.validateFields(['fullName', 'tel'])
+}
+
+const option: FormOption<User> = {
+  onSubmit: async form => {
+    console.log('点击了提交', form)
+    await new Promise<void>(resolve => setTimeout(() => resolve(), 1200))
+  },
+  columns: [
+    {
+      label: '姓名',
+      key: 'fullName',
+      rule: [{ required: true, message: '姓名不能为空', trigger: ['blur'] }],
+    },
+    {
+      label: '电话',
+      key: 'tel',
+      type: 'number',
+      rule: {
+        required: true,
+        message: '电话不能为空',
+        trigger: ['change'],
+      },
+    },
+    {
+      label: '年龄最大值',
+      key: 'ageMax',
+      type: 'number',
+      defaultValue: 50,
+      rule: {
+        required: true,
+        message: '年龄最大值不能为空',
+        trigger: ['change'],
+      },
+    },
+    {
+      label: '年龄',
+      key: 'age',
+      type: 'number',
+      // 支持动态规则，例如根据其他字段的值来校验
+      rule: formData => {
+        return [
+          {
+            required: true,
+            message: '年龄不能为空',
+            trigger: ['change'],
+          },
+          {
+            validator: (value: number) => value >= 0,
+            message: '年龄必须为正数',
+            trigger: ['change'],
+          },
+          {
+            validator: (value: number) => value <= formData.ageMax,
+            message: `年龄不能超过${formData.ageMax}岁`,
+            trigger: ['change'],
+          },
+        ]
+      },
+    },
+  ],
+}
+</script>
+```
 
 ## 组件配置
 
@@ -632,6 +2014,37 @@ url: /form/upload/index.md
 通过设置 `type: 'upload'` 可在表单中使用文件上传组件，底层使用 `np-upload` 封装。
 
 `v-model` 绑定值为 `string[]` 类型，默认每项为 `{name, url, type}` 的 JSON 字符串。当 `listType` 为 `image-card` 且 `urlOnly` 为 `true` 时，每项仅保存文件的 `url` 字符串。
+
+```vue
+<template>
+  <div>
+    {{ data }}
+    <np-form v-model="data" :option="option" />
+  </div>
+</template>
+<script setup lang="ts">
+import type { FormOption } from 'naive-plus'
+import { ref } from 'vue'
+
+const data = ref({})
+
+const option: FormOption = {
+  onSubmit: async form => {
+    console.log('点击了提交', form)
+  },
+  columns: [
+    {
+      label: '附件',
+      key: 'files',
+      type: 'upload',
+      props: {
+        action: '/api/file/upload',
+      },
+    },
+  ],
+}
+</script>
+```
 
 ## 组件配置
 
@@ -657,6 +2070,63 @@ url: /table/base/index.md
 ## 基础用法
 
 表格主要通过 `option` 配置 `columns` 动态生成表格，`api.fetch` 获取数据。
+
+```vue
+<template>
+  <np-table :option="option" />
+</template>
+
+<script setup lang="ts">
+import type { TableOption } from 'naive-plus'
+
+type User = {
+  id: number
+  name: string
+  age: number
+  address: string
+}
+// Mock API
+const mockData: User[] = [
+  { id: 1, name: 'John', age: 30, address: 'New York' },
+  { id: 2, name: 'Jane', age: 25, address: 'Los Angeles' },
+  { id: 3, name: 'Bob', age: 35, address: 'Chicago' },
+]
+for (let i = 4; i <= 100; i++) {
+  mockData.push({
+    id: i,
+    name: `User ${i}`,
+    age: 20 + (i % 30),
+    address: `City ${i}`,
+  })
+}
+const option: TableOption<User> = {
+  columns: [
+    {
+      key: 'name',
+      label: 'Name',
+    },
+    {
+      key: 'age',
+      label: 'Age',
+      formProps: { type: 'number' },
+    },
+    {
+      key: 'address',
+      label: 'Address',
+    },
+  ],
+  api: {
+    fetch: async ({ page, pageSize }) => {
+      await new Promise<void>(resolve => setTimeout(resolve, 500))
+      return {
+        items: mockData.slice((page - 1) * pageSize, page * pageSize),
+        itemCount: mockData.length,
+      }
+    },
+  },
+}
+</script>
+```
 
 ## 组件配置
 
@@ -715,6 +2185,72 @@ url: /table/crud/index.md
 * 点击行操作「**删除**」弹出二次确认弹窗
 * `api.add/edit/del` 抛出异常或返回 `false` 时弹窗不关闭
 
+```vue
+<template>
+  <np-table :option="option" />
+</template>
+
+<script setup lang="ts">
+import type { TableOption } from 'naive-plus'
+
+type User = {
+  id: number
+  name: string
+  age: number
+  address: string
+}
+
+const mockData: User[] = [
+  { id: 1, name: 'John', age: 30, address: 'New York' },
+  { id: 2, name: 'Jane', age: 25, address: 'Los Angeles' },
+  { id: 3, name: 'Bob', age: 35, address: 'Chicago' },
+]
+
+const option: TableOption<User> = {
+  columns: [
+    {
+      key: 'name',
+      label: '姓名',
+      formProps: { type: 'input' },
+    },
+    {
+      key: 'age',
+      label: '年龄',
+      formProps: { type: 'number' },
+    },
+    {
+      key: 'address',
+      label: '地址',
+      formProps: { type: 'input' },
+    },
+  ],
+  api: {
+    fetch: async ({ page, pageSize }) => {
+      return {
+        items: mockData.slice((page - 1) * pageSize, page * pageSize),
+        itemCount: mockData.length,
+      }
+    },
+    add: async rowData => {
+      mockData.unshift({ ...rowData, id: mockData.length + 1 })
+    },
+    edit: async rowData => {
+      const idx = mockData.findIndex(item => item.id === rowData.id)
+      if (idx !== -1) {
+        mockData[idx] = { ...mockData[idx], ...rowData }
+      }
+    },
+    del: async rowData => {
+      const idx = mockData.findIndex(item => item.id === rowData.id)
+      if (idx !== -1) {
+        mockData.splice(idx, 1)
+      }
+    },
+  },
+}
+</script>
+```
+
 ## onBefore 钩子
 
 `operation.onBefore` 在弹窗打开前触发，可用于：
@@ -722,6 +2258,103 @@ url: /table/crud/index.md
 * **阻断操作**：返回 `false` 或抛出异常，弹窗不打开
 * **替换数据**：返回新对象，以该对象作为表单初始数据
 * **正常打开**：返回 `void` / `undefined` / `true`，按默认逻辑处理
+
+```vue
+<template>
+  <div>
+    <n-space vertical>
+      <n-alert type="info">
+        onBefore 控制：
+        <n-radio-group v-model:value="mode">
+          <n-radio value="normal">正常打开</n-radio>
+          <n-radio value="block">阻断（返回 false）</n-radio>
+          <n-radio value="replace">
+            替换数据（修改地址为「已覆盖地址」）
+          </n-radio>
+        </n-radio-group>
+      </n-alert>
+      <np-table :option="option" />
+    </n-space>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { NAlert, NRadio, NRadioGroup, NSpace } from 'naive-ui'
+import type { TableOption } from 'naive-plus'
+
+type User = {
+  id: number
+  name: string
+  age: number
+  address: string
+}
+
+const mode = ref<'normal' | 'block' | 'replace'>('normal')
+
+const mockData: User[] = [
+  { id: 1, name: 'John', age: 30, address: 'New York' },
+  { id: 2, name: 'Jane', age: 25, address: 'Los Angeles' },
+  { id: 3, name: 'Bob', age: 35, address: 'Chicago' },
+]
+
+const option: TableOption<User> = {
+  columns: [
+    {
+      key: 'name',
+      label: '姓名',
+      formProps: { type: 'input' },
+    },
+    {
+      key: 'age',
+      label: '年龄',
+      formProps: { type: 'number' },
+    },
+    {
+      key: 'address',
+      label: '地址',
+      formProps: { type: 'input' },
+    },
+  ],
+  api: {
+    fetch: async ({ page, pageSize }) => {
+      return {
+        items: mockData.slice((page - 1) * pageSize, page * pageSize),
+        itemCount: mockData.length,
+      }
+    },
+    add: async rowData => {
+      mockData.unshift({ ...rowData, id: mockData.length + 1 })
+    },
+    edit: async rowData => {
+      const idx = mockData.findIndex(item => item.id === rowData.id)
+      if (idx !== -1) {
+        mockData[idx] = { ...mockData[idx], ...rowData }
+      }
+    },
+    del: async rowData => {
+      const idx = mockData.findIndex(item => item.id === rowData.id)
+      if (idx !== -1) {
+        mockData.splice(idx, 1)
+      }
+    },
+  },
+  operation: {
+    onBefore: async (rowData, type) => {
+      if (mode.value === 'block') {
+        // 返回 false 阻断操作，弹窗不打开
+        return false
+      }
+      if (mode.value === 'replace' && type === 'edit') {
+        // 返回新对象替换初始数据
+        return { ...rowData, address: '已覆盖地址' }
+      }
+      // 返回 undefined / void 则正常打开
+    },
+  },
+}
+</script>
+```
 
 ## 类型定义
 
@@ -771,6 +2404,80 @@ url: /table/filter/index.md
 
 通过 `filters` 配置表格筛选器，支持单选/多选、搜索功能。
 
+```vue
+<template>
+  <np-table :option="option" />
+</template>
+
+<script setup lang="ts">
+import type { TableOption } from 'naive-plus'
+
+const mockData = Array.from({ length: 50 }, (_, i) => ({
+  id: i + 1,
+  name: `用户 ${i + 1}`,
+  age: 20 + (i % 30),
+  status: i % 3 === 0 ? 'enabled' : i % 3 === 1 ? 'disabled' : 'pending',
+}))
+
+const option: TableOption = {
+  columns: [
+    { key: 'name', label: '姓名' },
+    { key: 'age', label: '年龄' },
+    { key: 'status', label: '状态' },
+  ],
+  filters: [
+    {
+      key: 'status',
+      label: '状态',
+      options: [
+        { label: '启用', value: 'enabled' },
+        { label: '禁用', value: 'disabled' },
+        { label: '待处理', value: 'pending' },
+      ],
+      multiple: true,
+    },
+    {
+      key: 'users',
+      label: '用户',
+      options: mockData.map(item => ({
+        label: item.name,
+        value: item.id,
+      })),
+      multiple: true,
+      searchable: true,
+    },
+  ],
+  api: {
+    fetch: async ({ page, pageSize }, queryParams) => {
+      await new Promise<void>(resolve => setTimeout(resolve, 500))
+
+      let items = [...mockData]
+
+      // 根据筛选条件过滤
+      if (queryParams.status && queryParams.status.length > 0) {
+        const statuses = Array.isArray(queryParams.status)
+          ? queryParams.status
+          : [queryParams.status]
+        items = items.filter(item => statuses.includes(item.status))
+      }
+      // 根据筛选条件过滤
+      if (queryParams.users && queryParams.users.length > 0) {
+        const users = Array.isArray(queryParams.users)
+          ? queryParams.users
+          : [queryParams.users]
+        items = items.filter(item => users.includes(item.id))
+      }
+
+      return {
+        items: items.slice((page - 1) * pageSize, page * pageSize),
+        itemCount: items.length,
+      }
+    },
+  },
+}
+</script>
+```
+
 ## 类型定义
 
 ```ts
@@ -800,9 +2507,95 @@ url: /table/operation/index.md
 
 将 `operation` 设为 `false`，同时隐藏操作列和顶部「添加」按钮。
 
+```vue
+<template>
+  <np-table :option="option" />
+</template>
+
+<script setup lang="ts">
+import type { TableOption } from 'naive-plus'
+
+type User = { id: number; name: string; age: number; address: string }
+
+const mockData: User[] = [
+  { id: 1, name: 'John', age: 30, address: 'New York' },
+  { id: 2, name: 'Jane', age: 25, address: 'Los Angeles' },
+  { id: 3, name: 'Bob', age: 35, address: 'Chicago' },
+]
+
+const option: TableOption<User> = {
+  columns: [
+    { key: 'name', label: '姓名' },
+    { key: 'age', label: '年龄' },
+    { key: 'address', label: '地址' },
+  ],
+  api: {
+    fetch: async ({ page, pageSize }) => ({
+      items: mockData.slice((page - 1) * pageSize, page * pageSize),
+      itemCount: mockData.length,
+    }),
+  },
+  // 设置 false 隐藏操作列，同时隐藏顶部添加按钮
+  operation: false,
+}
+</script>
+```
+
 ## 前后插槽
 
 通过 `prefixRender` 和 `suffixRender` 在默认操作按钮的前后插入自定义内容。
+
+```vue
+<template>
+  <np-table :option="option" />
+</template>
+
+<script setup lang="ts">
+import { h } from 'vue'
+import { NButton } from 'naive-ui'
+import type { TableOption } from 'naive-plus'
+
+type User = { id: number; name: string; age: number; address: string }
+
+const mockData: User[] = [
+  { id: 1, name: 'John', age: 30, address: 'New York' },
+  { id: 2, name: 'Jane', age: 25, address: 'Los Angeles' },
+  { id: 3, name: 'Bob', age: 35, address: 'Chicago' },
+]
+
+const option: TableOption<User> = {
+  columns: [
+    { key: 'name', label: '姓名' },
+    { key: 'age', label: '年龄' },
+    { key: 'address', label: '地址' },
+  ],
+  api: {
+    fetch: async ({ page, pageSize }) => ({
+      items: mockData.slice((page - 1) * pageSize, page * pageSize),
+      itemCount: mockData.length,
+    }),
+  },
+  operation: {
+    label: '操作',
+    width: 200,
+    // 操作按钮前插入自定义内容
+    prefixRender: rowData =>
+      h(
+        NButton,
+        { size: 'small', type: 'info', style: 'margin-right:4px' },
+        () => `查看 #${rowData.id}`
+      ),
+    // 操作按钮后插入自定义内容
+    suffixRender: rowData =>
+      h(
+        NButton,
+        { size: 'small', type: 'warning', style: 'margin-left:4px' },
+        () => `日志`
+      ),
+  },
+}
+</script>
+```
 
 ## 自定义选项与 onSelect
 
@@ -810,6 +2603,62 @@ url: /table/operation/index.md
 
 * `{ type: 'edit' }` / `{ type: 'del' }` 会复用内置的编辑/删除逻辑（触发 `onBefore`、弹窗等）
 * 自定义 `key` 的选项点击后触发 `onSelect` 回调
+
+```vue
+<template>
+  <div>
+    <n-alert v-if="lastKey" type="success" style="margin-bottom: 12px">
+      onSelect 触发，key =
+      <strong>{{ lastKey }}</strong>
+    </n-alert>
+    <np-table :option="option" />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { NAlert } from 'naive-ui'
+import type { TableOption } from 'naive-plus'
+
+type User = { id: number; name: string; age: number; address: string }
+
+const lastKey = ref('')
+
+const mockData: User[] = [
+  { id: 1, name: 'John', age: 30, address: 'New York' },
+  { id: 2, name: 'Jane', age: 25, address: 'Los Angeles' },
+  { id: 3, name: 'Bob', age: 35, address: 'Chicago' },
+]
+
+const option: TableOption<User> = {
+  columns: [
+    { key: 'name', label: '姓名' },
+    { key: 'age', label: '年龄' },
+    { key: 'address', label: '地址' },
+  ],
+  api: {
+    fetch: async ({ page, pageSize }) => ({
+      items: mockData.slice((page - 1) * pageSize, page * pageSize),
+      itemCount: mockData.length,
+    }),
+  },
+  operation: {
+    label: '操作',
+    // 自定义下拉菜单选项，使用内置 type 可复用默认编辑/删除逻辑
+    options: [
+      { type: 'edit' },
+      { type: 'del', label: '删除(危险)' },
+      { key: 'detail', label: '详情' },
+      { key: 'export', label: '导出' },
+    ],
+    // 处理自定义选项的点击事件，内置 edit/delete 会优先触发 onBefore，不经过此回调
+    onSelect: key => {
+      lastKey.value = key
+    },
+  },
+}
+</script>
+```
 
 ## 类型定义
 
@@ -849,3 +2698,64 @@ url: /table/selection/index.md
 在 `columns` 中添加 `type: 'selection'` 列开启多选，通过 `option.props` 传入 `checkedRowKeys` 和 `onUpdateCheckedRowKeys` 控制选中状态。
 
 > 注意：需将 `option` 定义为 `computed`，以保证 `checkedRowKeys` 的响应式更新能同步到表格。
+
+```vue
+<template>
+  <div>
+    <n-space style="margin-bottom: 12px">
+      <n-tag
+        v-for="key in checkedRowKeys"
+        :key="key"
+        type="primary"
+        closable
+        @close="removeKey(key)"
+      >
+        ID: {{ key }}
+      </n-tag>
+      <n-text v-if="checkedRowKeys.length === 0" depth="3">暂无选中行</n-text>
+    </n-space>
+    <np-table :option="option" />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import type { TableOption } from 'naive-plus'
+import type { DataTableRowKey } from 'naive-ui'
+
+const mockData = Array.from({ length: 50 }, (_, i) => ({
+  id: i + 1,
+  name: `用户 ${i + 1}`,
+  age: 20 + (i % 30),
+  address: `城市 ${i + 1}`,
+}))
+
+const checkedRowKeys = ref<DataTableRowKey[]>([])
+
+const removeKey = (key: DataTableRowKey) => {
+  checkedRowKeys.value = checkedRowKeys.value.filter(k => k !== key)
+}
+
+const option = computed<TableOption>(() => ({
+  columns: [
+    { key: 'name', label: '姓名' },
+    { key: 'age', label: '年龄' },
+    { key: 'address', label: '地址' },
+  ],
+  selection: {
+    onChange: (keys, rows, meta) => {
+      checkedRowKeys.value = keys
+      console.log(keys, rows, meta)
+    },
+  },
+  api: {
+    fetch: async ({ page, pageSize }) => {
+      return {
+        items: mockData.slice((page - 1) * pageSize, page * pageSize),
+        itemCount: mockData.length,
+      }
+    },
+  },
+}))
+</script>
+```

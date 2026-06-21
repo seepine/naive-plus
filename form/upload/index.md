@@ -7,6 +7,37 @@ url: /form/upload/index.md
 
 `v-model` 绑定值为 `string[]` 类型，默认每项为 `{name, url, type}` 的 JSON 字符串。当 `listType` 为 `image-card` 且 `urlOnly` 为 `true` 时，每项仅保存文件的 `url` 字符串。
 
+```vue
+<template>
+  <div>
+    {{ data }}
+    <np-form v-model="data" :option="option" />
+  </div>
+</template>
+<script setup lang="ts">
+import type { FormOption } from 'naive-plus'
+import { ref } from 'vue'
+
+const data = ref({})
+
+const option: FormOption = {
+  onSubmit: async form => {
+    console.log('点击了提交', form)
+  },
+  columns: [
+    {
+      label: '附件',
+      key: 'files',
+      type: 'upload',
+      props: {
+        action: '/api/file/upload',
+      },
+    },
+  ],
+}
+</script>
+```
+
 ## 组件配置
 
 ### FormColumn Props

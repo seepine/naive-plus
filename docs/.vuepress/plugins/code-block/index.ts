@@ -1,6 +1,12 @@
 import { path } from '@vuepress/utils'
 import type { Plugin } from '@vuepress/core'
-import { resolveHtmlBlock, resolveScriptSetup, vitePageHMR } from './node'
+import type { ViteBundlerOptions } from '@vuepress/bundler-vite'
+import {
+  resolveContentCodeBlock,
+  resolveHtmlBlock,
+  resolveScriptSetup,
+  vitePageHMR,
+} from './node'
 
 export const codeBlockPlugin = (): Plugin => {
   const store = new Map<string, Map<string, string>>()
@@ -17,13 +23,16 @@ export const codeBlockPlugin = (): Plugin => {
     async extendsPage(page) {
       page.data.headers ??= page.headers ?? []
       resolveScriptSetup(page, store)
+      resolveContentCodeBlock(page)
     },
 
     extendsBundlerOptions(bundlerOptions, app) {
       if (app.options.bundler.name === '@vuepress/bundler-vite') {
-        bundlerOptions.viteOptions ??= {}
-        bundlerOptions.viteOptions.plugins ??= []
-        bundlerOptions.viteOptions.plugins.push(vitePageHMR(app))
+        const viteBundlerOptions = bundlerOptions as ViteBundlerOptions
+
+        viteBundlerOptions.viteOptions ??= {}
+        viteBundlerOptions.viteOptions.plugins ??= []
+        viteBundlerOptions.viteOptions.plugins.push(vitePageHMR(app))
       }
     },
   }

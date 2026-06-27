@@ -336,7 +336,9 @@ export interface FormOption<FormData extends AnyObject = AnyObject> {
 }
 
 export interface FormInst extends NFormInst {
-  validateFields: (fields: string | string[]) => Promise<void> | void
+  submit: () => Promise<void>
+  reset: () => Promise<void>
+  validateFields: (fields: string | string[]) => Promise<void>
 }
 
 export interface FormInjection<FormData extends AnyObject = AnyObject> {

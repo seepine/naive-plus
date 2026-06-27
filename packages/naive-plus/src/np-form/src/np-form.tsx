@@ -24,7 +24,7 @@ export default defineComponent({
   inheritAttrs: false,
   props: npFormProps,
   emits: ['update:modelValue'],
-  setup(props, { emit, expose }) {
+  setup(props, { emit }) {
     const injectKey = Symbol('np-form-inject-key')
     const data = ref<AnyObject>({})
     const backData = ref<AnyObject>({})
@@ -44,6 +44,8 @@ export default defineComponent({
           v,
           // 额外暴露的方法
           {
+            submit,
+            reset,
             validateFields: async (fields: string | string[]) => {
               const fieldsArr = typeof fields === 'string' ? [fields] : fields
               await formRef.value?.validate(
@@ -143,22 +145,6 @@ export default defineComponent({
       event,
       submit,
     })
-
-    expose({})
-
-    // expose(
-    //   new Proxy(
-    //     {},
-    //     {
-    //       get(_, p) {
-    //         return ((formRef.value || {}) as any)[p]
-    //       },
-    //       has(_, p) {
-    //         return p in (formRef.value || {})
-    //       },
-    //     }
-    //   )
-    // )
 
     const footer = () => {
       if (props.option.footer === false) {

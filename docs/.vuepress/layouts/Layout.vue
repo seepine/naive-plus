@@ -5,7 +5,9 @@
     :locale="zhCN"
     :date-locale="dateZhCN"
   >
-    <ParentLayout />
+    <n-message-provider>
+      <ParentLayout />
+    </n-message-provider>
   </n-config-provider>
 </template>
 
@@ -15,6 +17,7 @@ import {
   lightTheme,
   darkTheme,
   NConfigProvider,
+  NMessageProvider,
   zhCN,
   dateZhCN,
 } from 'naive-ui'

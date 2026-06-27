@@ -21,6 +21,16 @@ Form fields are mainly configured with `label`, `key`, `type` to set the form la
 | ---- | ---- | ---- | ---- |
 | option | Configuration | [FormOption](#formoption) | - |
 
+### Methods
+
+After getting the form instance via `ref`, you can imperatively call the following methods. See [Imperative Methods](/en/form/imperative/).
+
+| Method | Description | Type |
+| ---- | ---- | ---- |
+| submit | Submit the form manually | `() => Promise<void>` |
+| reset | Reset the form and trigger `onReset` | `() => Promise<void>` |
+| validateFields | Validate the given fields, supports `__` prefix matching | `(fields: string \| string[]) => Promise<void>` |
+
 ## Types
 
 The component exports the following type definitions:

@@ -21,6 +21,15 @@ permalink: /form/base/
 | ---- | ---- | ---- | ---- |
 | option | 配置参数 | [FormOption](#formoption) | - |
 
+### Methods
+通过 `ref` 获取表单实例后，可调用以下主动方法，详见 [主动方法](/form/imperative/)。
+
+| 方法 | 说明 | 类型 |
+| ---- | ---- | ---- |
+| submit | 主动提交表单 | `() => Promise<void>` |
+| reset | 重置表单并触发 `onReset` | `() => Promise<void>` |
+| validateFields | 校验指定字段，支持 `__` 前缀匹配 | `(fields: string \| string[]) => Promise<void>` |
+
 ## 类型定义
 
 组件导出以下类型定义

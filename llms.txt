@@ -19,6 +19,7 @@
 - [np-form 显隐控制](/form/display/index.md)
 - [np-form 回车提交表单](/form/enter-submit/index.md)
 - [np-form 自定义底部](/form/footer/index.md)
+- [np-form 主动方法](/form/imperative/index.md)
 - [np-form 字典选项](/form/options/index.md)
 - [np-form 规则校验](/form/rules/index.md)
 - [np-form 文件上传](/form/upload/index.md)

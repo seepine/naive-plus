@@ -1,5 +1,11 @@
 # naive-plus
 
+## 0.1.0-beta.16
+
+### Minor Changes
+
+- [#28](https://github.com/seepine/naive-plus/pull/28) [`bfe9356`](https://github.com/seepine/naive-plus/commit/bfe935697900ec5c34e29a057d473a46eeb0a7ac) Thanks [@seepine](https://github.com/seepine)! - feat(np-form): expose submit and reset methods on form instance
+
 ## 0.1.0-beta.15
 
 ### Minor Changes

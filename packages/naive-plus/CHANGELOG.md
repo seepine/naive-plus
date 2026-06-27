@@ -1,5 +1,11 @@
 # naive-plus
 
+## 0.1.0-beta.17
+
+### Patch Changes
+
+- [#30](https://github.com/seepine/naive-plus/pull/30) [`fd34db5`](https://github.com/seepine/naive-plus/commit/fd34db5866bb6beaacfeb38dfe6c5f023b79f29b) Thanks [@seepine](https://github.com/seepine)! - fix(np-form): correct checkbox column value type for grouped selections
+
 ## 0.1.0-beta.16
 
 ### Minor Changes

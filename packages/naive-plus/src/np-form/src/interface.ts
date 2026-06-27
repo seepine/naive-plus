@@ -40,8 +40,8 @@ import type {
 } from 'naive-ui'
 import type { NpRadioProps, RadioOption, RadioValue } from '../../np-radio'
 import type {
+  CheckboxGroupValue,
   CheckboxOption,
-  CheckboxValue,
   NpCheckboxProps,
 } from '../../np-checkbox'
 import type EventBus from '../../utils/event-bus'
@@ -135,9 +135,9 @@ export type FormColumnComponent<FormData extends AnyObject = AnyObject> =
   | {
       type: 'checkbox'
       props?: Omit<NpCheckboxProps, OmitValue>
-      defaultValue?: CheckboxValue
+      defaultValue?: CheckboxGroupValue
       options: Run<FormData, Array<CheckboxOption | any>>
-      onChange?: (value: CheckboxValue, ctx: OnChangeCtx<FormData>) => void
+      onChange?: (value: CheckboxGroupValue, ctx: OnChangeCtx<FormData>) => void
     }
   | {
       type: 'autoComplete'

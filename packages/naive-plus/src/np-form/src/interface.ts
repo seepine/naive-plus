@@ -1,5 +1,5 @@
 import type { AnyObject, Run } from '../../types'
-import type { ComputedRef, CSSProperties, Ref, VNode } from 'vue'
+import type { CSSProperties, Ref, VNode } from 'vue'
 import type {
   AutoCompleteGroupOption,
   AutoCompleteOption,
@@ -58,9 +58,7 @@ export interface FormColumnBase<FormData extends AnyObject = AnyObject> {
   /**
    * 标签值
    */
-  label?:
-    | Run<FormData, string | ComputedRef<string>>
-    | ((data: FormData) => VNode)
+  label?: Run<FormData, string> | ((data: FormData) => VNode)
   /**
    * 属性值
    */

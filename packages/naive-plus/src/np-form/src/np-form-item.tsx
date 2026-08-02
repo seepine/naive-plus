@@ -5,6 +5,7 @@ import {
   onUnmounted,
   provide,
   ref,
+  type VNode,
 } from 'vue'
 import { useCreate } from '../../_hooks/create'
 import { npFormItemProps } from './props'
@@ -72,7 +73,7 @@ export default defineComponent({
       set: val => (formInj.data.value[columnKey] = val),
     })
 
-    const label = ref('')
+    const label = ref<string | VNode>('')
     const display = ref(true)
     const rule = ref<FormItemRule[]>()
 
@@ -466,13 +467,15 @@ export default defineComponent({
           class={bemClass.value}
           {...props.column.formItemProps}
           path={props.column.key}
-          label={label.value}
           rule={rule.value}
           first={props.column.formItemProps?.first ?? true}
           feedback={feedbackMsg.value}
           validationStatus={validationStatus.value}
         >
-          {comp()}
+          {{
+            default: () => comp(),
+            label: () => label.value,
+          }}
         </NFormItem>
       ) : undefined
   },

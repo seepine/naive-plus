@@ -1,5 +1,11 @@
 # naive-plus
 
+## 0.1.0-beta.18
+
+### Patch Changes
+
+- [`3858c88`](https://github.com/seepine/naive-plus/commit/3858c88706595c7ccbd40dd0261a44603a0d989c) Thanks [@seepine](https://github.com/seepine)! - fix(np-form): use label slot instead of prop to support VNode labels
+
 ## 0.1.0-beta.17
 
 ### Patch Changes

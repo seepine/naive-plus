@@ -1824,6 +1824,7 @@ const option: FormOption = {
 | ---- | ---- | ---- | ---- |
 | submitBtn | 提交按钮是否显示 | boolean | true |
 | resetBtn | 重置按钮是否显示 | boolean | true |
+| submitErrorFeedback | 提交（onSubmit）异常时，是否将错误信息展示在底部表单项的校验反馈中 | boolean | true |
 | prefixRender | 前缀渲染函数 | `(data)=>VNode` | - |
 | suffixRender | 后缀渲染函数 | `(data)=>VNode` | - |
 
@@ -2146,6 +2147,44 @@ const option: FormOption<User> = {
 ---
 
 ---
+url: /form/submit-error/index.md
+---
+# np-form 提交异常反馈
+
+提交（`onSubmit`）抛出异常时，错误信息默认会展示在底部按钮所在的表单项中，无需额外处理；设置 `footer.submitErrorFeedback: false` 可关闭该行为。
+
+```vue
+<template>
+  <np-form :option="option" />
+</template>
+<script setup lang="ts">
+import type { FormOption } from 'naive-plus'
+
+const option: FormOption = {
+  onSubmit: async () => {
+    // 模拟接口异常，异常信息会显示在提交按钮所在的表单项上
+    await new Promise(resolve => setTimeout(resolve, 800))
+    throw new Error('用户名已存在，请更换后重试')
+  },
+  columns: [
+    { label: '用户名', key: 'username', defaultValue: 'admin' },
+    { label: '手机号', key: 'tel', type: 'number' },
+  ],
+}
+</script>
+```
+
+## 组件配置
+
+### Footer Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| ---- | ---- | ---- | ---- |
+| submitErrorFeedback | 提交（onSubmit）异常时，是否将错误信息展示在底部表单项的校验反馈中 | boolean | true |
+
+---
+
+---
 url: /form/upload/index.md
 ---
 # np-form 文件上传
@@ -2275,12 +2314,22 @@ const option: TableOption<User> = {
 | ------ | -------- | --------------------------- | ------ |
 | option | 配置参数 | [TableOption](#tableoption) | -      |
 
+### Methods
+
+通过 `ref` 获取表格实例后，可调用以下主动方法，详见 [主动方法](/table/expose/)。
+
+| 方法    | 说明                                                       | 类型                    |
+| ------- | ---------------------------------------------------------- | ----------------------- |
+| reload  | 重新加载数据，会重置到第一页                               | `() => Promise<void>`   |
+| refresh | 重新刷新当前页数据                                         | `() => Promise<void>`   |
+| params  | 绑定的查询参数，会作为 `queryParams` 传递给 `api.fetch`    | `Record<string, any>`   |
+
 ## 类型定义
 
 组件导出以下类型定义
 
 ```ts
-import type { TableOption, TableColumn, TableFilter } from 'naive-plus'
+import type { TableOption, TableColumn, TableFilter, NpTableInst } from 'naive-plus'
 ```
 
 ### TableOption
@@ -2292,19 +2341,18 @@ import type { TableOption, TableColumn, TableFilter } from 'naive-plus'
 | props      | 表格属性，会透传给 `n-data-table`。为避免表格内部纵向滚动遮挡页面内容，会忽略 `maxHeight`、`flexHeight`、`virtualScroll` 等纵向滚动相关配置 | object                                                                               | -      |
 | pagination | 分页配置，设为 `false` 可禁用分页 | `false` / `PaginationConfig`                                                         | -      |
 | filters    | 筛选器配置                        | Array<[TableFilter](/table/filter/)>                                                   | -      |
+| slots      | 插槽配置，优先级高于组件同名插槽  | [TableSlotOption](/table/slot/#tableslotoption)                                        | -      |
 
 ### TableColumn
 
-| 属性     | 说明           | 类型                                    | 默认值 |
-| -------- | -------------- | --------------------------------------- | ------ |
-| key      | 列字段名称     | string                                  | -      |
-| title    | 列标题         | string / ComputedRef\<string>          | -      |
-| render   | 自定义渲染函数 | `(rowData, rowIndex) => VNode`          | -      |
-| type     | 列类型         | `'selection'` / `'index'` / `'expand'`  | -      |
-| width    | 列宽度         | string / number                         | -      |
-| minWidth | 列最小宽度     | string / number                         | -      |
-| fixed    | 列固定位置     | `'left'` / `'right'`                    | -      |
-| display  | 列是否显示     | boolean                                 | true   |
+| 属性    | 说明                                                           | 类型                            | 默认值 |
+| ------- | -------------------------------------------------------------- | ------------------------------- | ------ |
+| key     | 列字段名称                                                     | string                          | -      |
+| label   | 列标题                                                         | string                          | -      |
+| render  | 自定义渲染函数                                                 | `(rowData, rowIndex) => VNode`  | -      |
+| props   | 列属性，透传给 `n-data-table`（如 `width`、`minWidth`、`fixed`） | object                          | -      |
+| display | 是否在表格中显示该列，`false` 表示彻底隐藏（常用于仅表单字段） | boolean                         | true   |
+| formProps | 表单字段配置，详见 [CRUD 增删改查](/table/crud/#formprops)      | object                          | -      |
 
 ---
 
@@ -2508,6 +2556,8 @@ formProps?: Partial<FormColumn> & {
 }
 ```
 
+其中 `formProps.display` 支持 `boolean` 或 `(data) => boolean`，用于控制表单字段的显隐，详见 [显隐控制](/table/display/)。
+
 ### operation.onBefore
 
 ```ts
@@ -2533,6 +2583,345 @@ onBefore?: (
 | `del` | 删除接口 | `(rowData: T) => Promise<T \| boolean \| void>` |
 
 > 三个方法均为可选。返回 `false` 或抛出异常时弹窗不关闭；返回其他值则关闭弹窗并刷新表格。
+
+---
+
+---
+url: /table/display/index.md
+---
+# 显隐控制
+
+`np-table` 支持表格列与表单字段的显隐控制，分别通过列的 `display` 与 `formProps.display` 配置。
+
+## 表格列隐藏
+
+通过列的 `display` 控制表格列是否显示，默认为 `true`。设置为 `false` 的列会在表格中**彻底隐藏**，也不会出现在右上角的「显示设置」中，常用于只在新增 / 编辑表单中使用的字段。
+
+```vue
+<template>
+  <np-table :option="option" />
+</template>
+
+<script setup lang="ts">
+import type { TableOption } from 'naive-plus'
+
+type User = {
+  id: number
+  name: string
+  age: number
+  address: string
+  email: string
+  remark?: string
+}
+
+const mockData: User[] = [
+  {
+    id: 1,
+    name: 'John',
+    age: 30,
+    address: 'New York',
+    email: 'john@example.com',
+    remark: 'VIP 用户',
+  },
+  {
+    id: 2,
+    name: 'Jane',
+    age: 25,
+    address: 'Los Angeles',
+    email: 'jane@example.com',
+    remark: '普通用户',
+  },
+  {
+    id: 3,
+    name: 'Bob',
+    age: 35,
+    address: 'Chicago',
+    email: 'bob@example.com',
+  },
+]
+
+const option: TableOption<User> = {
+  columns: [
+    {
+      key: 'name',
+      label: '姓名',
+      formProps: { type: 'input' },
+    },
+    {
+      key: 'age',
+      label: '年龄',
+      formProps: { type: 'number' },
+    },
+    {
+      key: 'address',
+      label: '地址',
+      formProps: { type: 'input' },
+    },
+    {
+      key: 'email',
+      label: '邮箱',
+      // display: false 表示该列在表格中彻底隐藏，
+      // 常用于只在新增 / 编辑表单中使用的字段
+      display: false,
+      formProps: { type: 'input' },
+    },
+    {
+      key: 'remark',
+      label: '备注',
+      // 表格中不显示
+      display: false,
+      formProps: {
+        type: 'input',
+        // 新增表单中也不显示，仅在编辑表单中显示
+        addProps: { display: false },
+      },
+    },
+  ],
+  api: {
+    fetch: async ({ page, pageSize }) => {
+      return {
+        items: mockData.slice((page - 1) * pageSize, page * pageSize),
+        itemCount: mockData.length,
+      }
+    },
+    add: async rowData => {
+      mockData.unshift({ ...rowData, id: mockData.length + 1 })
+    },
+    edit: async rowData => {
+      const idx = mockData.findIndex(item => item.id === rowData.id)
+      if (idx !== -1) {
+        mockData[idx] = { ...mockData[idx], ...rowData }
+      }
+    },
+    del: async rowData => {
+      const idx = mockData.findIndex(item => item.id === rowData.id)
+      if (idx !== -1) {
+        mockData.splice(idx, 1)
+      }
+    },
+  },
+}
+</script>
+```
+
+> 表格右上角的「显示设置」可动态切换列的显示 / 隐藏（针对未设置 `display: false` 的列），且至少会保留一列显示。
+
+结合 `formProps.addProps` / `formProps.editProps`，还可以让字段只在某个操作模式下显示。例如“只在编辑时有的字段”（表格与新增表单均不显示）：
+
+```ts
+{
+  key: 'remark',
+  label: '备注',
+  display: false, // 表格中彻底隐藏
+  formProps: {
+    type: 'input',
+    addProps: { display: false }, // 新增表单中也隐藏，仅编辑表单显示
+  },
+}
+```
+
+> 上方「表格列隐藏」示例中的「备注」字段即为该用法，点击「编辑」可见、点击「添加」不可见。
+
+## 表单字段显隐
+
+CRUD 表单字段的显隐通过列的 `formProps.display` 控制，支持布尔值或函数。函数会接收当前表单数据，可根据其他字段动态显隐。
+
+```vue
+<template>
+  <np-table :option="option" />
+</template>
+
+<script setup lang="ts">
+import type { TableOption } from 'naive-plus'
+
+type User = {
+  id: number
+  name: string
+  gender: 'man' | 'feman'
+  age: number
+  address: string
+}
+
+const mockData: User[] = [
+  { id: 1, name: 'John', gender: 'man', age: 30, address: 'New York' },
+  { id: 2, name: 'Jane', gender: 'feman', age: 25, address: 'Los Angeles' },
+  { id: 3, name: 'Bob', gender: 'man', age: 35, address: 'Chicago' },
+]
+
+const option: TableOption<User> = {
+  columns: [
+    {
+      key: 'name',
+      label: '姓名',
+      formProps: { type: 'input' },
+    },
+    {
+      key: 'gender',
+      label: '性别',
+      formProps: {
+        type: 'radio',
+        defaultValue: 'man',
+        options: [
+          { label: '男', value: 'man' },
+          { label: '女', value: 'feman' },
+        ],
+      },
+    },
+    {
+      key: 'age',
+      label: '年龄',
+      formProps: {
+        type: 'number',
+        // 表单中性别为「男」时才显示
+        display: data => data.gender === 'man',
+      },
+    },
+    {
+      key: 'address',
+      label: '地址',
+      formProps: { type: 'input' },
+    },
+  ],
+  api: {
+    fetch: async ({ page, pageSize }) => {
+      return {
+        items: mockData.slice((page - 1) * pageSize, page * pageSize),
+        itemCount: mockData.length,
+      }
+    },
+    add: async rowData => {
+      mockData.unshift({ ...rowData, id: mockData.length + 1 })
+    },
+    edit: async rowData => {
+      const idx = mockData.findIndex(item => item.id === rowData.id)
+      if (idx !== -1) {
+        mockData[idx] = { ...mockData[idx], ...rowData }
+      }
+    },
+    del: async rowData => {
+      const idx = mockData.findIndex(item => item.id === rowData.id)
+      if (idx !== -1) {
+        mockData.splice(idx, 1)
+      }
+    },
+  },
+}
+</script>
+```
+
+## 类型定义
+
+### TableColumn.display
+
+| 属性    | 说明       | 类型      | 默认值 |
+| ------- | ---------- | --------- | ------ |
+| display | 是否在表格中显示该列，`false` 表示彻底隐藏 | `boolean` | true   |
+
+### TableColumn.formProps.display
+
+| 属性    | 说明           | 类型                          | 默认值 |
+| ------- | -------------- | ----------------------------- | ------ |
+| display | 表单字段是否显示 | `boolean / (data) => boolean` | true   |
+
+---
+
+---
+url: /table/expose/index.md
+---
+# np-table 主动方法
+
+通过 `ref` 获取表格实例后，可调用以下主动方法。
+
+* `reload`：重新加载数据，会重置到第一页。
+* `refresh`：重新刷新当前页数据。
+* `params`：绑定的查询参数，会作为 `queryParams` 传递给 `api.fetch`。
+
+```vue
+<template>
+  <div>
+    <n-space style="margin-bottom: 12px">
+      <n-input
+        v-model:value="keyword"
+        placeholder="请输入关键字"
+        clearable
+        style="width: 220px"
+        @keyup.enter="handleSearch"
+      />
+      <n-button type="primary" @click="handleSearch">搜索</n-button>
+      <n-button @click="handleRefresh">刷新当前页</n-button>
+    </n-space>
+    <np-table ref="tableRef" :option="option" />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { NButton, NInput, NSpace } from 'naive-ui'
+import type { NpTableInst, TableOption } from 'naive-plus'
+
+type User = {
+  id: number
+  name: string
+  age: number
+  address: string
+}
+
+const mockData: User[] = Array.from({ length: 50 }, (_, i) => ({
+  id: i + 1,
+  name: `用户 ${i + 1}`,
+  age: 20 + (i % 30),
+  address: `城市 ${i + 1}`,
+}))
+
+const tableRef = ref<NpTableInst>()
+const keyword = ref('')
+
+const option: TableOption<User> = {
+  columns: [
+    { key: 'name', label: '姓名' },
+    { key: 'age', label: '年龄' },
+    { key: 'address', label: '地址' },
+  ],
+  api: {
+    // 第二个参数 queryParams 即通过 tableRef.params 绑定的参数
+    fetch: async ({ page, pageSize }, queryParams) => {
+      await new Promise<void>(resolve => setTimeout(resolve, 300))
+
+      let items = [...mockData]
+      if (queryParams.keyword) {
+        items = items.filter(item => item.name.includes(queryParams.keyword))
+      }
+
+      return {
+        items: items.slice((page - 1) * pageSize, page * pageSize),
+        itemCount: items.length,
+      }
+    },
+  },
+}
+
+// 设置 params 后调用 reload，会重置到第一页并携带参数重新请求
+const handleSearch = () => {
+  tableRef.value!.params = { keyword: keyword.value }
+  tableRef.value!.reload()
+}
+
+// refresh 保持当前页重新请求
+const handleRefresh = () => {
+  tableRef.value!.refresh()
+}
+</script>
+```
+
+## 组件配置
+
+### NpTableInst methods
+
+| 方法    | 说明                                                       | 类型                    |
+| ------- | ---------------------------------------------------------- | ----------------------- |
+| reload  | 重新加载数据，会重置到第一页                               | `() => Promise<void>`   |
+| refresh | 重新刷新当前页数据                                         | `() => Promise<void>`   |
+| params  | 绑定的查询参数，会作为 `queryParams` 传递给 `api.fetch`    | `Record<string, any>`   |
 
 ---
 
@@ -2718,12 +3107,19 @@ const option: TableOption<User> = {
     label: '操作',
     width: 200,
     // 操作按钮前插入自定义内容
-    prefixRender: rowData =>
-      h(
+    prefixRender: rowData => {
+      if (rowData.id === 1) {
+        return undefined
+      }
+      if (rowData.id === 2) {
+        return [h('span', '1'), h('span', '2')]
+      }
+      return h(
         NButton,
         { size: 'small', type: 'info', style: 'margin-right:4px' },
         () => `查看 #${rowData.id}`
-      ),
+      )
+    },
     // 操作按钮后插入自定义内容
     suffixRender: rowData =>
       h(
@@ -2754,7 +3150,7 @@ const option: TableOption<User> = {
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
 import { ref } from 'vue'
 import { NAlert } from 'naive-ui'
 import type { TableOption } from 'naive-plus'
@@ -2788,9 +3184,73 @@ const option: TableOption<User> = {
       { type: 'edit' },
       { type: 'del', label: '删除(危险)' },
       { key: 'detail', label: '详情' },
-      { key: 'export', label: '导出' },
+      { key: 'export', label: () => <span style="color: red">导出</span> },
     ],
     // 处理自定义选项的点击事件，内置 edit/delete 会优先触发 onBefore，不经过此回调
+    onSelect: key => {
+      lastKey.value = key
+    },
+  },
+}
+</script>
+```
+
+## 动态选项
+
+`options` 支持传入函数，可根据当前行数据动态生成下拉选项。
+
+```vue
+<template>
+  <div>
+    <n-alert v-if="lastKey" type="success" style="margin-bottom: 12px">
+      onSelect 触发，key =
+      <strong>{{ lastKey }}</strong>
+    </n-alert>
+    <np-table :option="option" />
+  </div>
+</template>
+
+<script setup lang="tsx">
+import { ref } from 'vue'
+import { NAlert } from 'naive-ui'
+import type { TableOption } from 'naive-plus'
+
+type User = {
+  id: number
+  name: string
+  age: number
+  address: string
+  locked?: boolean
+}
+
+const lastKey = ref('')
+
+const mockData: User[] = [
+  { id: 1, name: 'John', age: 30, address: 'New York' },
+  { id: 2, name: 'Jane', age: 25, address: 'Los Angeles', locked: true },
+  { id: 3, name: 'Bob', age: 35, address: 'Chicago' },
+]
+
+const option: TableOption<User> = {
+  columns: [
+    { key: 'name', label: '姓名' },
+    { key: 'age', label: '年龄' },
+    { key: 'address', label: '地址' },
+  ],
+  api: {
+    fetch: async ({ page, pageSize }) => ({
+      items: mockData.slice((page - 1) * pageSize, page * pageSize),
+      itemCount: mockData.length,
+    }),
+  },
+  operation: {
+    label: '操作',
+    // options 支持函数形式，可根据当前行数据动态生成下拉选项
+    options: (rowData, rowIndex) => [
+      { type: 'edit' },
+      { type: 'del', disabled: rowData.locked },
+      { key: 'detail', label: `详情 ${rowIndex + 1}` },
+    ],
     onSelect: key => {
       lastKey.value = key
     },
@@ -2811,7 +3271,7 @@ operation?:
       width?: number | string
       prefixRender?: (rowData: T, rowIndex: number) => VNode
       suffixRender?: (rowData: T, rowIndex: number) => VNode
-      options?: TableOperationOption[]
+      options?: TableOperationOption[] | ((rowData: T, rowIndex: number) => TableOperationOption[])
       onSelect?: (key: string) => void | boolean
       onBefore?: (rowData: T, type: 'add' | 'edit' | 'del') => boolean | T | void | Promise<...>
     }
@@ -2819,11 +3279,11 @@ operation?:
 
 ### TableOperationOption
 
-| 字段 | 说明 | 类型 |
-| --- | --- | --- |
-| `type` | 使用内置类型，复用编辑/删除逻辑 | `'edit'` | `'del'` |
-| `key` | 自定义选项标识，触发 `onSelect` 回调 | `string \| number` |
-| `label` | 自定义选项显示文字 | `string \| (() => VNode)` |
+| 字段    | 说明                                 | 类型                      |
+| ------- | ------------------------------------ | ------------------------- |
+| `type`  | 使用内置类型，复用编辑/删除逻辑      | `'edit'` | `'del'`       |
+| `key`   | 自定义选项标识，触发 `onSelect` 回调 | `string \| number`        |
+| `label` | 自定义选项显示文字                   | `string \| (() => VNode)` |
 
 > 可同时混合内置 type 与自定义 key，例如 `[{ type: 'edit' }, { type: 'del' }, { key: 'export', label: '导出' }]`。
 
@@ -2834,7 +3294,7 @@ url: /table/selection/index.md
 ---
 # np-table 多选
 
-在 `columns` 中添加 `type: 'selection'` 列开启多选，通过 `option.props` 传入 `checkedRowKeys` 和 `onUpdateCheckedRowKeys` 控制选中状态。
+通过 `option.selection` 开启多选，可通过 `option.selection.onChange` 获取选中项变化。
 
 > 注意：需将 `option` 定义为 `computed`，以保证 `checkedRowKeys` 的响应式更新能同步到表格。
 
@@ -2898,3 +3358,116 @@ const option = computed<TableOption>(() => ({
 }))
 </script>
 ```
+
+---
+
+---
+url: /table/slot/index.md
+---
+# np-table 插槽
+
+通过插槽在表格顶部、底部插入自定义内容。
+
+## 顶部插槽
+
+* `headerLeft`：顶部左侧内容，位于表格上方最左侧
+* `headerRight`：顶部右侧内容，渲染在「添加」按钮及筛选、显隐、刷新等操作按钮之前
+
+## 底部插槽
+
+* `footerLeft`：底部左侧内容，与分页器处于同一行
+
+```vue
+<template>
+  <np-table :option="option">
+    <template #headerLeft>
+      <n-text strong style="font-size: 16px">用户列表</n-text>
+    </template>
+    <template #headerRight>
+      <n-button secondary @click="handleExport">导出</n-button>
+    </template>
+    <template #footerLeft>
+      <n-text depth="3">共 {{ total }} 条数据</n-text>
+    </template>
+  </np-table>
+</template>
+
+<script setup lang="ts">
+import { useMessage } from 'naive-ui'
+import type { TableOption } from 'naive-plus'
+
+type User = {
+  id: number
+  name: string
+  age: number
+  address: string
+}
+
+const message = useMessage()
+
+const mockData: User[] = Array.from({ length: 100 }, (_, i) => ({
+  id: i + 1,
+  name: `用户 ${i + 1}`,
+  age: 20 + (i % 30),
+  address: `城市 ${i + 1}`,
+}))
+
+const total = mockData.length
+
+const option: TableOption<User> = {
+  columns: [
+    { key: 'name', label: '姓名' },
+    { key: 'age', label: '年龄' },
+    { key: 'address', label: '地址' },
+  ],
+  api: {
+    fetch: async ({ page, pageSize }) => {
+      return {
+        items: mockData.slice((page - 1) * pageSize, page * pageSize),
+        itemCount: mockData.length,
+      }
+    },
+  },
+}
+
+const handleExport = () => {
+  message.success(`导出 ${total} 条数据`)
+}
+</script>
+```
+
+## 插槽列表
+
+| 名称        | 说明                                                       |
+| ----------- | ---------------------------------------------------------- |
+| headerLeft  | 顶部左侧插槽                                               |
+| headerRight | 顶部右侧插槽，渲染在「添加」按钮及筛选、显隐、刷新按钮之前 |
+| footerLeft  | 底部左侧插槽，与分页器处于同一行                           |
+
+## option.slots
+
+除组件插槽外，也可通过 `option.slots` 配置相同位置的内容；两者同时存在时，**`option.slots` 优先**。
+
+```ts
+import { h } from 'vue'
+import { NButton } from 'naive-ui'
+import type { TableOption } from 'naive-plus'
+
+const option: TableOption = {
+  // ...
+  slots: {
+    headerLeft: () => h('span', '用户列表'),
+    headerRight: () =>
+      h(NButton, { secondary: true }, { default: () => '导出' }),
+    footerLeft: () => h('span', '共 100 条数据'),
+  },
+}
+```
+
+### TableSlotOption
+
+| 属性        | 说明                                 | 类型               |
+| ----------- | ------------------------------------ | ------------------ |
+| headerLeft  | 顶部左侧内容，优先级高于同名组件插槽 | `() => VNodeChild` |
+| headerRight | 顶部右侧内容，优先级高于同名组件插槽 | `() => VNodeChild` |
+| footerLeft  | 底部左侧内容，优先级高于同名组件插槽 | `() => VNodeChild` |

@@ -198,6 +198,8 @@ formProps?: Partial<FormColumn> & {
 }
 ```
 
+其中 `formProps.display` 支持 `boolean` 或 `(data) => boolean`，用于控制表单字段的显隐，详见 [显隐控制](/table/display/)。
+
 ### operation.onBefore
 
 ```ts

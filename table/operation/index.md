@@ -81,12 +81,19 @@ const option: TableOption<User> = {
     label: '操作',
     width: 200,
     // 操作按钮前插入自定义内容
-    prefixRender: rowData =>
-      h(
+    prefixRender: rowData => {
+      if (rowData.id === 1) {
+        return undefined
+      }
+      if (rowData.id === 2) {
+        return [h('span', '1'), h('span', '2')]
+      }
+      return h(
         NButton,
         { size: 'small', type: 'info', style: 'margin-right:4px' },
         () => `查看 #${rowData.id}`
-      ),
+      )
+    },
     // 操作按钮后插入自定义内容
     suffixRender: rowData =>
       h(
@@ -117,7 +124,7 @@ const option: TableOption<User> = {
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
 import { ref } from 'vue'
 import { NAlert } from 'naive-ui'
 import type { TableOption } from 'naive-plus'
@@ -151,9 +158,73 @@ const option: TableOption<User> = {
       { type: 'edit' },
       { type: 'del', label: '删除(危险)' },
       { key: 'detail', label: '详情' },
-      { key: 'export', label: '导出' },
+      { key: 'export', label: () => <span style="color: red">导出</span> },
     ],
     // 处理自定义选项的点击事件，内置 edit/delete 会优先触发 onBefore，不经过此回调
+    onSelect: key => {
+      lastKey.value = key
+    },
+  },
+}
+</script>
+```
+
+## 动态选项
+
+`options` 支持传入函数，可根据当前行数据动态生成下拉选项。
+
+```vue
+<template>
+  <div>
+    <n-alert v-if="lastKey" type="success" style="margin-bottom: 12px">
+      onSelect 触发，key =
+      <strong>{{ lastKey }}</strong>
+    </n-alert>
+    <np-table :option="option" />
+  </div>
+</template>
+
+<script setup lang="tsx">
+import { ref } from 'vue'
+import { NAlert } from 'naive-ui'
+import type { TableOption } from 'naive-plus'
+
+type User = {
+  id: number
+  name: string
+  age: number
+  address: string
+  locked?: boolean
+}
+
+const lastKey = ref('')
+
+const mockData: User[] = [
+  { id: 1, name: 'John', age: 30, address: 'New York' },
+  { id: 2, name: 'Jane', age: 25, address: 'Los Angeles', locked: true },
+  { id: 3, name: 'Bob', age: 35, address: 'Chicago' },
+]
+
+const option: TableOption<User> = {
+  columns: [
+    { key: 'name', label: '姓名' },
+    { key: 'age', label: '年龄' },
+    { key: 'address', label: '地址' },
+  ],
+  api: {
+    fetch: async ({ page, pageSize }) => ({
+      items: mockData.slice((page - 1) * pageSize, page * pageSize),
+      itemCount: mockData.length,
+    }),
+  },
+  operation: {
+    label: '操作',
+    // options 支持函数形式，可根据当前行数据动态生成下拉选项
+    options: (rowData, rowIndex) => [
+      { type: 'edit' },
+      { type: 'del', disabled: rowData.locked },
+      { key: 'detail', label: `详情 ${rowIndex + 1}` },
+    ],
     onSelect: key => {
       lastKey.value = key
     },
@@ -174,7 +245,7 @@ operation?:
       width?: number | string
       prefixRender?: (rowData: T, rowIndex: number) => VNode
       suffixRender?: (rowData: T, rowIndex: number) => VNode
-      options?: TableOperationOption[]
+      options?: TableOperationOption[] | ((rowData: T, rowIndex: number) => TableOperationOption[])
       onSelect?: (key: string) => void | boolean
       onBefore?: (rowData: T, type: 'add' | 'edit' | 'del') => boolean | T | void | Promise<...>
     }
@@ -182,10 +253,10 @@ operation?:
 
 ### TableOperationOption
 
-| 字段 | 说明 | 类型 |
-| --- | --- | --- |
-| `type` | 使用内置类型，复用编辑/删除逻辑 | `'edit'` | `'del'` |
-| `key` | 自定义选项标识，触发 `onSelect` 回调 | `string \| number` |
-| `label` | 自定义选项显示文字 | `string \| (() => VNode)` |
+| 字段    | 说明                                 | 类型                      |
+| ------- | ------------------------------------ | ------------------------- |
+| `type`  | 使用内置类型，复用编辑/删除逻辑      | `'edit'` | `'del'`       |
+| `key`   | 自定义选项标识，触发 `onSelect` 回调 | `string \| number`        |
+| `label` | 自定义选项显示文字                   | `string \| (() => VNode)` |
 
 > 可同时混合内置 type 与自定义 key，例如 `[{ type: 'edit' }, { type: 'del' }, { key: 'export', label: '导出' }]`。

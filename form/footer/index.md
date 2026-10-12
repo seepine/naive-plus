@@ -63,5 +63,6 @@ const option: FormOption = {
 | ---- | ---- | ---- | ---- |
 | submitBtn | 提交按钮是否显示 | boolean | true |
 | resetBtn | 重置按钮是否显示 | boolean | true |
+| submitErrorFeedback | 提交（onSubmit）异常时，是否将错误信息展示在底部表单项的校验反馈中 | boolean | true |
 | prefixRender | 前缀渲染函数 | `(data)=>VNode` | - |
 | suffixRender | 后缀渲染函数 | `(data)=>VNode` | - |

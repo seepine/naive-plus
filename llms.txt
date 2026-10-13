@@ -30,5 +30,6 @@
 - [np-table 主动方法](/table/expose/index.md)
 - [np-table 筛选](/table/filter/index.md)
 - [自定义操作列](/table/operation/index.md)
+- [np-table 搜索](/table/search/index.md)
 - [np-table 多选](/table/selection/index.md)
 - [np-table 插槽](/table/slot/index.md)

@@ -2348,41 +2348,48 @@ const option: TableOption<User> = {
 
 通过 `ref` 获取表格实例后，可调用以下主动方法，详见 [主动方法](/table/expose/)。
 
-| 方法    | 说明                                                       | 类型                    |
-| ------- | ---------------------------------------------------------- | ----------------------- |
-| reload  | 重新加载数据，会重置到第一页                               | `() => Promise<void>`   |
-| refresh | 重新刷新当前页数据                                         | `() => Promise<void>`   |
-| params  | 绑定的查询参数，会作为 `queryParams` 传递给 `api.fetch`    | `Record<string, any>`   |
+| 方法    | 说明                                                    | 类型                  |
+| ------- | ------------------------------------------------------- | --------------------- |
+| reload  | 重新加载数据，会重置到第一页                            | `() => Promise<void>` |
+| refresh | 重新刷新当前页数据                                      | `() => Promise<void>` |
+| params  | 绑定的查询参数，会作为 `queryParams` 传递给 `api.fetch` | `Record<string, any>` |
 
 ## 类型定义
 
 组件导出以下类型定义
 
 ```ts
-import type { TableOption, TableColumn, TableFilter, NpTableInst } from 'naive-plus'
+import type {
+  TableOption,
+  TableColumn,
+  TableFilter,
+  TableSearchOption,
+  NpTableInst,
+} from 'naive-plus'
 ```
 
 ### TableOption
 
-| 属性       | 说明                              | 类型                                                                                 | 默认值 |
-| ---------- | --------------------------------- | ------------------------------------------------------------------------------------ | ------ |
-| columns    | 表格列                            | Array<[TableColumn](#tablecolumn)>                                                   | -      |
-| api        | 数据接口                          | `{ fetch: (pageParams, otherParams) => Promise<{ items, itemCount? }> }`            | -      |
-| props      | 表格属性，会透传给 `n-data-table`。为避免表格内部纵向滚动遮挡页面内容，会忽略 `maxHeight`、`flexHeight`、`virtualScroll` 等纵向滚动相关配置 | object                                                                               | -      |
-| pagination | 分页配置，设为 `false` 可禁用分页 | `false` / `PaginationConfig`                                                         | -      |
-| filters    | 筛选器配置                        | Array<[TableFilter](/table/filter/)>                                                   | -      |
-| slots      | 插槽配置，优先级高于组件同名插槽  | [TableSlotOption](/table/slot/#tableslotoption)                                        | -      |
+| 属性       | 说明                                                                                                                                        | 类型                                                                     | 默认值 |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------ |
+| columns    | 表格列                                                                                                                                      | Array<[TableColumn](#tablecolumn)>                                       | -      |
+| api        | 数据接口                                                                                                                                    | `{ fetch: (pageParams, otherParams) => Promise<{ items, itemCount? }> }` | -      |
+| props      | 表格属性，会透传给 `n-data-table`。为避免表格内部纵向滚动遮挡页面内容，会忽略 `maxHeight`、`flexHeight`、`virtualScroll` 等纵向滚动相关配置 | object                                                                   | -      |
+| pagination | 分页配置，设为 `false` 可禁用分页                                                                                                           | `false` / `PaginationConfig`                                             | -      |
+| filters    | 筛选器配置                                                                                                                                  | Array<[TableFilter](/table/filter/)>                                     | -      |
+| search     | 搜索框配置，不传或为 `false` 时不显示                                                                                                       | `false` / [TableSearchOption](/table/search/#tablesearchoption)          | -      |
+| slots      | 插槽配置，优先级高于组件同名插槽                                                                                                            | [TableSlotOption](/table/slot/#tableslotoption)                          | -      |
 
 ### TableColumn
 
-| 属性    | 说明                                                           | 类型                            | 默认值 |
-| ------- | -------------------------------------------------------------- | ------------------------------- | ------ |
-| key     | 列字段名称                                                     | string                          | -      |
-| label   | 列标题                                                         | string                          | -      |
-| render  | 自定义渲染函数                                                 | `(rowData, rowIndex) => VNode`  | -      |
-| props   | 列属性，透传给 `n-data-table`（如 `width`、`minWidth`、`fixed`） | object                          | -      |
-| display | 是否在表格中显示该列，`false` 表示彻底隐藏（常用于仅表单字段） | boolean                         | true   |
-| formProps | 表单字段配置，详见 [CRUD 增删改查](/table/crud/#formprops)      | object                          | -      |
+| 属性      | 说明                                                             | 类型                           | 默认值 |
+| --------- | ---------------------------------------------------------------- | ------------------------------ | ------ |
+| key       | 列字段名称                                                       | string                         | -      |
+| label     | 列标题                                                           | string                         | -      |
+| render    | 自定义渲染函数                                                   | `(rowData, rowIndex) => VNode` | -      |
+| props     | 列属性，透传给 `n-data-table`（如 `width`、`minWidth`、`fixed`） | object                         | -      |
+| display   | 是否在表格中显示该列，`false` 表示彻底隐藏（常用于仅表单字段）   | boolean                        | true   |
+| formProps | 表单字段配置，详见 [CRUD 增删改查](/table/crud/#formprops)       | object                         | -      |
 
 ---
 
@@ -3316,6 +3323,116 @@ operation?:
 | `label` | 自定义选项显示文字                   | `string \| (() => VNode)` |
 
 > 可同时混合内置 type 与自定义 key，例如 `[{ type: 'edit' }, { type: 'del' }, { key: 'export', label: '导出' }]`。
+
+---
+
+---
+url: /table/search/index.md
+---
+# np-table 搜索
+
+通过 `search` 配置表格搜索框，搜索框渲染在表格顶部最左侧（`headerLeft` 区域），与 `headerLeft` 插槽内容并存。
+
+```vue
+<template>
+  <np-table :option="option" />
+</template>
+
+<script setup lang="ts">
+import type { TableOption } from 'naive-plus'
+
+const mockData = Array.from({ length: 50 }, (_, i) => ({
+  id: i + 1,
+  name: `用户 ${i + 1}`,
+  age: 20 + (i % 30),
+  status: i % 3 === 0 ? 'enabled' : i % 3 === 1 ? 'disabled' : 'pending',
+}))
+
+const option: TableOption = {
+  columns: [
+    { key: 'name', label: '姓名' },
+    { key: 'age', label: '年龄' },
+    { key: 'status', label: '状态' },
+  ],
+  search: {
+    key: 'keyword',
+    placeholder: '搜索姓名',
+  },
+  api: {
+    fetch: async ({ page, pageSize }, queryParams) => {
+      await new Promise<void>(resolve => setTimeout(resolve, 500))
+
+      let items = [...mockData]
+
+      // 根据搜索关键词过滤
+      if (queryParams.keyword) {
+        items = items.filter(item => item.name.includes(queryParams.keyword))
+      }
+
+      return {
+        items: items.slice((page - 1) * pageSize, page * pageSize),
+        itemCount: items.length,
+      }
+    },
+  },
+}
+</script>
+```
+
+## 基础用法
+
+```ts
+import type { TableOption } from 'naive-plus'
+
+const option: TableOption = {
+  columns: [
+    { key: 'name', label: '姓名' },
+    { key: 'age', label: '年龄' },
+  ],
+  search: {
+    key: 'keyword',
+    placeholder: '搜索姓名',
+  },
+  api: {
+    fetch: async ({ page, pageSize }, { keyword }) => {
+      // keyword 即搜索框输入值
+      return { items: [], itemCount: 0 }
+    },
+  },
+}
+```
+
+搜索值会以 `search.key`（默认 `keyword`）为字段名，合并进 `api.fetch` 的第二个参数，与 `filters`、`tableRef.params` 共存。输入框清空后该字段会被移除。
+
+## 自动搜索
+
+输入框监听值变化并自动触发搜索，无需回车或点击。通过 `debounce` 控制防抖时间（默认 300ms），避免连续输入时频繁请求。
+
+```ts
+const option: TableOption = {
+  // ...
+  search: {
+    debounce: 500,
+  },
+}
+```
+
+## 类型定义
+
+```ts
+import type { TableSearchOption } from 'naive-plus'
+```
+
+### TableSearchOption
+
+| 属性        | 说明                                         | 类型               | 默认值             |
+| ----------- | -------------------------------------------- | ------------------ | ------------------ |
+| key         | 提交给 `api.fetch` 的查询参数名              | string             | `keyword`          |
+| placeholder | 输入框占位文本                               | string             | `请输入关键词搜索` |
+| width       | 输入框宽度                                   | `string \| number` | `220`              |
+| clearable   | 是否可清空                                   | boolean            | `true`             |
+| debounce    | 输入防抖时间（毫秒），停止输入后自动触发搜索 | number             | `300`              |
+| props       | 透传给 `n-input` 的其他属性                  | `InputProps`       | -                  |
 
 ---
 

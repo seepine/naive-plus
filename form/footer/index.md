@@ -49,6 +49,34 @@ const option: FormOption = {
 </script>
 ```
 
+## 右对齐
+
+通过 `align="right"` 让底部内容靠右对齐，提交异常时的校验反馈也会同步靠右。
+
+```vue
+<template>
+  <np-form :option="option" />
+</template>
+<script setup lang="tsx">
+import type { FormOption } from 'naive-plus'
+
+const option: FormOption = {
+  footer: {
+    // 底部内容靠右对齐，校验反馈信息同步靠右
+    align: 'right',
+  },
+  // 提交异常时，错误信息会展示在底部表单项的校验反馈中
+  onSubmit: () => {
+    throw new Error('提交失败，请稍后重试')
+  },
+  columns: [
+    { label: '姓名', key: 'fullName' },
+    { label: '电话', key: 'tel', type: 'number' },
+  ],
+}
+</script>
+```
+
 ## 组件配置
 
 ### FormOption Props
@@ -64,5 +92,6 @@ const option: FormOption = {
 | submitBtn | 提交按钮是否显示 | boolean | true |
 | resetBtn | 重置按钮是否显示 | boolean | true |
 | submitErrorFeedback | 提交（onSubmit）异常时，是否将错误信息展示在底部表单项的校验反馈中 | boolean | true |
+| align | 底部内容对齐方式，`right` 时靠右对齐且校验反馈同步靠右 | `'left' \| 'right'` | `'left'` |
 | prefixRender | 前缀渲染函数 | `(data)=>VNode` | - |
 | suffixRender | 后缀渲染函数 | `(data)=>VNode` | - |

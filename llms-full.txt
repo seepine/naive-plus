@@ -566,7 +566,7 @@ const options = async () => {
 
 ## 自定义字段名
 
-通常我们会从后端接口获取数据，但数据类型并不一定是 `{label,value}` 的结构，此时可通过 `keys` 指定选项字段名
+通常我们会从后端接口获取数据，但数据类型并不一定是 `{label,value}` 的结构，此时可通过 `labelField` 和 `valueField` 指定选项字段名
 
 ```vue
 <template>
@@ -620,20 +620,21 @@ const value = ref([])
 
 ### Props
 
-| 属性 | 说明     | 类型   | 默认值 |
-| ---- | -------- | ------ | ------ |
-| v-model | 选中值 | CheckboxGroupValue\[] | -      |
-| options | 配置项 | AsyncValue\<CheckboxOption\[]> | - |
-| keys | 自定义字段名 | {label:string, value:string} | { label: 'label', value: 'value' }   |
-| loadingDelay| 加载出现延迟，当 options 异步时有效 | number | 250 |
-| props| TCheckboxGroup 属性 | [TCheckboxGroup Props](https://tdesign.tencent.com/vue-next/components/checkbox?tab=api#checkboxgroup-props)  | - |
-| onChange | 改变事件 |(value: T, context: CheckboxGroupChangeContext) | |
+| 属性         | 说明                                | 类型                                                                                                         | 默认值 |
+| ------------ | ----------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------ |
+| v-model      | 选中值                              | CheckboxGroupValue\[]                                                                                         | -      |
+| options      | 配置项                              | AsyncValue\<CheckboxOption\[]>                                                                                 | -      |
+| labelField   | 自定义标签字段名                    | string                                                                                                       | label  |
+| valueField   | 自定义值字段名                      | string                                                                                                       | value  |
+| loadingDelay | 加载出现延迟，当 options 异步时有效 | number                                                                                                       | 250    |
+| props        | TCheckboxGroup 属性                 | [TCheckboxGroup Props](https://tdesign.tencent.com/vue-next/components/checkbox?tab=api#checkboxgroup-props) | -      |
+| onChange     | 改变事件                            | (value: T, context: CheckboxGroupChangeContext)                                                              |        |
 
 ### Events
 
-| 事件名 | 说明           | 参数                          |
-| ------ | -------------- | ----------------------------- |
-| change | 改变事件 |(value: T, context: CheckboxGroupChangeContext) |
+| 事件名 | 说明     | 参数                                            |
+| ------ | -------- | ----------------------------------------------- |
+| change | 改变事件 | (value: T, context: CheckboxGroupChangeContext) |
 
 ## 类型定义
 
@@ -864,7 +865,7 @@ const value = ref<string | null>(null)
 
 ## 按钮组
 
-设置 `button` 以使用按钮组样式。
+设置 `type="button"` 以使用按钮组样式。
 
 ```vue
 <template>
@@ -1015,23 +1016,23 @@ const value = ref<string | number | boolean | null>(null)
 
 ### Props
 
-| 属性 | 说明 | 类型 | 默认值 |
-| ---- | ---- | ---- | ---- |
-| v-model | 选中值 | RadioGroupValue | - |
-| options | 配置项 | AsyncValue\<RadioOption\[]> | - |
-| labelField | 自定义标签字段名 | string | label |
-| valueField | 自定义值字段名 | string | value |
-| button | 是否按钮组样式 | boolean | false |
-| loadingDelay | 加载出现延迟，当 options 异步时有效 | number | 250 |
-| props | NRadioGroup 属性 | [NRadioGroup Props](https://www.naiveui.com/zh-CN/light/components/radio#RadioGroup-Props) | - |
-| onChange | 改变事件 | (value: RadioGroupValue) => void | - |
+| 属性         | 说明                                | 类型                                                                                       | 默认值  |
+| ------------ | ----------------------------------- | ------------------------------------------------------------------------------------------ | ------- |
+| v-model      | 选中值                              | RadioGroupValue                                                                            | -       |
+| options      | 配置项                              | AsyncValue\<RadioOption\[]>                                                                  | -       |
+| labelField   | 自定义标签字段名                    | string                                                                                     | label   |
+| valueField   | 自定义值字段名                      | string                                                                                     | value   |
+| type         | 展示类型                            | 'default' | 'button'                                                                      | default |
+| loadingDelay | 加载出现延迟，当 options 异步时有效 | number                                                                                     | 250     |
+| props        | NRadioGroup 属性                    | [NRadioGroup Props](https://www.naiveui.com/zh-CN/light/components/radio#RadioGroup-Props) | -       |
+| onChange     | 改变事件                            | (value: RadioGroupValue) => void                                                           | -       |
 
 ### Events
 
-| 事件名 | 说明 | 参数 |
-| ------ | ---- | ---- |
+| 事件名            | 说明       | 参数                     |
+| ----------------- | ---------- | ------------------------ |
 | update:modelValue | 值变更事件 | (value: RadioGroupValue) |
-| change | 改变事件 | (value: RadioGroupValue) |
+| change            | 改变事件   | (value: RadioGroupValue) |
 
 ## 类型定义
 
@@ -1810,6 +1811,34 @@ const option: FormOption = {
 </script>
 ```
 
+## 右对齐
+
+通过 `align="right"` 让底部内容靠右对齐，提交异常时的校验反馈也会同步靠右。
+
+```vue
+<template>
+  <np-form :option="option" />
+</template>
+<script setup lang="tsx">
+import type { FormOption } from 'naive-plus'
+
+const option: FormOption = {
+  footer: {
+    // 底部内容靠右对齐，校验反馈信息同步靠右
+    align: 'right',
+  },
+  // 提交异常时，错误信息会展示在底部表单项的校验反馈中
+  onSubmit: () => {
+    throw new Error('提交失败，请稍后重试')
+  },
+  columns: [
+    { label: '姓名', key: 'fullName' },
+    { label: '电话', key: 'tel', type: 'number' },
+  ],
+}
+</script>
+```
+
 ## 组件配置
 
 ### FormOption Props
@@ -1825,6 +1854,7 @@ const option: FormOption = {
 | submitBtn | 提交按钮是否显示 | boolean | true |
 | resetBtn | 重置按钮是否显示 | boolean | true |
 | submitErrorFeedback | 提交（onSubmit）异常时，是否将错误信息展示在底部表单项的校验反馈中 | boolean | true |
+| align | 底部内容对齐方式，`right` 时靠右对齐且校验反馈同步靠右 | `'left' \| 'right'` | `'left'` |
 | prefixRender | 前缀渲染函数 | `(data)=>VNode` | - |
 | suffixRender | 后缀渲染函数 | `(data)=>VNode` | - |
 

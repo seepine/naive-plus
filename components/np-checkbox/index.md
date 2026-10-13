@@ -108,7 +108,7 @@ const options = async () => {
 
 ## 自定义字段名
 
-通常我们会从后端接口获取数据，但数据类型并不一定是 `{label,value}` 的结构，此时可通过 `keys` 指定选项字段名
+通常我们会从后端接口获取数据，但数据类型并不一定是 `{label,value}` 的结构，此时可通过 `labelField` 和 `valueField` 指定选项字段名
 
 ```vue
 <template>
@@ -162,20 +162,21 @@ const value = ref([])
 
 ### Props
 
-| 属性 | 说明     | 类型   | 默认值 |
-| ---- | -------- | ------ | ------ |
-| v-model | 选中值 | CheckboxGroupValue\[] | -      |
-| options | 配置项 | AsyncValue\<CheckboxOption\[]> | - |
-| keys | 自定义字段名 | {label:string, value:string} | { label: 'label', value: 'value' }   |
-| loadingDelay| 加载出现延迟，当 options 异步时有效 | number | 250 |
-| props| TCheckboxGroup 属性 | [TCheckboxGroup Props](https://tdesign.tencent.com/vue-next/components/checkbox?tab=api#checkboxgroup-props)  | - |
-| onChange | 改变事件 |(value: T, context: CheckboxGroupChangeContext) | |
+| 属性         | 说明                                | 类型                                                                                                         | 默认值 |
+| ------------ | ----------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------ |
+| v-model      | 选中值                              | CheckboxGroupValue\[]                                                                                         | -      |
+| options      | 配置项                              | AsyncValue\<CheckboxOption\[]>                                                                                 | -      |
+| labelField   | 自定义标签字段名                    | string                                                                                                       | label  |
+| valueField   | 自定义值字段名                      | string                                                                                                       | value  |
+| loadingDelay | 加载出现延迟，当 options 异步时有效 | number                                                                                                       | 250    |
+| props        | TCheckboxGroup 属性                 | [TCheckboxGroup Props](https://tdesign.tencent.com/vue-next/components/checkbox?tab=api#checkboxgroup-props) | -      |
+| onChange     | 改变事件                            | (value: T, context: CheckboxGroupChangeContext)                                                              |        |
 
 ### Events
 
-| 事件名 | 说明           | 参数                          |
-| ------ | -------------- | ----------------------------- |
-| change | 改变事件 |(value: T, context: CheckboxGroupChangeContext) |
+| 事件名 | 说明     | 参数                                            |
+| ------ | -------- | ----------------------------------------------- |
+| change | 改变事件 | (value: T, context: CheckboxGroupChangeContext) |
 
 ## 类型定义
 

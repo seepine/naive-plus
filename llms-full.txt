@@ -829,6 +829,14 @@ const items = [
 | searchable | 是否支持搜索            | `boolean`                                        | `false` |
 | options    | 选项配置                | `Array<ParamsOption> \| Array<{title, options}>` | -       |
 
+## ParamsOption
+
+| 参数  | 说明                             | 类型                          | 默认值 |
+| ----- | -------------------------------- | ----------------------------- | ------ |
+| label | 选项标题                         | `string \| () => VNode`       | -      |
+| value | 选项值，支持字符串、数字、布尔值 | `string \| number \| boolean` | -      |
+| icon  | 选项图标                         | `VNode \| () => VNode`        | -      |
+
 ## Events
 
 | 事件名        | 说明              | 参数                                    |

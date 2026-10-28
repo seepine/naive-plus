@@ -100,7 +100,7 @@ import type { TableSearchOption } from 'naive-plus'
 | 属性        | 说明                                         | 类型               | 默认值             |
 | ----------- | -------------------------------------------- | ------------------ | ------------------ |
 | key         | 提交给 `api.fetch` 的查询参数名              | string             | `keyword`          |
-| placeholder | 输入框占位文本                               | string             | `请输入关键词搜索` |
+| placeholder | 输入框占位文本                               | string             | 取 locale 中的 `Table.search.placeholder` |
 | width       | 输入框宽度                                   | `string \| number` | `220`              |
 | clearable   | 是否可清空                                   | boolean            | `true`             |
 | debounce    | 输入防抖时间（毫秒），停止输入后自动触发搜索 | number             | `300`              |

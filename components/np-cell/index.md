@@ -142,6 +142,8 @@ const iconRender = () => {
 | value | 单元格值 | `string \| VNode \| () => VNode` | - |
 | description | 单元格描述 | `string \| VNode \| () => VNode` | - |
 | arrow | 是否显示右侧箭头 | `boolean` | `false` |
+| bordered | 是否显示内容区下边框 | `boolean` | `false` |
+| size | 单元格尺寸 | `'small' \| 'medium' \| 'large'` | `'medium'` |
 
 ## Slots
 
@@ -154,3 +156,13 @@ const iconRender = () => {
 | 事件名         | 说明                 | 参数                      |
 | -------------- | -------------------- | ------------------------- |
 | update:checked | 控件状态变更时触发   | `(value: boolean) => void` |
+
+## 全局默认值
+
+可通过 [NpConfigProvider](/components/np-config-provider/) 统一修改默认值，组件自身传入的 prop 优先级更高。
+
+```vue
+<np-config-provider :component-options="{ Cell: { size: 'large', arrow: true } }">
+  <np-cell label="单元格" />
+</np-config-provider>
+```

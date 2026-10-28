@@ -120,3 +120,21 @@ import type {
 | props     | 列属性，透传给 `n-data-table`（如 `width`、`minWidth`、`fixed`） | object                         | -      |
 | display   | 是否在表格中显示该列，`false` 表示彻底隐藏（常用于仅表单字段）   | boolean                        | true   |
 | formProps | 表单字段配置，详见 [CRUD 增删改查](/table/crud/#formprops)       | object                         | -      |
+
+## 全局默认值
+
+可通过 [NpConfigProvider](/components/np-config-provider/) 统一配置 `rowKey` / `props` / `formProps` / `operation`，以及每一列的默认 `column`（`props` 合并到列属性，`formProps` 合并到新增/编辑表单的列配置），`option` 中的同名配置优先级更高。
+
+```vue
+<np-config-provider
+  :component-options="{
+    Table: {
+      rowKey: 'id',
+      props: { size: 'small' },
+      column: { props: { align: 'center' }, formProps: { props: { size: 'small' } } },
+    },
+  }"
+>
+  <np-table :option="option" />
+</np-config-provider>
+```

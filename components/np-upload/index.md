@@ -98,3 +98,17 @@ const fileList = ref<string[]>([])
 ```ts
 import type { NpUploadProps } from 'naive-plus'
 ```
+
+## 全局默认值
+
+可通过 [NpConfigProvider](/components/np-config-provider/) 统一修改透传给 `n-upload` 的 `props`（如 `listType` / `accept` / `max` / `action` 等），组件自身传入的 prop 优先级更高。
+
+> 运行期切换 `listType` 不会重新解析已有的 `modelValue`：已上传数据仍按初始化时的 `listType` 解析展示，避免把旧格式数据误判为新格式。
+
+```vue
+<np-config-provider
+  :component-options="{ Upload: { props: { listType: 'image-card' } } }"
+>
+  <np-upload v-model="value" />
+</np-config-provider>
+```

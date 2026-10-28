@@ -233,6 +233,26 @@ const option: TableOption<User> = {
 </script>
 ```
 
+## 默认操作项配置
+
+`options` 中只写 `{ type: 'edit' }` / `{ type: 'del' }` 时会复用内置操作项。通过 `defaultOptions` 可以覆盖内置的文案与属性（按 `edit` / `del` 逐项合并，只写 `label` 时仍保留内置的 `key`），`options` 中的同名属性优先级更高。
+
+```ts
+const option: TableOption = {
+  // ...
+  operation: {
+    defaultOptions: {
+      edit: { label: 'Edit', key: 'edit' },
+      del: { label: 'Delete', key: 'delete' },
+    },
+  },
+}
+```
+
+> 不传 `defaultOptions` 时，文案来自 `NpConfigProvider` 的 [locale](/components/np-config-provider/#多语言)；也可以在 `NpConfigProvider` 的 `Table.operation` 中全局配置。
+
+> 注意：内置 `del.label` 是渲染 `NText type="error"` 的函数，示例中直接传字符串会替换该渲染函数，删除项将失去红色文字样式；需要保留时请自行渲染 `NText type="error"`。
+
 ## 类型定义
 
 ### operation
@@ -246,10 +266,15 @@ operation?:
       prefixRender?: (rowData: T, rowIndex: number) => VNode
       suffixRender?: (rowData: T, rowIndex: number) => VNode
       options?: TableOperationOption[] | ((rowData: T, rowIndex: number) => TableOperationOption[])
+      defaultOptions?: TableOperationDefaultOptions
       onSelect?: (key: string) => void | boolean
       onBefore?: (rowData: T, type: 'add' | 'edit' | 'del') => boolean | T | void | Promise<...>
     }
 ```
+
+### TableOperationDefaultOptions
+
+`Partial<Record<'edit' | 'del', Omit<TableOperationOption, 'type'>>>`，用于覆盖内置编辑 / 删除操作项的默认值（逐项合并）。
 
 ### TableOperationOption
 

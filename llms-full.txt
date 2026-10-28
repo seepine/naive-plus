@@ -177,7 +177,7 @@ const handleClick = async (e: MouseEvent, delay = 2000) => {
 | throttle-delay | 节流延迟 | number | 350 |
 | loading-delay | 加载延迟 | number | 250 |
 | click | 点击函数 | `() => Promise<void>` | - |
-| tyoe | 主题风格 | `primary/danger/warning/success` | default |
+| type | 主题风格 | `default/primary/warning/success/info/error` | default |
 | props | 其他按钮属性 | object -> [Button Props](https://www.naiveui.com/zh-CN/light/components/button#Button-Props) | |
 
 ### Events
@@ -200,6 +200,20 @@ const handleClick = async (e: MouseEvent, delay = 2000) => {
 import type { NpButtonProps } from 'naive-plus'
 ```
 
+## 全局默认值
+
+可通过 [NpConfigProvider](/components/np-config-provider/) 统一修改默认值，组件自身传入的 prop 优先级更高。
+
+```vue
+<np-config-provider
+  :component-options="{ Button: { type: 'primary', props: { size: 'small' } } }"
+>
+  <np-button>按钮</np-button>
+</np-config-provider>
+```
+
+注意：`click` / `onClick` 属于使用组件时的业务行为，不支持全局配置。
+
 ---
 
 ---
@@ -211,7 +225,7 @@ url: /components/np-cell-group/index.md
 
 ## 基础用法
 
-options 支持所有 `np-cell` 属性
+options 支持部分 `np-cell` 属性，见下表 `NpCellGroupOption`
 
 ```vue
 <script setup lang="tsx">
@@ -284,8 +298,8 @@ const handleChange = (_keys: unknown[], item: NpCellGroupOption) => {
 | value | 单元格值 | `string \| VNode \| () => VNode` | - |
 | description | 单元格描述 | `string \| VNode \| () => VNode` | - |
 | footer | 底部内容 | `VNode \| () => VNode` | - |
-| hover | 是否启用悬停态 | `boolean` | - |
-| arrow | 是否显示右侧箭头 | `boolean` | `false` |
+| hover | 是否启用悬停态，未传时继承 `NpConfigProvider` 的 `Cell` 配置 | `boolean` | - |
+| arrow | 是否显示右侧箭头，未传时继承 `NpConfigProvider` 的 `Cell` 配置 | `boolean` | `false`（无 `Cell` 配置时） |
 | onClick | 点击时的回调函数 | `() => void` | - |
 
 ## Events
@@ -294,6 +308,18 @@ const handleChange = (_keys: unknown[], item: NpCellGroupOption) => {
 | ------ | ------------------ | ---------------------------- |
 | change | 选中项变化时触发 | `(keys: NpCellGroupKeys, item: NpCellGroupOption) => void` |
 | update:keys | 控件状态变更时触发 | `(keys: NpCellGroupKeys) => void` |
+
+## 全局默认值
+
+可通过 [NpConfigProvider](/components/np-config-provider/) 统一修改 `size` / `bordered` 的默认值，组件自身传入的 prop 优先级更高；`hover` / `arrow` 未在选项上指定时，回落到 `NpConfigProvider` 的 `Cell` 配置。
+
+```vue
+<np-config-provider
+  :component-options="{ CellGroup: { size: 'small', bordered: true } }"
+>
+  <np-cell-group :options="options" />
+</np-config-provider>
+```
 
 ---
 
@@ -441,6 +467,8 @@ const iconRender = () => {
 | value | 单元格值 | `string \| VNode \| () => VNode` | - |
 | description | 单元格描述 | `string \| VNode \| () => VNode` | - |
 | arrow | 是否显示右侧箭头 | `boolean` | `false` |
+| bordered | 是否显示内容区下边框 | `boolean` | `false` |
+| size | 单元格尺寸 | `'small' \| 'medium' \| 'large'` | `'medium'` |
 
 ## Slots
 
@@ -453,6 +481,16 @@ const iconRender = () => {
 | 事件名         | 说明                 | 参数                      |
 | -------------- | -------------------- | ------------------------- |
 | update:checked | 控件状态变更时触发   | `(value: boolean) => void` |
+
+## 全局默认值
+
+可通过 [NpConfigProvider](/components/np-config-provider/) 统一修改默认值，组件自身传入的 prop 优先级更高。
+
+```vue
+<np-config-provider :component-options="{ Cell: { size: 'large', arrow: true } }">
+  <np-cell label="单元格" />
+</np-config-provider>
+```
 
 ---
 
@@ -642,6 +680,277 @@ const value = ref([])
 
 ```ts
 import type { NpCheckboxProps } from 'naive-plus'
+```
+
+## 全局默认值
+
+可通过 [NpConfigProvider](/components/np-config-provider/) 统一修改 `loadingDelay` 与透传给 `n-checkbox-group` 的 `props`，组件自身传入的 prop 优先级更高。
+
+```vue
+<np-config-provider
+  :component-options="{ Checkbox: { loadingDelay: 500, props: { size: 'small' } } }"
+>
+  <np-checkbox v-model="value" :options="options" />
+</np-config-provider>
+```
+
+---
+
+---
+url: /components/np-config-provider/index.md
+---
+# NpConfigProvider
+
+组件全局默认配置，用于统一修改组件 prop 的默认值，避免在每处调用点重复书写。
+
+优先级：**组件自身 prop > NpConfigProvider > 组件内置默认值**。
+
+## 基础用法
+
+通过 `component-options` 配置各组件的默认 props，key 为组件名（PascalCase，去掉 `Np` 前缀）。
+
+```vue
+<script setup lang="ts">
+import type { NpComponentOptions } from '../index'
+import { NpConfigProvider } from '../index'
+
+// 统一调整组件 prop 默认值，避免在每处调用点重复书写
+const componentOptions: NpComponentOptions = {
+  Button: {
+    type: 'primary',
+    props: {
+      size: 'small',
+    },
+  },
+  Cell: {
+    hover: true,
+    arrow: true,
+  },
+}
+</script>
+
+<template>
+  <NpConfigProvider :component-options="componentOptions">
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <span>config-provider 改为 primary + small</span>
+      <div style="display: flex; gap: 8px">
+        <np-button>默认</np-button>
+        <np-button type="error" :props="{ size: 'medium' }">设置prop</np-button>
+      </div>
+      <span>config-provider 改为 hover + arrow = true</span>
+      <np-cell label="单元格默认 hover + 箭头" value="默认值" />
+      <np-cell
+        label="组件自身 prop 优先级更高"
+        value="设置prop"
+        :hover="false"
+        :arrow="false"
+      />
+    </div>
+  </NpConfigProvider>
+</template>
+```
+
+## Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+| ---------------- | ---------------------- | ------------------- | ------ |
+| componentOptions | 各组件的默认 props 覆盖 | `NpComponentOptions` | -（未传时继承外层，无外层时视为 `{}`） |
+| locale | 组件内置文案语言，目前支持 `'zh'` / `'en'`；未传时继承外层 `NpConfigProvider` | `'zh' \| 'en'` | `'zh'`（无外层时） |
+
+## NpComponentOptions
+
+只开放「展示类」属性（`Button` 例外：除 `click` / `onClick` 外全部 props 均可配置；`Form` 的 `column.props` 按控件类型透传），下面列出各组件可配置的字段。具体类型由各组件自身定义并导出。
+
+| 字段 | 可配置项 | 类型 |
+| ---------- | ---------------------------------------- | ------------------------ |
+| Button | 除 `click` / `onClick` 外的全部 props | `NpButtonConfigProps` |
+| Cell | `hover` / `arrow` / `bordered` / `size` | `NpCellConfigProps` |
+| CellGroup | `size` / `bordered` | `NpCellGroupConfigProps` |
+| Checkbox | `loadingDelay` / `props` | `NpCheckboxConfigProps` |
+| Radio | `type` / `loadingDelay` / `props` | `NpRadioConfigProps` |
+| Upload | `props` | `NpUploadConfigProps` |
+| Filter | `trigger` / `placement` | `NpFilterConfigProps` |
+| Form | `enterSubmitMode` / `grid` / `props` / `column` / `footer` | `NpFormConfigProps` |
+| Table | `rowKey` / `props` / `formProps` / `column` / `operation` | `NpTableConfigProps` |
+
+### NpFormConfigProps
+
+| 字段 | 说明 | 类型 |
+| ---------------- | ---------------------------- | ------------------------------- |
+| enterSubmitMode | 回车提交模式 | `'last' \| 'all' \| false` |
+| grid | 栅格布局配置 | `Partial<GridProps>` |
+| props | 透传给 `n-form` 的属性 | `FormOption['props']` |
+| column | 每个表单项的默认配置 | `NpFormColumnConfigProps` |
+| column.props | 所有表单项默认的控件属性，按 `type` 选择合法属性 | `AnyObject` |
+| column.formItemProps | 所有表单项默认的表单项属性 | `FormGridItemProps` |
+| footer | 底部的默认配置 | `NpFormFooterConfigProps` |
+
+### NpFormFooterConfigProps
+
+| 字段 | 说明 | 类型 |
+| ---------------- | ---------------------------- | ---------------------- |
+| formItemProps | 底部表单项属性，`span` 可控制底部占位 | `FormGridItemProps` |
+| style | 底部内容容器样式 | `CSSProperties` |
+| align | 底部内容对齐方式，`right` 时校验反馈同步靠右 | `'left' \| 'right'` |
+| submitErrorFeedback | 提交异常时是否将错误信息展示在底部校验反馈中 | `boolean` |
+| submitBtn | 提交按钮配置，`false` 表示不显示 | `false \| { text?, props? }` |
+| resetBtn | 重置按钮配置，`false` 表示不显示 | `false \| { text?, props? }` |
+
+### NpTableConfigProps
+
+| 字段 | 说明 | 类型 |
+| -------------------- | -------------------------------- | --------------------------- |
+| rowKey | 行数据主键字段名 | `string` |
+| props | 透传给 `n-data-table` 的属性 | `TableOption['props']` |
+| formProps | 新增/编辑弹窗中表单的属性 | `FormOption['props']` |
+| column | 每一列的默认配置 | `NpTableColumnConfigProps` |
+| column.props | 所有列默认的 naive-ui 列属性（`children` 除外，属于列自身结构） | `Omit<TableColumn['props'], 'children'>` |
+| column.formProps | 所有列默认的表单属性（新增/编辑弹窗），不含内容 / 数据源 / 数据契约 / 状态 / 事件字段 | `NpTableColumnFormConfigProps` |
+| column.formProps.addProps | 新增弹窗的列表单默认属性，同名属性优先于 `column.formProps` | `NpTableColumnFormConfigProps['addProps']` |
+| column.formProps.editProps | 编辑弹窗的列表单默认属性，同名属性优先于 `column.formProps` | `NpTableColumnFormConfigProps['editProps']` |
+| operation | 操作列的默认配置 | `NpTableOperationConfigProps` |
+
+### NpTableOperationConfigProps
+
+| 字段 | 说明 | 类型 |
+| -------------------- | -------------------------------------------- | --------------------------- |
+| label | 操作列标题，默认取语言包中的 `Table.operation.label` | `string` |
+| defaultOptions | 内置编辑 / 删除操作项的默认配置，逐项合并到内置默认值 | `TableOperationDefaultOptions` |
+
+> `option.operation` 中的同名配置优先级更高；`option.operation` 传 `false` 时仍然隐藏整个操作列。
+
+## 多语言
+
+通过 `locale` 统一修改组件内部硬编码的文案，目前支持 `'zh'`（默认）与 `'en'`。
+
+```vue
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import {
+  NConfigProvider,
+  NRadioButton,
+  NRadioGroup,
+  enUS,
+  zhCN,
+} from 'naive-ui'
+import type { FormOption, TableOption } from 'naive-plus'
+import type { NpLocale } from '../index'
+import { NpConfigProvider } from '../index'
+
+const locale = ref<NpLocale>('zh')
+/** naive-ui 组件的语言，保持与 np 组件一致 */
+const naiveLocale = computed(() => (locale.value === 'zh' ? zhCN : enUS))
+
+const formOption: FormOption = {
+  columns: [{ label: '姓名', key: 'name' }],
+}
+
+const tableOption: TableOption = {
+  api: {
+    fetch: async () => ({
+      items: [{ id: 1, name: 'Naive Plus' }],
+      itemCount: 1,
+    }),
+  },
+  columns: [{ key: 'name', label: '名称' }],
+  search: {},
+}
+</script>
+
+<template>
+  <NConfigProvider :locale="naiveLocale">
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <NRadioGroup v-model:value="locale">
+        <NRadioButton value="zh">中文</NRadioButton>
+        <NRadioButton value="en">English</NRadioButton>
+      </NRadioGroup>
+      <NpConfigProvider :locale="locale">
+        <np-form :option="formOption" />
+        <np-table :option="tableOption" />
+      </NpConfigProvider>
+    </div>
+  </NConfigProvider>
+</template>
+```
+
+语言包结构（`NpLocaleMessages`）：
+
+| 字段 | 说明 | 中文默认值 |
+| ------------------------------------ | ------------------------ | ---------------------------------------- |
+| Form.footer.submitBtnText | 提交按钮文字 | `提交` |
+| Form.footer.resetBtnText | 重置按钮文字 | `重置` |
+| Form.uploadPendingTip | 文件上传未完成时的校验提示 | `文件上传未完成` |
+| Upload.uploadFailedTip | 上传失败提示前缀 | `上传失败` |
+| Upload.unknownError | 未知错误提示 | `未知错误` |
+| Upload.uploadBtnText | 默认上传按钮文字 | `上传文件` |
+| Filter.clearAllText | 清除所有筛选项的文字 | `清除所有筛选` |
+| Table.operation.label | 操作列标题 | `''` |
+| Table.operation.editLabel | 操作项「编辑」文字 | `编辑` |
+| Table.operation.delLabel | 操作项「删除」文字 | `删除` |
+| Table.display.title | 列显隐设置弹窗标题 | `显示设置` |
+| Table.display.keepOneTip | 最后一个显示列被隐藏时的提示 | `至少保留一列显示` |
+| Table.search.placeholder | 搜索框占位文本 | `请输入关键词搜索` |
+| Table.addBtnText | 顶部「添加」按钮文字 | `添加` |
+| Table.dialog.addTitle | 新增弹窗标题 | `新增` |
+| Table.dialog.editTitle | 编辑弹窗标题 | `编辑` |
+| Table.dialog.confirmText | 新增 / 编辑弹窗确认按钮文字 | `确认` |
+| Table.dialog.cancelText | 新增 / 编辑弹窗取消按钮文字 | `取消` |
+| Table.deleteDialog.title | 删除确认弹窗标题 | `确认删除` |
+| Table.deleteDialog.content | 删除确认弹窗内容 | `确定要删除该条数据吗？此操作不可恢复。` |
+| Table.deleteDialog.confirmText | 删除确认弹窗确认按钮文字 | `确认删除` |
+| Table.deleteDialog.cancelText | 删除确认弹窗取消按钮文字 | `取消` |
+
+文案优先级：**组件自身配置（如 `option.footer.submitBtn.text` / `option.operation.options`）> `componentOptions` > 语言包**。
+
+语言包与类型已导出，可用于自定义或按需读取：
+
+```ts
+import { zhCN, enUS, npLocales } from 'naive-plus'
+import type { NpLocale, NpLocaleMessages } from 'naive-plus'
+```
+
+`locale` 目前只内置 `zh` / `en`。完整的多语言文案由语言包（`NpLocaleMessages`）提供；`componentOptions` 也可通过 `Form.footer.submitBtn.text` 等已开放字段覆盖文案，需要完整多语言时优先使用 `locale`。
+
+## 说明
+
+* 以下类型的属性**不支持**全局配置，需在使用处指定：
+  * 内容：`label` / `value` / `description` / `icon` / `title`（含 `NpCell` 的 `footer` 插槽内容；`NpTable` 操作列的标题除外，见 `Table.operation.label`）
+  * 状态：`modelValue` / `checked` / `keys` / `params`
+  * 数据源：`options` / `items`
+  * 分页：`pagination`（分页状态由 `NpTable` 内部管理）
+  * 数据契约：`labelField` / `valueField` / `urlOnly`
+  * 事件回调：`click` / `onClick` / `onChange`
+* 透传 naive-ui 的 `props`（以及 `Button` 的 `style`）只做一层合并（浅合并）：provider 与组件自身同时设置时取并集，同名属性以组件自身为准；嵌套对象不会深度合并，整体以组件自身为准。
+* `NpForm` 的 `column` 会合并到每一个表单项（`props` 合并到控件属性，`formItemProps` 合并到表单项属性）。
+* `NpForm` 的 `footer` 会与 `option.footer` 逐层合并（`formItemProps` / `style` / `submitBtn` / `resetBtn` 取并集），`option.footer === false` 仍然隐藏整个底部。
+* `NpTable` 的 `column` 会合并到每一列（`props` 合并到列属性，`formProps` 合并到新增/编辑表单的列配置，其中 `formProps.props` / `formProps.formItemProps`（含 `addProps` / `editProps` 中的）做一层合并）；列自身专属的字段（内容 / 数据源 / 数据契约 / 状态 / 事件）会被剔除，不会从全局配置继承。
+* `NpCellGroup` 内部单元格的尺寸/边框由 `NpCellGroup` 自身的 props 决定，不受 `Cell` 配置影响。
+* 支持嵌套：内层 `NpConfigProvider` 未传 `componentOptions` 时继承外层配置，显式传入时会整体替换外层配置（不合并）；`locale` 未显式传入时继承外层，显式传入时以自身为准。
+
+## 自定义组件接入
+
+自定义组件需要读取全局配置时，注入 `npConfigProviderInjectionKey` 即可（值为 `Ref<NpComponentOptions | undefined>`）：
+
+```ts
+import { computed, inject } from 'vue'
+import { npConfigProviderInjectionKey } from 'naive-plus'
+
+const componentOptions = inject(npConfigProviderInjectionKey, undefined)
+// 读取 Cell 的全局配置，并回落到组件内置默认值
+const cellOptions = computed(() => ({
+  size: 'medium',
+  ...componentOptions?.value?.Cell,
+}))
+```
+
+需要读取语言包时，注入 `npLocaleInjectionKey`（值为 `Ref<NpLocaleMessages>`），未注入时回落到中文：
+
+```ts
+import { computed, inject } from 'vue'
+import { npLocaleInjectionKey, zhCN } from 'naive-plus'
+
+const locale = inject(npLocaleInjectionKey, undefined)
+const messages = computed(() => locale?.value ?? zhCN)
 ```
 
 ---
@@ -843,6 +1152,18 @@ const items = [
 | ------------- | ----------------- | --------------------------------------- |
 | change        | 筛选变化时触发    | `(params: Record<string, any>) => void` |
 | update:params | params 更新时触发 | `(params: Record<string, any>) => void` |
+
+## 全局默认值
+
+可通过 [NpConfigProvider](/components/np-config-provider/) 统一修改 `trigger` / `placement` 的默认值，组件自身传入的 prop 优先级更高。
+
+```vue
+<np-config-provider
+  :component-options="{ Filter: { trigger: 'hover', placement: 'right' } }"
+>
+  <np-filter v-model:params="params" :items="items" />
+</np-config-provider>
+```
 
 ---
 
@@ -1050,6 +1371,16 @@ const value = ref<string | number | boolean | null>(null)
 import type { NpRadioProps } from 'naive-plus'
 ```
 
+## 全局默认值
+
+可通过 [NpConfigProvider](/components/np-config-provider/) 统一修改 `type`（`default` / `button`）、`loadingDelay` 与透传给 `n-radio-group` 的 `props`，组件自身传入的 prop 优先级更高。
+
+```vue
+<np-config-provider :component-options="{ Radio: { type: 'button' } }">
+  <np-radio v-model="value" :options="options" />
+</np-config-provider>
+```
+
 ---
 
 ---
@@ -1151,6 +1482,20 @@ const fileList = ref<string[]>([])
 
 ```ts
 import type { NpUploadProps } from 'naive-plus'
+```
+
+## 全局默认值
+
+可通过 [NpConfigProvider](/components/np-config-provider/) 统一修改透传给 `n-upload` 的 `props`（如 `listType` / `accept` / `max` / `action` 等），组件自身传入的 prop 优先级更高。
+
+> 运行期切换 `listType` 不会重新解析已有的 `modelValue`：已上传数据仍按初始化时的 `listType` 解析展示，避免把旧格式数据误判为新格式。
+
+```vue
+<np-config-provider
+  :component-options="{ Upload: { props: { listType: 'image-card' } } }"
+>
+  <np-upload v-model="value" />
+</np-config-provider>
 ```
 
 ---
@@ -1395,6 +1740,7 @@ import type { FormOption } from 'naive-plus'
 | onSubmit | 提交事件 | `(data)=>Promise<void>` | - |
 | onReset | 重置事件 | `(data)=>Promise<void>` | - |
 | props | 表单属性 | object | - |
+| grid | 栅格布局配置，详见 [栅格布局](/form/grid/) | object | - |
 
 ### FormColumn
 
@@ -1406,7 +1752,26 @@ import type { FormOption } from 'naive-plus'
 | defaultValue | 表单项默认值 | any | - |
 | options | 字典项，例如 checkbox、select 等 | `Array<any>` / `()=>Promise<Array<any>>` | - |
 | props | 组件 Props，会透传给实际组件 | object | - |
-| formItemProps | 表单项 Props，会透传给 `n-form-item` | object | - |
+| formItemProps | 表单项 Props，会透传给 `n-form-item-gi`，支持 `span` / `offset` | object | - |
+
+## 全局默认值
+
+可通过 [NpConfigProvider](/components/np-config-provider/) 统一配置 `enterSubmitMode` / `grid` / `props`，以及每个表单项的默认 `column`，`option` 中的同名配置优先级更高。
+
+```vue
+<np-config-provider
+  :component-options="{
+    Form: {
+      enterSubmitMode: 'all',
+      grid: { cols: 24, xGap: 12 },
+      props: { labelWidth: 100 },
+      column: { formItemProps: { labelWidth: 100 }, props: { size: 'small' } },
+    },
+  }"
+>
+  <np-form v-model="data" :option="option" />
+</np-config-provider>
+```
 
 ---
 
@@ -1865,6 +2230,196 @@ const option: FormOption = {
 | align | 底部内容对齐方式，`right` 时靠右对齐且校验反馈同步靠右 | `'left' \| 'right'` | `'left'` |
 | prefixRender | 前缀渲染函数 | `(data)=>VNode` | - |
 | suffixRender | 后缀渲染函数 | `(data)=>VNode` | - |
+
+## 全局默认配置
+
+`formItemProps` / `style` / `align` / `submitErrorFeedback` / `submitBtn` / `resetBtn` 支持通过 [NpConfigProvider](/components/np-config-provider/) 设置全局默认值，`option.footer` 中的同名配置优先级更高；`option.footer` 传 `false` 时仍然隐藏整个底部。
+
+```vue
+<np-config-provider
+  :component-options="{
+    Form: {
+      footer: {
+        align: 'right',
+        submitBtn: { text: '保存' },
+      },
+    },
+  }"
+>
+  <np-form :option="option" />
+</np-config-provider>
+```
+
+`prefixRender` / `suffixRender` 属于内容渲染，需在使用处指定。
+
+按钮文案优先级：`submitBtn.text` / `resetBtn.text` > `NpConfigProvider` 的 `componentOptions.Form.footer` > [locale](/components/np-config-provider/#多语言) 语言包。需要多语言时优先使用 `locale`。
+
+---
+
+---
+url: /form/grid/index.md
+---
+# np-form 栅格布局
+
+`np-form` 始终使用栅格布局，表单项统一由 `n-form-item-gi` 渲染，默认 `span` 占满整行（24 列），因此视觉上与普通表单项一致。
+
+通过 `option.grid` 可以配置 `n-grid`（列数、间距等），底部操作区同样占满整行。
+
+```vue
+<template>
+  <np-form :option="option" />
+</template>
+<script setup lang="tsx">
+import type { FormOption } from 'naive-plus'
+
+const option: FormOption = {
+  // 配置 n-grid 的列数与间距，表单项统一使用 n-form-item-gi 渲染
+  grid: {
+    cols: 24,
+    xGap: 16,
+    yGap: 16,
+  },
+  columns: [
+    // 通过 formItemProps.span 指定占据的栅格数，未指定时占满整行
+    { label: '姓名', key: 'fullName', formItemProps: { span: 12 } },
+    { label: '电话', key: 'tel', type: 'number', formItemProps: { span: 12 } },
+    { label: '邮箱', key: 'email', formItemProps: { span: 24 } },
+    {
+      label: '地址',
+      key: 'address',
+      type: 'textarea',
+      formItemProps: { span: 24 },
+    },
+  ],
+}
+</script>
+```
+
+## 响应式
+
+`option.grid` 中的 `cols`、`xGap`、`yGap` 以及 `formItemProps.span`、`formItemProps.offset` 都支持响应式写法，格式为 `'默认值 断点:值 ...'`。断点可以直接写像素值，例如 `'1 400:2 600:3'` 表示默认 1 列、`≥400px` 2 列、`≥600px` 3 列。
+
+也可以使用内置的命名断点 `xs` / `s` / `m` / `l` / `xl` / `xxl`（分别对应 `0px` / `640px` / `1024px` / `1280px` / `1536px` / `1920px`），但**必须显式设置 `grid.responsive: 'screen'`**；默认的 `'self'` 模式基于容器宽度（数值）匹配，命名断点不会生效。
+
+> 响应式写法的默认值不要写 `0`：`n-grid` 会直接跳过 `span` 为 `0` 的子项，导致该表单项不渲染。
+
+### 响应式列数
+
+列数随容器宽度变化时，表单项的 `span` 默认跟随 `cols`，也可以单独指定。
+
+```vue
+<template>
+  <!-- 拖拽分割条压缩表单容器宽度，便于观察列数随容器宽度变化 -->
+  <n-split :default-size="1">
+    <template #1>
+      <np-form :option="option" />
+    </template>
+    <template #2></template>
+  </n-split>
+</template>
+<script setup lang="tsx">
+import type { FormOption } from 'naive-plus'
+import { NSplit } from 'naive-ui'
+
+const option: FormOption = {
+  // 列数随容器宽度响应式变化：默认 1 列，≥400px 2 列，≥600px 3 列
+  grid: {
+    cols: '1 400:2 600:3',
+    xGap: 16,
+  },
+  footer: {
+    submitBtn: {
+      props: { block: true },
+    },
+    resetBtn: false,
+  },
+  columns: [
+    // span 为 1 时，在 2 / 3 列布局下并排展示
+    { label: '姓名', key: 'fullName', formItemProps: { span: 1 } },
+    { label: '电话', key: 'tel', type: 'number', formItemProps: { span: 1 } },
+    { label: '邮箱', key: 'email', formItemProps: { span: 1 } },
+    // 未指定 span 时占满整行
+    { label: '地址', key: 'address', type: 'textarea' },
+  ],
+}
+</script>
+```
+
+### 响应式 span
+
+当 `cols` 保持固定列数（如 `24`）时，`span` 直接使用响应式写法即可，`itemResponsive` 已默认开启。
+
+```vue
+<template>
+  <!-- 拖拽分割条压缩表单容器宽度，便于观察 span 随容器宽度变化 -->
+  <n-split :default-size="1">
+    <template #1>
+      <np-form :option="option" />
+    </template>
+    <template #2></template>
+  </n-split>
+</template>
+<script setup lang="tsx">
+import type { FormOption } from 'naive-plus'
+import { NSplit } from 'naive-ui'
+
+const option: FormOption = {
+  // 列数固定为 24，span 使用响应式写法
+  grid: {
+    cols: 24,
+    xGap: 16,
+  },
+  footer: {
+    submitBtn: {
+      props: { block: true },
+    },
+    resetBtn: false,
+  },
+  columns: [
+    // 默认占满整行，≥600px 时占 12 列，与下一个表单项并排
+    { label: '姓名', key: 'fullName', formItemProps: { span: '24 600:12' } },
+    // ≥400px 时占 12 列，≥600px 时占 6 列，可与邮箱并排展示三项
+    {
+      label: '电话',
+      key: 'tel',
+      type: 'number',
+      formItemProps: { span: '24 400:12 600:6' },
+    },
+    { label: '邮箱', key: 'email', formItemProps: { span: '24 400:12 600:6' } },
+    {
+      label: '地址',
+      key: 'address',
+      type: 'textarea',
+    },
+  ],
+}
+</script>
+```
+
+## 配置说明
+
+* `option.grid` 直接透传给 `n-grid`，常用配置：`cols`（列数，默认 `24`）、`xGap` / `yGap`（水平 / 垂直间距），也支持 `collapsed`、`responsive` 及响应式写法（如 `'1 400:2 600:3'`）
+* 表单项占据的栅格数通过 `formItemProps.span` 设置，左侧间隔通过 `formItemProps.offset` 设置，**未指定 `span` 时默认占满整行**
+* `offset` 需与 `span` 搭配使用：`n-grid` 会把 `offset` 换算成左外边距叠加在 `span` 上，只设置 `offset` 而不设置 `span`（默认占满整行）会让整行右移并撑出容器，产生水平溢出；需要左侧留白时请同时指定 `span`，例如 `{ span: 22, offset: 2 }`
+* `itemResponsive` 默认开启，响应式 `span` / `offset` 开箱即用；传 `itemResponsive: false` 可关闭，但仅当 `cols` / `xGap` / `yGap` 均为固定数值时才会真正关闭，否则 `n-grid` 仍会按容器宽度解析 `span` / `offset`
+* 底部操作区默认占满整行，可通过 `footer.formItemProps.span` 覆盖
+
+> `display: false` 的表单项（`render` 自定义列除外）不会渲染内容，也不会占据栅格位置（但 `collapsed` 折叠行的溢出计算仍会将其计入）；`render` 自定义渲染的列会被自动包裹一层 `n-gi`。
+
+## 组件配置
+
+### FormOption Props
+
+| 属性 | 说明                              | 类型   | 默认值 |
+| ---- | --------------------------------- | ------ | ------ |
+| grid | 栅格布局配置，直接透传给 `n-grid` | object | -      |
+
+### FormColumn Props
+
+| 属性                 | 说明               | 类型            | 默认值   |
+| -------------------- | ------------------ | --------------- | -------- |
+| formItemProps.span   | 栅格占据的列数     | number / string | 占满整行 |
+| formItemProps.offset | 栅格左侧的间隔格数 | number / string | 0        |
 
 ---
 
@@ -2399,6 +2954,24 @@ import type {
 | display   | 是否在表格中显示该列，`false` 表示彻底隐藏（常用于仅表单字段）   | boolean                        | true   |
 | formProps | 表单字段配置，详见 [CRUD 增删改查](/table/crud/#formprops)       | object                         | -      |
 
+## 全局默认值
+
+可通过 [NpConfigProvider](/components/np-config-provider/) 统一配置 `rowKey` / `props` / `formProps` / `operation`，以及每一列的默认 `column`（`props` 合并到列属性，`formProps` 合并到新增/编辑表单的列配置），`option` 中的同名配置优先级更高。
+
+```vue
+<np-config-provider
+  :component-options="{
+    Table: {
+      rowKey: 'id',
+      props: { size: 'small' },
+      column: { props: { align: 'center' }, formProps: { props: { size: 'small' } } },
+    },
+  }"
+>
+  <np-table :option="option" />
+</np-config-provider>
+```
+
 ---
 
 ---
@@ -2602,6 +3175,8 @@ formProps?: Partial<FormColumn> & {
 ```
 
 其中 `formProps.display` 支持 `boolean` 或 `(data) => boolean`，用于控制表单字段的显隐，详见 [显隐控制](/table/display/)。
+
+`formProps`（含 `addProps`、`editProps`）也可通过 [NpConfigProvider](/components/np-config-provider/) 的 `Table.column.formProps` 统一配置默认值，列上的同名配置优先级更高；其中 `props` / `formItemProps`（含 `addProps` / `editProps` 中的）会逐层合并，不会整体覆盖。
 
 ### operation.onBefore
 
@@ -3304,6 +3879,26 @@ const option: TableOption<User> = {
 </script>
 ```
 
+## 默认操作项配置
+
+`options` 中只写 `{ type: 'edit' }` / `{ type: 'del' }` 时会复用内置操作项。通过 `defaultOptions` 可以覆盖内置的文案与属性（按 `edit` / `del` 逐项合并，只写 `label` 时仍保留内置的 `key`），`options` 中的同名属性优先级更高。
+
+```ts
+const option: TableOption = {
+  // ...
+  operation: {
+    defaultOptions: {
+      edit: { label: 'Edit', key: 'edit' },
+      del: { label: 'Delete', key: 'delete' },
+    },
+  },
+}
+```
+
+> 不传 `defaultOptions` 时，文案来自 `NpConfigProvider` 的 [locale](/components/np-config-provider/#多语言)；也可以在 `NpConfigProvider` 的 `Table.operation` 中全局配置。
+
+> 注意：内置 `del.label` 是渲染 `NText type="error"` 的函数，示例中直接传字符串会替换该渲染函数，删除项将失去红色文字样式；需要保留时请自行渲染 `NText type="error"`。
+
 ## 类型定义
 
 ### operation
@@ -3317,10 +3912,15 @@ operation?:
       prefixRender?: (rowData: T, rowIndex: number) => VNode
       suffixRender?: (rowData: T, rowIndex: number) => VNode
       options?: TableOperationOption[] | ((rowData: T, rowIndex: number) => TableOperationOption[])
+      defaultOptions?: TableOperationDefaultOptions
       onSelect?: (key: string) => void | boolean
       onBefore?: (rowData: T, type: 'add' | 'edit' | 'del') => boolean | T | void | Promise<...>
     }
 ```
+
+### TableOperationDefaultOptions
+
+`Partial<Record<'edit' | 'del', Omit<TableOperationOption, 'type'>>>`，用于覆盖内置编辑 / 删除操作项的默认值（逐项合并）。
 
 ### TableOperationOption
 
@@ -3436,7 +4036,7 @@ import type { TableSearchOption } from 'naive-plus'
 | 属性        | 说明                                         | 类型               | 默认值             |
 | ----------- | -------------------------------------------- | ------------------ | ------------------ |
 | key         | 提交给 `api.fetch` 的查询参数名              | string             | `keyword`          |
-| placeholder | 输入框占位文本                               | string             | `请输入关键词搜索` |
+| placeholder | 输入框占位文本                               | string             | 取 locale 中的 `Table.search.placeholder` |
 | width       | 输入框宽度                                   | `string \| number` | `220`              |
 | clearable   | 是否可清空                                   | boolean            | `true`             |
 | debounce    | 输入防抖时间（毫秒），停止输入后自动触发搜索 | number             | `300`              |

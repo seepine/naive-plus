@@ -7,7 +7,7 @@ url: /components/np-cell-group/index.md
 
 ## 基础用法
 
-options 支持所有 `np-cell` 属性
+options 支持部分 `np-cell` 属性，见下表 `NpCellGroupOption`
 
 ```vue
 <script setup lang="tsx">
@@ -80,8 +80,8 @@ const handleChange = (_keys: unknown[], item: NpCellGroupOption) => {
 | value | 单元格值 | `string \| VNode \| () => VNode` | - |
 | description | 单元格描述 | `string \| VNode \| () => VNode` | - |
 | footer | 底部内容 | `VNode \| () => VNode` | - |
-| hover | 是否启用悬停态 | `boolean` | - |
-| arrow | 是否显示右侧箭头 | `boolean` | `false` |
+| hover | 是否启用悬停态，未传时继承 `NpConfigProvider` 的 `Cell` 配置 | `boolean` | - |
+| arrow | 是否显示右侧箭头，未传时继承 `NpConfigProvider` 的 `Cell` 配置 | `boolean` | `false`（无 `Cell` 配置时） |
 | onClick | 点击时的回调函数 | `() => void` | - |
 
 ## Events
@@ -90,3 +90,15 @@ const handleChange = (_keys: unknown[], item: NpCellGroupOption) => {
 | ------ | ------------------ | ---------------------------- |
 | change | 选中项变化时触发 | `(keys: NpCellGroupKeys, item: NpCellGroupOption) => void` |
 | update:keys | 控件状态变更时触发 | `(keys: NpCellGroupKeys) => void` |
+
+## 全局默认值
+
+可通过 [NpConfigProvider](/components/np-config-provider/) 统一修改 `size` / `bordered` 的默认值，组件自身传入的 prop 优先级更高；`hover` / `arrow` 未在选项上指定时，回落到 `NpConfigProvider` 的 `Cell` 配置。
+
+```vue
+<np-config-provider
+  :component-options="{ CellGroup: { size: 'small', bordered: true } }"
+>
+  <np-cell-group :options="options" />
+</np-config-provider>
+```

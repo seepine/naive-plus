@@ -185,3 +185,15 @@ const value = ref([])
 ```ts
 import type { NpCheckboxProps } from 'naive-plus'
 ```
+
+## 全局默认值
+
+可通过 [NpConfigProvider](/components/np-config-provider/) 统一修改 `loadingDelay` 与透传给 `n-checkbox-group` 的 `props`，组件自身传入的 prop 优先级更高。
+
+```vue
+<np-config-provider
+  :component-options="{ Checkbox: { loadingDelay: 500, props: { size: 'small' } } }"
+>
+  <np-checkbox v-model="value" :options="options" />
+</np-config-provider>
+```

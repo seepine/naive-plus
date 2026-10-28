@@ -201,3 +201,13 @@ const value = ref<string | number | boolean | null>(null)
 ```ts
 import type { NpRadioProps } from 'naive-plus'
 ```
+
+## 全局默认值
+
+可通过 [NpConfigProvider](/components/np-config-provider/) 统一修改 `type`（`default` / `button`）、`loadingDelay` 与透传给 `n-radio-group` 的 `props`，组件自身传入的 prop 优先级更高。
+
+```vue
+<np-config-provider :component-options="{ Radio: { type: 'button' } }">
+  <np-radio v-model="value" :options="options" />
+</np-config-provider>
+```

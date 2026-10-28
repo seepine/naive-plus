@@ -195,3 +195,15 @@ const items = [
 | ------------- | ----------------- | --------------------------------------- |
 | change        | 筛选变化时触发    | `(params: Record<string, any>) => void` |
 | update:params | params 更新时触发 | `(params: Record<string, any>) => void` |
+
+## 全局默认值
+
+可通过 [NpConfigProvider](/components/np-config-provider/) 统一修改 `trigger` / `placement` 的默认值，组件自身传入的 prop 优先级更高。
+
+```vue
+<np-config-provider
+  :component-options="{ Filter: { trigger: 'hover', placement: 'right' } }"
+>
+  <np-filter v-model:params="params" :items="items" />
+</np-config-provider>
+```

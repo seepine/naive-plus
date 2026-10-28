@@ -200,6 +200,8 @@ formProps?: Partial<FormColumn> & {
 
 其中 `formProps.display` 支持 `boolean` 或 `(data) => boolean`，用于控制表单字段的显隐，详见 [显隐控制](/table/display/)。
 
+`formProps`（含 `addProps`、`editProps`）也可通过 [NpConfigProvider](/components/np-config-provider/) 的 `Table.column.formProps` 统一配置默认值，列上的同名配置优先级更高；其中 `props` / `formItemProps`（含 `addProps` / `editProps` 中的）会逐层合并，不会整体覆盖。
+
 ### operation.onBefore
 
 ```ts

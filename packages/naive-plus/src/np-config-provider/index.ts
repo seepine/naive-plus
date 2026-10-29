@@ -8,7 +8,12 @@ export * from './src/props'
 export type { NpComponentOptions } from '../config-provider'
 // 内置多语言文案与类型
 export { zhCN, enUS, npLocales, npLocaleInjectionKey } from '../locale'
-export type { NpLocale, NpLocaleMessages } from '../locale'
+export type {
+  NpLocale,
+  NpLocaleMessages,
+  NpLocaleMessagesInput,
+  NpLocaleOption,
+} from '../locale'
 // 各组件的全局配置类型由组件自身定义，这里统一再导出一份
 export type { NpButtonConfigProps } from '../np-button'
 export type { NpCellConfigProps } from '../np-cell'

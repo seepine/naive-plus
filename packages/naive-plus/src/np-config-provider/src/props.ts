@@ -1,6 +1,6 @@
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { NpComponentOptions } from '../../config-provider'
-import type { NpLocale } from '../../locale'
+import type { NpLocaleOption } from '../../locale'
 
 export const npConfigProviderProps = {
   /**
@@ -12,11 +12,13 @@ export const npConfigProviderProps = {
     type: Object as PropType<NpComponentOptions>,
   },
   /**
-   * 内置文案语言，目前支持 `'zh'` 与 `'en'`。
+   * 内置文案语言或自定义语言包。
+   * 传 `'zh'` / `'en'` 时使用内置语言包，传自定义语言包对象时直接使用该语言包，
+   * 只覆盖部分字段时其余字段沿用内置语言包。
    * 未传时继承外层 `NpConfigProvider`，无外层时回落到 `'zh'`。
    */
   locale: {
-    type: String as PropType<NpLocale>,
+    type: [String, Object] as PropType<NpLocaleOption>,
   },
 }
 

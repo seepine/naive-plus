@@ -6,12 +6,8 @@
 <script setup lang="ts">
 import { computed, inject, provide } from 'vue'
 import { npConfigProviderInjectionKey } from '../../config-provider'
-import {
-  npLocaleInjectionKey,
-  npLocales,
-  zhCN,
-  type NpLocaleMessages,
-} from '../../locale'
+import { resolveLocale } from '../../_hooks/locale'
+import { npLocaleInjectionKey, zhCN, type NpLocaleMessages } from '../../locale'
 import { npConfigProviderProps } from './props'
 
 const props = defineProps(npConfigProviderProps)
@@ -30,10 +26,8 @@ const parentLocale = inject(npLocaleInjectionKey, undefined)
 provide(
   npLocaleInjectionKey,
   computed<NpLocaleMessages>(() => {
-    if (props.locale) {
-      return npLocales[props.locale] ?? zhCN
-    }
-    return parentLocale?.value ?? zhCN
+    // 未传时继承外层文案，无外层时回落到简体中文
+    return resolveLocale(props.locale) ?? parentLocale?.value ?? zhCN
   })
 )
 </script>

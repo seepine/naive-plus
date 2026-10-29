@@ -19,7 +19,7 @@ permalink: /components/np-config-provider/
 | 参数 | 说明 | 类型 | 默认值 |
 | ---------------- | ---------------------- | ------------------- | ------ |
 | componentOptions | 各组件的默认 props 覆盖 | `NpComponentOptions` | -（未传时继承外层，无外层时视为 `{}`） |
-| locale | 组件内置文案语言，目前支持 `'zh'` / `'en'`；未传时继承外层 `NpConfigProvider` | `'zh' \| 'en'` | `'zh'`（无外层时） |
+| locale | 组件内置文案语言，支持内置的 `'zh'` / `'en'`，也可直接传入自定义语言包；未传时继承外层 `NpConfigProvider` | `NpLocaleOption`（`'zh' \| 'en' \| NpLocaleMessagesInput`） | `'zh'`（无外层时） |
 
 ## NpComponentOptions
 
@@ -86,7 +86,7 @@ permalink: /components/np-config-provider/
 
 ## 多语言
 
-通过 `locale` 统一修改组件内部硬编码的文案，目前支持 `'zh'`（默认）与 `'en'`。
+通过 `locale` 统一修改组件内部硬编码的文案，支持内置语言 `'zh'`（默认）与 `'en'`，也可直接传入自定义语言包（`NpLocaleMessagesInput`）以支持任意语种。
 
 <demo src="../__demos__/locale.vue"></demo>
 
@@ -101,7 +101,7 @@ permalink: /components/np-config-provider/
 | Upload.unknownError | 未知错误提示 | `未知错误` |
 | Upload.uploadBtnText | 默认上传按钮文字 | `上传文件` |
 | Filter.clearAllText | 清除所有筛选项的文字 | `清除所有筛选` |
-| Table.operation.label | 操作列标题 | `''` |
+| Table.operation.label | 操作列标题 | `操作` |
 | Table.operation.editLabel | 操作项「编辑」文字 | `编辑` |
 | Table.operation.delLabel | 操作项「删除」文字 | `删除` |
 | Table.display.title | 列显隐设置弹窗标题 | `显示设置` |
@@ -123,10 +123,33 @@ permalink: /components/np-config-provider/
 
 ```ts
 import { zhCN, enUS, npLocales } from 'naive-plus'
-import type { NpLocale, NpLocaleMessages } from 'naive-plus'
+import type {
+  NpLocale,
+  NpLocaleMessages,
+  NpLocaleMessagesInput,
+  NpLocaleOption,
+} from 'naive-plus'
 ```
 
-`locale` 目前只内置 `zh` / `en`。完整的多语言文案由语言包（`NpLocaleMessages`）提供；`componentOptions` 也可通过 `Form.footer.submitBtn.text` 等已开放字段覆盖文案，需要完整多语言时优先使用 `locale`。
+需要其他语种时，直接传入自定义语言包即可（`NpLocaleMessagesInput` 允许只写需要覆盖的字段，未覆盖的字段沿用内置语言包）：
+
+```ts
+import type { NpLocaleMessagesInput } from 'naive-plus'
+
+const jaJP: NpLocaleMessagesInput = {
+  Form: {
+    footer: { submitBtnText: '送信', resetBtnText: 'リセット' },
+  },
+}
+```
+
+```vue
+<NpConfigProvider :locale="jaJP">
+  <!-- 子组件 -->
+</NpConfigProvider>
+```
+
+`locale` 内置 `zh` / `en`，完整的多语言文案由语言包（`NpLocaleMessages`）提供；`componentOptions` 也可通过 `Form.footer.submitBtn.text` 等已开放字段覆盖文案，需要完整多语言时优先使用 `locale`。
 
 ## 说明
 

@@ -62,7 +62,7 @@ import type {
 | --------- | ---------------------------------------------------------------- | ------------------------------ | ------ |
 | key       | 列字段名称                                                       | string                         | -      |
 | label     | 列标题                                                           | string                         | -      |
-| render    | 自定义渲染函数                                                   | `(rowData, rowIndex) => VNode` | -      |
+| render    | 自定义渲染函数                                                   | `(rowData: T, rowIndex) => VNodeChild` | -      |
 | props     | 列属性，透传给 `n-data-table`（如 `width`、`minWidth`、`fixed`） | object                         | -      |
 | display   | 是否在表格中显示该列，`false` 表示彻底隐藏（常用于仅表单字段）   | boolean                        | true   |
 | formProps | 表单字段配置，详见 [CRUD 增删改查](/table/crud/#formprops)       | object                         | -      |

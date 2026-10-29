@@ -31,9 +31,9 @@ export type TableColumn<T extends AnyObject = AnyObject> = {
    * 自定义表格渲染
    * @param rowData 行数据
    * @param rowIndex 行序号
-   * @returns VNode
+   * @returns VNodeChild
    */
-  render?: (rowData: any, rowIndex: number) => VNode
+  render?: (rowData: T, rowIndex: number) => VNodeChild
   /**
    * Naive Table Column Props 属性
    */
@@ -274,9 +274,12 @@ export type NpTableColumnFormConfigProps = ColumnFormPropsBase & {
   editProps?: ColumnFormPropsBase
 }
 
-export interface NpTableColumnConfigProps {
+export interface NpTableColumnConfigProps<T extends AnyObject = AnyObject> {
   /** 所有列默认的 naive-ui 列属性，列自身 `props` 优先级更高；`children` 属于列自身结构，不支持全局配置 */
-  props?: Omit<TableColumn['props'], 'children'>
+  props?: Omit<
+    NTableColumn<T>,
+    'key' | 'title' | 'render' | 'type' | 'children'
+  >
   /**
    * 所有列默认的表单属性（新增 / 编辑弹窗），列自身 `formProps` 优先级更高；
    * 列自身专属的字段（内容 / 数据源 / 数据契约 / 状态 / 事件）不支持全局配置，
@@ -315,7 +318,7 @@ export interface NpTableConfigProps<T extends AnyObject = AnyObject> {
   /** 新增 / 编辑弹窗中表单的属性（`FormOption['props']`） */
   formProps?: TableOption['formProps']
   /** 每一列的默认配置 */
-  column?: NpTableColumnConfigProps
+  column?: NpTableColumnConfigProps<T>
   /** 操作列的默认配置 */
   operation?: NpTableOperationConfigProps<T>
 }

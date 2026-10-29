@@ -1,5 +1,13 @@
 # naive-plus
 
+## 0.1.0-beta.27
+
+### Minor Changes
+
+- [#43](https://github.com/seepine/naive-plus/pull/43) [`56e79e4`](https://github.com/seepine/naive-plus/commit/56e79e4d41de8e53b4ade0bf0f1a7143f0f31dc3) Thanks [@seepine](https://github.com/seepine)! - feat(np-config-provider): support custom locale messages
+
+- [#43](https://github.com/seepine/naive-plus/pull/43) [`62ee76f`](https://github.com/seepine/naive-plus/commit/62ee76fcde73fa3449560dee5081aaaed1c38cce) Thanks [@seepine](https://github.com/seepine)! - feat(np-table): default operation column title from locale
+
 ## 0.1.0-beta.26
 
 ### Minor Changes

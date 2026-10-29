@@ -1,5 +1,15 @@
 # naive-plus
 
+## 0.1.0-beta.26
+
+### Minor Changes
+
+- [#42](https://github.com/seepine/naive-plus/pull/42) [`b66a08a`](https://github.com/seepine/naive-plus/commit/b66a08a6abf7c67f3123eea58861aab91dfe54f8) Thanks [@ayakabot](https://github.com/ayakabot)! - feat(np-table): type column render row with the table generic
+
+  TableColumn render receives the table generic T as rowData and returns VNodeChild; NpTableColumnConfigProps accepts the same generic.
+
+- [#40](https://github.com/seepine/naive-plus/pull/40) [`673e62b`](https://github.com/seepine/naive-plus/commit/673e62bd983a1779a1569bb96fa751d12da8b33f) Thanks [@ayakabot](https://github.com/ayakabot)! - feat(np-table): support NTableColumn props in NpTableOperationConfigProps
+
 ## 0.1.0-beta.25
 
 ### Minor Changes

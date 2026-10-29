@@ -101,7 +101,7 @@ export const zhCN: NpLocaleMessages = {
   },
   Table: {
     operation: {
-      label: '',
+      label: '操作',
       editLabel: '编辑',
       delLabel: '删除',
     },
@@ -149,7 +149,7 @@ export const enUS: NpLocaleMessages = {
   },
   Table: {
     operation: {
-      label: '',
+      label: 'Operation',
       editLabel: 'Edit',
       delLabel: 'Delete',
     },

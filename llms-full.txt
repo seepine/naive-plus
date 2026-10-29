@@ -816,6 +816,7 @@ const componentOptions: NpComponentOptions = {
 | -------------------- | -------------------------------------------- | --------------------------- |
 | label | 操作列标题，默认取语言包中的 `Table.operation.label` | `string` |
 | defaultOptions | 内置编辑 / 删除操作项的默认配置，逐项合并到内置默认值 | `TableOperationDefaultOptions` |
+| 其他 | 除 `key` / `title` / `render` / `type` 外的 `NTableColumn` 属性（如 `width` / `align` / `fixed` / `ellipsis`），作为操作列的默认值 | `Omit<NTableColumn<T>, 'key' \| 'title' \| 'render' \| 'type'>` |
 
 > `option.operation` 中的同名配置优先级更高；`option.operation` 传 `false` 时仍然隐藏整个操作列。
 

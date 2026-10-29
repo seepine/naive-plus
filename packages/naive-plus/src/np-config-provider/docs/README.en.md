@@ -20,7 +20,7 @@ Use `component-options` to set default props of components. The key is the compo
 | Name | Description | Type | Default |
 | ---------------- | ---------------------------------------------- | ------------------- | ------- |
 | componentOptions | Default props overrides of components | `NpComponentOptions` | - (inherited from the outer provider; treated as `{}` without one) |
-| locale | Language of the built-in texts, `'zh'` / `'en'` supported; inherited from the outer `NpConfigProvider` when omitted | `'zh' \| 'en'` | `'zh'` (without outer provider) |
+| locale | Language of the built-in texts, supports the built-in `'zh'` / `'en'` and a custom locale messages object; inherited from the outer `NpConfigProvider` when omitted | `NpLocaleOption` (`'zh' \| 'en' \| NpLocaleMessagesInput`) | `'zh'` (without outer provider) |
 
 ## NpComponentOptions
 
@@ -87,7 +87,7 @@ Only display-related props are exposed (`Button` is the exception: all props exc
 
 ## Locale
 
-Use `locale` to change the texts hard-coded inside components. `'zh'` (default) and `'en'` are supported.
+Use `locale` to change the texts hard-coded inside components. The built-in `'zh'` (default) and `'en'` are supported, and a custom locale messages object (`NpLocaleMessagesInput`) can be passed directly to support any language.
 
 <demo src="../__demos__/locale.en.vue"></demo>
 
@@ -102,7 +102,7 @@ Structure of the locale messages (`NpLocaleMessages`):
 | Upload.unknownError | Text shown when the upload error has no message | `未知错误` |
 | Upload.uploadBtnText | Text of the default upload button | `上传文件` |
 | Filter.clearAllText | Text of the clear-all-filters item | `清除所有筛选` |
-| Table.operation.label | Title of the operation column | `''` |
+| Table.operation.label | Title of the operation column | `操作` |
 | Table.operation.editLabel | Text of the edit item | `编辑` |
 | Table.operation.delLabel | Text of the delete item | `删除` |
 | Table.display.title | Title of the column display popover | `显示设置` |
@@ -124,10 +124,33 @@ The locale messages and types are exported for customization or direct reading:
 
 ```ts
 import { zhCN, enUS, npLocales } from 'naive-plus'
-import type { NpLocale, NpLocaleMessages } from 'naive-plus'
+import type {
+  NpLocale,
+  NpLocaleMessages,
+  NpLocaleMessagesInput,
+  NpLocaleOption,
+} from 'naive-plus'
 ```
 
-Only `zh` / `en` are built in. Full localized texts are provided by the locale messages (`NpLocaleMessages`); `componentOptions` can also override texts through the exposed fields such as `Form.footer.submitBtn.text`, but prefer `locale` when you need complete localization.
+For other languages, pass a custom locale messages object to `locale` (`NpLocaleMessagesInput` only requires the fields to override, the fields left out keep the built-in texts):
+
+```ts
+import type { NpLocaleMessagesInput } from 'naive-plus'
+
+const jaJP: NpLocaleMessagesInput = {
+  Form: {
+    footer: { submitBtnText: '送信', resetBtnText: 'リセット' },
+  },
+}
+```
+
+```vue
+<NpConfigProvider :locale="jaJP">
+  <!-- children -->
+</NpConfigProvider>
+```
+
+`zh` / `en` are built in. Full localized texts are provided by the locale messages (`NpLocaleMessages`); `componentOptions` can also override texts through the exposed fields such as `Form.footer.submitBtn.text`, but prefer `locale` when you need complete localization.
 
 ## Notes
 

@@ -81,6 +81,24 @@ export interface NpLocaleMessages {
 export type NpLocale = 'zh' | 'en'
 
 /**
+ * 递归可选类型
+ */
+export type DeepPartial<T> = {
+  [K in keyof T]?: T[K] extends Record<string, any> ? DeepPartial<T[K]> : T[K]
+}
+
+/**
+ * 自定义语言包，允许只覆盖部分字段，
+ * 未覆盖的字段会回落到内置语言包（简体中文）
+ */
+export type NpLocaleMessagesInput = DeepPartial<NpLocaleMessages>
+
+/**
+ * `locale` 支持的值：内置语言标识，或直接传入自定义语言包
+ */
+export type NpLocaleOption = NpLocale | NpLocaleMessagesInput
+
+/**
  * 简体中文文案
  */
 export const zhCN: NpLocaleMessages = {
@@ -101,7 +119,7 @@ export const zhCN: NpLocaleMessages = {
   },
   Table: {
     operation: {
-      label: '',
+      label: '操作',
       editLabel: '编辑',
       delLabel: '删除',
     },
@@ -149,7 +167,7 @@ export const enUS: NpLocaleMessages = {
   },
   Table: {
     operation: {
-      label: '',
+      label: 'Operation',
       editLabel: 'Edit',
       delLabel: 'Delete',
     },

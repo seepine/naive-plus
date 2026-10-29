@@ -8,12 +8,28 @@ import {
   zhCN,
 } from 'naive-ui'
 import type { FormOption, TableOption } from 'naive-plus'
-import type { NpLocale } from '../index'
+import type { NpLocaleMessagesInput, NpLocaleOption } from '../index'
 import { NpConfigProvider } from '../index'
 
-const locale = ref<NpLocale>('en')
-/** Locale of naive-ui components, kept in sync with np components */
-const naiveLocale = computed(() => (locale.value === 'zh' ? zhCN : enUS))
+type LocaleKey = 'zh' | 'en' | 'custom'
+
+const localeKey = ref<LocaleKey>('en')
+
+/** Custom locale messages: only the fields to override are needed */
+const customLocale: NpLocaleMessagesInput = {
+  Form: {
+    footer: { submitBtnText: 'Submit Now', resetBtnText: 'Clear' },
+  },
+  Table: {
+    operation: { label: 'Actions' },
+  },
+}
+
+const locale = computed<NpLocaleOption>(() =>
+  localeKey.value === 'custom' ? customLocale : localeKey.value
+)
+/** Locale of naive-ui components, kept in sync with np components (naive-ui has no custom locale) */
+const naiveLocale = computed(() => (localeKey.value === 'en' ? enUS : zhCN))
 
 const formOption: FormOption = {
   columns: [{ label: 'Name', key: 'name' }],
@@ -34,9 +50,10 @@ const tableOption: TableOption = {
 <template>
   <NConfigProvider :locale="naiveLocale">
     <div style="display: flex; flex-direction: column; gap: 12px">
-      <NRadioGroup v-model:value="locale">
+      <NRadioGroup v-model:value="localeKey">
         <NRadioButton value="zh">中文</NRadioButton>
         <NRadioButton value="en">English</NRadioButton>
+        <NRadioButton value="custom">Custom</NRadioButton>
       </NRadioGroup>
       <NpConfigProvider :locale="locale">
         <np-form :option="formOption" />

@@ -28,7 +28,13 @@ import NpTableAction from '../../np-table/src/np-table-action'
 import NpTableCrudDialog from '../../np-table/src/components/np-table-crud-dialog.vue'
 import NpTableDelDialog from '../../np-table/src/components/np-table-del-dialog.vue'
 import NpUpload from '../../np-upload/src/np-upload'
-import type { NpComponentOptions, NpTableColumnFormConfigProps } from '../index'
+import type {
+  NpComponentOptions,
+  NpLocaleMessagesInput,
+  NpLocaleOption,
+  NpTableColumnFormConfigProps,
+} from '../index'
+import { enUS } from '../../locale'
 
 const stubs = {
   'n-checkbox': true,
@@ -55,7 +61,7 @@ const mountWithProvider = (
  * 挂载一个指定语言的 np-config-provider 容器
  */
 const mountWithLocale = (
-  locale: 'zh' | 'en',
+  locale: NpLocaleOption,
   slot: () => any,
   componentOptions: NpComponentOptions = {}
 ) =>
@@ -677,6 +683,81 @@ describe('NpConfigProvider locale', () => {
     await nextTick()
 
     expect(footerButtonText(wrapper)).toEqual(['Submit', 'Reset'])
+  })
+
+  test('Form: locale 传自定义语言包时使用自定义文案', async () => {
+    const jaJP: NpLocaleMessagesInput = {
+      Form: { footer: { submitBtnText: '送信', resetBtnText: 'リセット' } },
+    }
+    const wrapper = mountWithLocale(jaJP, () => (
+      <NpForm option={{ columns: [{ label: '名前', key: 'name' }] }} />
+    ))
+    await nextTick()
+
+    expect(footerButtonText(wrapper)).toEqual(['送信', 'リセット'])
+  })
+
+  test('Form: 自定义语言包未覆盖的字段回落到内置语言包', async () => {
+    const partial: NpLocaleMessagesInput = {
+      Form: { footer: { submitBtnText: '送信' } },
+    }
+    const wrapper = mountWithLocale(partial, () => (
+      <NpForm option={{ columns: [{ label: '名前', key: 'name' }] }} />
+    ))
+    await nextTick()
+
+    expect(footerButtonText(wrapper)).toEqual(['送信', '重置'])
+  })
+
+  test('Form: 自定义语言包中值为 undefined 的字段视为未覆盖', async () => {
+    const partial: NpLocaleMessagesInput = {
+      Form: { footer: { submitBtnText: '送信', resetBtnText: undefined } },
+    }
+    const wrapper = mountWithLocale(partial, () => (
+      <NpForm option={{ columns: [{ label: '名前', key: 'name' }] }} />
+    ))
+    await nextTick()
+
+    expect(footerButtonText(wrapper)).toEqual(['送信', '重置'])
+  })
+
+  test('Form: 传入完整的内置语言包时使用其文案', async () => {
+    const wrapper = mountWithLocale(enUS, () => (
+      <NpForm option={{ columns: [{ label: 'Name', key: 'name' }] }} />
+    ))
+    await nextTick()
+
+    expect(footerButtonText(wrapper)).toEqual(['Submit', 'Reset'])
+  })
+
+  test('Form: 切换自定义语言包时文案响应式更新', async () => {
+    const custom: NpLocaleMessagesInput = {
+      Form: { footer: { submitBtnText: 'Save', resetBtnText: 'Reset' } },
+    }
+    const wrapper = mountWithLocale('zh', () => (
+      <NpForm option={{ columns: [{ label: '姓名', key: 'name' }] }} />
+    ))
+    await nextTick()
+    expect(footerButtonText(wrapper)).toEqual(['提交', '重置'])
+
+    await wrapper.setProps({ locale: custom })
+    await nextTick()
+
+    expect(footerButtonText(wrapper)).toEqual(['Save', 'Reset'])
+  })
+
+  test('嵌套 provider 时内层自定义语言包覆盖外层', async () => {
+    const custom: NpLocaleMessagesInput = {
+      Form: { footer: { submitBtnText: '送出', resetBtnText: '重設' } },
+    }
+    const wrapper = mountWithLocale('en', () => (
+      <NpConfigProvider locale={custom}>
+        <NpForm option={{ columns: [{ label: '姓名', key: 'name' }] }} />
+      </NpConfigProvider>
+    ))
+    await nextTick()
+
+    expect(footerButtonText(wrapper)).toEqual(['送出', '重設'])
   })
 
   test('Form: componentOptions 的按钮文案优先于语言包', async () => {

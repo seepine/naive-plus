@@ -57,7 +57,7 @@ const componentOptions: NpComponentOptions = {
 | 参数 | 说明 | 类型 | 默认值 |
 | ---------------- | ---------------------- | ------------------- | ------ |
 | componentOptions | 各组件的默认 props 覆盖 | `NpComponentOptions` | -（未传时继承外层，无外层时视为 `{}`） |
-| locale | 组件内置文案语言，目前支持 `'zh'` / `'en'`；未传时继承外层 `NpConfigProvider` | `'zh' \| 'en'` | `'zh'`（无外层时） |
+| locale | 组件内置文案语言，支持内置的 `'zh'` / `'en'`，也可直接传入自定义语言包；未传时继承外层 `NpConfigProvider` | `NpLocaleOption`（`'zh' \| 'en' \| NpLocaleMessagesInput`） | `'zh'`（无外层时） |
 
 ## NpComponentOptions
 
@@ -124,7 +124,7 @@ const componentOptions: NpComponentOptions = {
 
 ## 多语言
 
-通过 `locale` 统一修改组件内部硬编码的文案，目前支持 `'zh'`（默认）与 `'en'`。
+通过 `locale` 统一修改组件内部硬编码的文案，支持内置语言 `'zh'`（默认）与 `'en'`，也可直接传入自定义语言包（`NpLocaleMessagesInput`）以支持任意语种。
 
 ```vue
 <script setup lang="ts">
@@ -137,12 +137,28 @@ import {
   zhCN,
 } from 'naive-ui'
 import type { FormOption, TableOption } from 'naive-plus'
-import type { NpLocale } from '../index'
+import type { NpLocaleMessagesInput, NpLocaleOption } from '../index'
 import { NpConfigProvider } from '../index'
 
-const locale = ref<NpLocale>('zh')
-/** naive-ui 组件的语言，保持与 np 组件一致 */
-const naiveLocale = computed(() => (locale.value === 'zh' ? zhCN : enUS))
+type LocaleKey = 'zh' | 'en' | 'ja'
+
+const localeKey = ref<LocaleKey>('zh')
+
+/** 自定义语言包：只需写需要覆盖的字段，其余字段沿用内置语言包 */
+const customLocale: NpLocaleMessagesInput = {
+  Form: {
+    footer: { submitBtnText: '送信', resetBtnText: 'リセット' },
+  },
+  Table: {
+    operation: { label: '操作' },
+  },
+}
+
+const locale = computed<NpLocaleOption>(() =>
+  localeKey.value === 'ja' ? customLocale : localeKey.value
+)
+/** naive-ui 组件的语言，保持与 np 组件一致（naive-ui 暂不支持自定义语言包） */
+const naiveLocale = computed(() => (localeKey.value === 'en' ? enUS : zhCN))
 
 const formOption: FormOption = {
   columns: [{ label: '姓名', key: 'name' }],
@@ -163,9 +179,10 @@ const tableOption: TableOption = {
 <template>
   <NConfigProvider :locale="naiveLocale">
     <div style="display: flex; flex-direction: column; gap: 12px">
-      <NRadioGroup v-model:value="locale">
+      <NRadioGroup v-model:value="localeKey">
         <NRadioButton value="zh">中文</NRadioButton>
         <NRadioButton value="en">English</NRadioButton>
+        <NRadioButton value="ja">日本語</NRadioButton>
       </NRadioGroup>
       <NpConfigProvider :locale="locale">
         <np-form :option="formOption" />
@@ -187,7 +204,7 @@ const tableOption: TableOption = {
 | Upload.unknownError | 未知错误提示 | `未知错误` |
 | Upload.uploadBtnText | 默认上传按钮文字 | `上传文件` |
 | Filter.clearAllText | 清除所有筛选项的文字 | `清除所有筛选` |
-| Table.operation.label | 操作列标题 | `''` |
+| Table.operation.label | 操作列标题 | `操作` |
 | Table.operation.editLabel | 操作项「编辑」文字 | `编辑` |
 | Table.operation.delLabel | 操作项「删除」文字 | `删除` |
 | Table.display.title | 列显隐设置弹窗标题 | `显示设置` |
@@ -209,10 +226,33 @@ const tableOption: TableOption = {
 
 ```ts
 import { zhCN, enUS, npLocales } from 'naive-plus'
-import type { NpLocale, NpLocaleMessages } from 'naive-plus'
+import type {
+  NpLocale,
+  NpLocaleMessages,
+  NpLocaleMessagesInput,
+  NpLocaleOption,
+} from 'naive-plus'
 ```
 
-`locale` 目前只内置 `zh` / `en`。完整的多语言文案由语言包（`NpLocaleMessages`）提供；`componentOptions` 也可通过 `Form.footer.submitBtn.text` 等已开放字段覆盖文案，需要完整多语言时优先使用 `locale`。
+需要其他语种时，直接传入自定义语言包即可（`NpLocaleMessagesInput` 允许只写需要覆盖的字段，未覆盖的字段沿用内置语言包）：
+
+```ts
+import type { NpLocaleMessagesInput } from 'naive-plus'
+
+const jaJP: NpLocaleMessagesInput = {
+  Form: {
+    footer: { submitBtnText: '送信', resetBtnText: 'リセット' },
+  },
+}
+```
+
+```vue
+<NpConfigProvider :locale="jaJP">
+  <!-- 子组件 -->
+</NpConfigProvider>
+```
+
+`locale` 内置 `zh` / `en`，完整的多语言文案由语言包（`NpLocaleMessages`）提供；`componentOptions` 也可通过 `Form.footer.submitBtn.text` 等已开放字段覆盖文案，需要完整多语言时优先使用 `locale`。
 
 ## 说明
 
